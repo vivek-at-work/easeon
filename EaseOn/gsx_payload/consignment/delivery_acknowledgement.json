@@ -1,0 +1,13 @@
+{
+  "parts": [
+   {
+      "number": "011-0659",
+      "quantity": 0,
+      "device": {
+        "id": "FCGT24E5HFM2"
+      }
+    }
+  ],
+  "deliveryNumber": "string",
+  "shipTo": "0001026647"
+}

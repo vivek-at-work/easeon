@@ -1,0 +1,283 @@
+[
+  {
+    "model": "slas.sla",
+    "pk": 1,
+    "fields": {
+      "guid": "8d8e658ec17eac93b857ef1a49a18ea5d9709be5",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.371Z",
+      "updated_at": "2019-07-09T11:53:43.371Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "sla_type": "TICKET_SLA",
+      "name": "Default Ticket SLA",
+      "is_default": true
+    }
+  },
+  {
+    "model": "slas.sla",
+    "pk": 2,
+    "fields": {
+      "guid": "69e5940d396e5186f5fed90f439ce1e035c36597",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.437Z",
+      "updated_at": "2019-07-09T11:53:43.437Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "sla_type": "DELIVERY_SLA",
+      "name": "Default Delivery SLA",
+      "is_default": true
+    }
+  },
+  {
+    "model": "slas.sla",
+    "pk": 3,
+    "fields": {
+      "guid": "46044794e1188e654b5619739ef25adf1bb43468",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.456Z",
+      "updated_at": "2019-07-09T11:53:43.456Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "sla_type": "PHONE_LOAN_AGREEMENT",
+      "name": "Default PHONE LOAN AGREEMENT SLA",
+      "is_default": true
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 1,
+    "fields": {
+      "guid": "7f39f09ecb8160958a2812c7a070ed70d42e4604",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.412Z",
+      "updated_at": "2019-07-09T11:53:43.412Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "Apple or Apple Authorized Service centre (AASP) will not be responsible for any damage to the product that occurs during the repair process that is a result of any unauthorized modifications or repairs or replacements not performed by Apple or an AASP. If damage results, Apple will seek your authorization for any additional costs for completing the service even if the product is covered by warranty or an AppleCare service plan. If you decline authorization, Apple may return your product unrepaired in the damaged condition without any responsibility.Internal inspection would be done at advanced repair centre.",
+      "heading": null,
+      "sla": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 2,
+    "fields": {
+      "guid": "cdd1c3ba2c84308d626c826456b92e2fff7f9956",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.425Z",
+      "updated_at": "2019-07-09T11:53:43.425Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "No responsibility for data backup, screen guards, wear and tear. And no warranty for liquid/physical damages, and unauthorised modifications found in the device.Estimation given may vary at the time of approval for processing the part or during servicing of the product. Equipment is accepted subject to the terms and conditions mentioned overleaf..",
+      "heading": null,
+      "sla": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 3,
+    "fields": {
+      "guid": "fcff17e7a254d6ff1d2ebd1d5bc560dc07b7a3d8",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.461Z",
+      "updated_at": "2019-07-09T11:53:43.461Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "You acknowledge receipt of the Loaner Phone listed below which at Service Provider’s discretion may be new or refurbished, and agree to return it to Service Provider (i) no more than fourteen (14) days from the date Service Provider notifies you that your repaired Customer Phone is ready for pickup or (ii) upon Service Provider’s written request to do so (each, a 'Return Date'):.From the date on which you receive the Loaner Phone through the Return Date, title to the Loaner Phone shall at all times remain vested in Service Provider.",
+      "heading": "Loaner Phone",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 4,
+    "fields": {
+      "guid": "8f87149c6b2d74fcf14eab0e055c428cdba45598",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.470Z",
+      "updated_at": "2019-07-09T11:53:43.470Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": " Service Provider may require a valid credit card number prior to providing a Loaner Phone. An authorization, in the amount of the Replacement Value listed in the table below will be placed on your credit card. In the event that you fail to return the Loaner Phone to Service Provider by the Return Date your credit card will be charged the Replacement Value. After confirmation that any and all charges have been paid, the authorization on your credit card will expire.",
+      "heading": "In Case of Failure/Damage to Return Loaner Phone",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 5,
+    "fields": {
+      "guid": "4c8cf5ef903e9c0d694859d9dd67e43a46ccecfc",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.480Z",
+      "updated_at": "2019-07-09T11:53:43.480Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "If you have a circumstance that prevents you from picking up your repaired Customer Phone on or before the Return Date, you may submit a request to Service Provider for an extension of five (5) days beyond the standard fourteen (14) day return period. You may submit a request for the extension by contacting Service Provider at the location where the Loaner Phone was provided. Upon approval of the five (5) day extension, the extended date will become your Return Date for purposes of these terms, and you will be required to return the Loaner Phone by that extended Return Date. All of the terms set forth in this agreement will apply to that extended Return Date.",
+      "heading": "Extended Return Date",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 6,
+    "fields": {
+      "guid": "15bbbb0bb0377b07adc78860f3f270945e391a50",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.490Z",
+      "updated_at": "2019-07-09T11:53:43.490Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": " Where Service Provider determines that replacement of the Customer Phone is required (e.g., where repair is not possible or entails disproportionate costs): (i) you will return the Loaner Phone to Service Provider and collect the Replacement Phone, for which all original terms of sale that applied to the Customer iPhone, including the remainder of any warranty terms still in effect will apply; (ii) provided that you return the Loaner Phone, you will obtain full rights of ownership in the Replacement Phone, and (iii) Service Provider will obtain full rights of ownership in the Customer Phone and may use or dispose of the Customer Phone as Service Provider sees fit.",
+      "heading": "Replacement",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 7,
+    "fields": {
+      "guid": "71d6c584e3d44d8d61645a9169ff669d1f3246fa",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.499Z",
+      "updated_at": "2019-07-09T11:53:43.499Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "You must take reasonable and prudent precautions to protect the Loaner Phone against damage, loss, or abuse while in your care, custody, and control. If the Loaner Phone is lost, stolen or damaged, you must notify Service Provider immediately. Only Service Provider may service the Loaner Phone. You may be held responsible for repair or replacement costs if the Loaner Phone is lost, damaged, or stolen while on loan.",
+      "heading": "Safeguarding",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 8,
+    "fields": {
+      "guid": "f1b9984be8dd72853cc2c397ba8e0bf31513d757",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.509Z",
+      "updated_at": "2019-07-09T11:53:43.509Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "Use. The Loaner Phone is to be used solely by you while your iPhone is being serviced by Service Provider ('Service Period'). You must not use the Loaner Phone for any unlawful purpose. Only software with valid licenses should be loaded on the Loaner Phone.",
+      "heading": "Permitted Use",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 9,
+    "fields": {
+      "guid": "60b72b1fbe33649e139c9e1c340d729ae5f8ef2c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.519Z",
+      "updated_at": "2019-07-09T11:53:43.519Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": " You acknowledge that before returning the Loaner Phone, you are responsible for erasing all files, including personal and/or confidential files and data, created by you. Therefore, should you wish to retain any files you created, you should backup your files using iTunes or iCloud so that the files can later be transferred to your repaired Customer Phone. You are responsible for removing and storing any such files prior to returning the Loaner iPhone. Service Provider or Apple is not responsible nor liable for any files or data remaining on, or erased from the Loaner Phone, following its return.",
+      "heading": "Delete Your Files Upon Return of Loaner Phone",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 10,
+    "fields": {
+      "guid": "d462a3a5ebd1b9bbcfe811559c3f83a10eab162a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.528Z",
+      "updated_at": "2019-07-09T11:53:43.528Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": " You acknowledge that all software provided with the Loaner Phone is licensed specifically to this Loaner Phone and you will not remove it. You also agree not to copy or otherwise reproduce, reverse engineer, disassemble or decompile any software, the equipment, or components provided with the Loaner Phone.",
+      "heading": "Installed Software",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 11,
+    "fields": {
+      "guid": "d62998029dcc1509a985f1a185caaf49dea10c8b",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.538Z",
+      "updated_at": "2019-07-09T11:53:43.538Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "Service Provider will not be liable for any: (i) consequential; (ii) incidental; (iii) indirect; or (iv) direct damages; arising out of these terms or the use of the Loaner Phone, including without limitation any losses of or affecting your personal property, software or data. THIS LIMITATION IS NOT INTENDED TO EXCLUDE ANY LIABILITY FOR DEATH OR PERSONAL INJURY, FRAUD, FRAUDULENT MISREPRESENTATION OR ANY LIABILITY THAT ARISES UNDER CONSUMER LAW WHICH CANNOT BE EXCLUDED.",
+      "heading": "Service Provider Liability",
+      "sla": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "slas.term",
+    "pk": 12,
+    "fields": {
+      "guid": "6d77c2036b1f8b471dbf10cd20347dda51c40e72",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T11:53:43.548Z",
+      "updated_at": "2019-07-09T11:53:43.548Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "statement": "This Agreement shall be governed by and construed in accordance with the laws of the country in which the Loaner Phone is provided. The undersigned has read and understands this Agreement and hereby acknowledges receipt of a copy.",
+      "heading": "Governing Law",
+      "sla": [
+        3
+      ]
+    }
+  }
+]

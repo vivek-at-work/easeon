@@ -1,0 +1,15 @@
+{
+  "orderId": "string",
+  "carrierCode": "string",
+  "parts": [
+    {
+      "number": "string",
+      "quantity": 0,
+      "device": {
+        "id": "string"
+      }
+    }
+  ],
+  "trackingNumber": "string",
+  "shipTo": "string"
+}

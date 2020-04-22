@@ -1,0 +1,206 @@
+[
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 1,
+      "fields": {
+          "guid": "cf64d2406c843edcf3fb25f566581a953ee1a1f4",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:09:08.776Z",
+          "updated_at": "2019-11-07T13:09:08.776Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-01867",
+          "reason": "For Display Damage Only",
+          "cost": 11000.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 2,
+      "fields": {
+          "guid": "8c2e382cca71e383ba1dbdcefca7603a579f2607",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:09:18.939Z",
+          "updated_at": "2019-11-07T13:09:18.939Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-01867",
+          "reason": "Exchange Price Returnable Damage",
+          "cost": 24500.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 3,
+      "fields": {
+          "guid": "90e145166bf1e3491e52d9a95872d9b16ce90a63",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:09:35.854Z",
+          "updated_at": "2019-11-07T13:09:35.854Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-01867",
+          "reason": "Lost Or Excessive Damage",
+          "cost": 35500.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 4,
+      "fields": {
+          "guid": "fb96b21f2b65237c4704c8cf10fc91813b0a9460",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:10:00.888Z",
+          "updated_at": "2019-11-07T13:10:00.888Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-01909",
+          "reason": "For Display Damage Only",
+          "cost": 11000.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 5,
+      "fields": {
+          "guid": "5c9179adf6a78b7bdbd343fdc570225e7fc504c2",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:10:14.674Z",
+          "updated_at": "2019-11-07T13:10:14.674Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-01909",
+          "reason": "Exchange Price Returnable Damage",
+          "cost": 21000.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 6,
+      "fields": {
+          "guid": "a2b4ea66822e55e9cda3e5ec5fd0b4f4e0db6e5c",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:10:25.663Z",
+          "updated_at": "2019-11-07T13:10:25.663Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-01909",
+          "reason": "Lost Or Excessive Damage",
+          "cost": 26500.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 7,
+      "fields": {
+          "guid": "934bcfc69481ba2970fb7dfe9b57c954b1fd77ba",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:10:42.269Z",
+          "updated_at": "2019-11-07T13:10:42.269Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-08772",
+          "reason": "For Display Damage Only",
+          "cost": 15000.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 8,
+      "fields": {
+          "guid": "431fa3118a14386ebd5b3630ff64c06db94caf3b",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:10:52.851Z",
+          "updated_at": "2019-11-07T13:10:52.851Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-08772",
+          "reason": "Exchange Price Returnable Damage",
+          "cost": 30500.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 9,
+      "fields": {
+          "guid": "0cc8ef04c0da68372b0df8d5f388c62d924ca92d",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:11:04.312Z",
+          "updated_at": "2019-11-07T13:11:04.312Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-08772",
+          "reason": "Lost Or Excessive Damage",
+          "cost": 46000.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 10,
+      "fields": {
+          "guid": "ab831245f00466814faffa18715301c4b1597543",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:11:18.851Z",
+          "updated_at": "2019-11-07T13:11:18.851Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-08255",
+          "reason": "For Display Damage Only",
+          "cost": 13000.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 11,
+      "fields": {
+          "guid": "68f02c1434d6ad92759c2b4cce99feffc9029c64",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:11:28.966Z",
+          "updated_at": "2019-11-07T13:11:28.966Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-08255",
+          "reason": "Exchange Price Returnable Damage",
+          "cost": 27000.0
+      }
+  },
+  {
+      "model": "inventory.loaneritempenaltyamount",
+      "pk": 12,
+      "fields": {
+          "guid": "f34a2f0bd6d308c003f14c6c2c9900a64915459f",
+          "created_by": 1,
+          "last_modified_by": null,
+          "created_at": "2019-11-07T13:11:37.292Z",
+          "updated_at": "2019-11-07T13:11:37.292Z",
+          "deleted_at": null,
+          "is_deleted": false,
+          "version": "v1",
+          "part_number": "HN661-08255",
+          "reason": "Lost Or Excessive Damage",
+          "cost": 35000.0
+      }
+  }
+]

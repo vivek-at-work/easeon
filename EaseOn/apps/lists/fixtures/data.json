@@ -1,0 +1,1464 @@
+[
+  {
+    "model": "lists.item",
+    "pk": 1,
+    "fields": {
+      "guid": "2669cfafb239a126e9e1027cf5bda4eba150c736",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.952Z",
+      "updated_at": "2019-07-09T10:47:31.952Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Limited Warranty",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 2,
+    "fields": {
+      "guid": "e83eb4d49dea7bc6a180dbe2953c9df5a30768e4",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.960Z",
+      "updated_at": "2019-07-09T10:47:31.960Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Out of warranty",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 3,
+    "fields": {
+      "guid": "1fc5dfcfc71fa85d581d717e8c0026da0da6aac9",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.965Z",
+      "updated_at": "2019-07-09T10:47:31.965Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Quality Program",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 4,
+    "fields": {
+      "guid": "7530e60234b1a6ff61f5cf913098495a25ca5094",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.970Z",
+      "updated_at": "2019-07-09T10:47:31.970Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Chargeable",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 5,
+    "fields": {
+      "guid": "d833d6c8ef6363b004e07f9cfa8125c380deb478",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.976Z",
+      "updated_at": "2019-07-09T10:47:31.976Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Applecare Protection Plan",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 6,
+    "fields": {
+      "guid": "80d8bd5d84caf7934725e49ea57b10f16ac92827",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.981Z",
+      "updated_at": "2019-07-09T10:47:31.981Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Repeat Service",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 7,
+    "fields": {
+      "guid": "81973be6a6fe694aa757e9a20adeaab1b724ed59",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.991Z",
+      "updated_at": "2019-07-09T10:47:31.991Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Others Exception",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 8,
+    "fields": {
+      "guid": "d30cac46e14f534ff2ed2828dcb89ccbc139eed1",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:31.996Z",
+      "updated_at": "2019-07-09T10:47:31.996Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Warranty on POP",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 9,
+    "fields": {
+      "guid": "205cebf6b5a17b2201774a2aef293ace64154a4f",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.002Z",
+      "updated_at": "2019-07-09T10:47:32.002Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "APP+",
+      "list_name": "COVERAGE_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 10,
+    "fields": {
+      "guid": "f73fa83b2c50b4cb1813c99a33a6a36b4ee09bba",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.009Z",
+      "updated_at": "2019-07-09T10:47:32.009Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Hardware",
+      "list_name": "REPAIR_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 11,
+    "fields": {
+      "guid": "feab8899ca86734eeef565da33fc10ffde116b5b",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.014Z",
+      "updated_at": "2019-07-09T10:47:32.014Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Software",
+      "list_name": "REPAIR_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 12,
+    "fields": {
+      "guid": "ac2a707922faf2c5beab6626587f6e40fab0603e",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.020Z",
+      "updated_at": "2019-07-09T10:47:32.020Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Not Confirm",
+      "list_name": "REPAIR_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 13,
+    "fields": {
+      "guid": "99b8ee425f121f60301f83dc3d83f15cb540362c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.025Z",
+      "updated_at": "2019-07-09T10:47:32.025Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Carry-In",
+      "list_name": "GSX_REPAIR_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 14,
+    "fields": {
+      "guid": "d9958459c7e5ad3a039656f647d99716846557be",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.031Z",
+      "updated_at": "2019-07-09T10:47:32.031Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Mail-In",
+      "list_name": "GSX_REPAIR_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 15,
+    "fields": {
+      "guid": "c61bbd2dda116a3dedbf8156189e0a2701d44e96",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.036Z",
+      "updated_at": "2019-07-09T10:47:32.036Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Registered",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 16,
+    "fields": {
+      "guid": "6b54654a269542ccbc7797100277968c7cd0b621",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.040Z",
+      "updated_at": "2019-07-09T10:47:32.041Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Under Progress",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 17,
+    "fields": {
+      "guid": "950c1b484d34c4a0421b0edadbf0cf61b494b49d",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.045Z",
+      "updated_at": "2019-07-09T10:47:32.045Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Ready",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 18,
+    "fields": {
+      "guid": "250f2c1f68cebcec04af994a9269512227b8a618",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.050Z",
+      "updated_at": "2019-07-09T10:47:32.050Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Delivered",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 19,
+    "fields": {
+      "guid": "15c46b3f469c8505098b62397b480389b9ccc569",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.056Z",
+      "updated_at": "2019-07-09T10:47:32.056Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Hold",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 20,
+    "fields": {
+      "guid": "e08c4ac9c341b556054ed9373197018641d4776e",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.061Z",
+      "updated_at": "2019-07-09T10:47:32.061Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "PROCESSED FOR REPLACEMENT",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 21,
+    "fields": {
+      "guid": "10c2f54be392981396e56f383a85397ea3fcc18a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.066Z",
+      "updated_at": "2019-07-09T10:47:32.066Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "DECLINED",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 22,
+    "fields": {
+      "guid": "e7826a786ae7fc261ea5759406b4bade3cb6fb96",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.070Z",
+      "updated_at": "2019-07-09T10:47:32.070Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Ready For Pickup",
+      "list_name": "TICKET_STATUS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 23,
+    "fields": {
+      "guid": "76fd04eb0f8a374cf8992046ef6d186b657edc4a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.076Z",
+      "updated_at": "2019-07-09T10:47:32.076Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "End User",
+      "list_name": "CUSTOMER_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 24,
+    "fields": {
+      "guid": "f410f114c098de417420c7506dffe88f59e55f6e",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.081Z",
+      "updated_at": "2019-07-09T10:47:32.081Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "NEU",
+      "list_name": "CUSTOMER_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 25,
+    "fields": {
+      "guid": "bb97393d18ec3bcf454721b98aaa34b8ddf961f2",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.086Z",
+      "updated_at": "2019-07-09T10:47:32.086Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Touch ID/ Face ID",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 26,
+    "fields": {
+      "guid": "d674750662892fb088acbb51e14e19dce4b01575",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.092Z",
+      "updated_at": "2019-07-09T10:47:32.092Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "USB/DOC",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 27,
+    "fields": {
+      "guid": "e626c61ee1fab2cc59dbd3d4c14a97f083fdaaa0",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.097Z",
+      "updated_at": "2019-07-09T10:47:32.097Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Camera",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 28,
+    "fields": {
+      "guid": "4ef19d76c39e8446446f657d303984842789d50e",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.103Z",
+      "updated_at": "2019-07-09T10:47:32.103Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Speaker",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 29,
+    "fields": {
+      "guid": "202d57e5daa3e5da23ed2a894e91b09bd0f8175a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.109Z",
+      "updated_at": "2019-07-09T10:47:32.109Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Display",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 30,
+    "fields": {
+      "guid": "b49816202eaa89d0b677eb99a6f20db61e64b086",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.114Z",
+      "updated_at": "2019-07-09T10:47:32.114Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Airport/Wifi",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 31,
+    "fields": {
+      "guid": "81640be2f90e5bda5ecdeec945074940b56ebbdb",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.121Z",
+      "updated_at": "2019-07-09T10:47:32.121Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Bluetooth",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 32,
+    "fields": {
+      "guid": "d8d87cc0aae32c864542b36777ceb62ceb3cd828",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.126Z",
+      "updated_at": "2019-07-09T10:47:32.126Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Battery",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 33,
+    "fields": {
+      "guid": "d923372c2fde36533cad8b3532afd15b72805598",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.132Z",
+      "updated_at": "2019-07-09T10:47:32.132Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Adapter",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 34,
+    "fields": {
+      "guid": "4bf57906e0d65b872222d42e509aa6201956d1ad",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.137Z",
+      "updated_at": "2019-07-09T10:47:32.138Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Touch Screen",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 35,
+    "fields": {
+      "guid": "24f4aa741b3b6273a0ed3efac48347c0e93f94a0",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.142Z",
+      "updated_at": "2019-07-09T10:47:32.142Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "FMIP",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 36,
+    "fields": {
+      "guid": "65855555c14a8719646b748ed225e7147a76824a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.148Z",
+      "updated_at": "2019-07-09T10:47:32.148Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Mouse/Keyboard",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 37,
+    "fields": {
+      "guid": "aaeb78c867a889dda03b14365137fcd829834994",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.153Z",
+      "updated_at": "2019-07-09T10:47:32.153Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "EarPods/Charging cable",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 38,
+    "fields": {
+      "guid": "d66b13e87f14ef447e8c71ffd4758b83a9ad6863",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.158Z",
+      "updated_at": "2019-07-09T10:47:32.158Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Microphone",
+      "list_name": "UNIT_PART"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 39,
+    "fields": {
+      "guid": "218078d3e4787d83716f15602b3c27ac17be900a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.164Z",
+      "updated_at": "2019-07-09T10:47:32.164Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "India",
+      "list_name": "COUNTRY"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 40,
+    "fields": {
+      "guid": "81447a09be4fb2b8473a87f81f08d1e4176fc235",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.169Z",
+      "updated_at": "2019-07-09T10:47:32.169Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "USA",
+      "list_name": "COUNTRY"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 41,
+    "fields": {
+      "guid": "9c0d2feda317749cf85f5a02938968711571ee98",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.174Z",
+      "updated_at": "2019-07-09T10:47:32.174Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Andaman and Nicobar Islands",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 42,
+    "fields": {
+      "guid": "ce303e6332493568ff078c3f3ab6f5ce822a9cd1",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.180Z",
+      "updated_at": "2019-07-09T10:47:32.180Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Andhra Pradesh",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 43,
+    "fields": {
+      "guid": "b79d0e8706a89c0a2e819edc32dcb05c7443480d",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.187Z",
+      "updated_at": "2019-07-09T10:47:32.187Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Arunachal Pradesh",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 44,
+    "fields": {
+      "guid": "189e9874bdd472140d52d75824f0630686c2d448",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.192Z",
+      "updated_at": "2019-07-09T10:47:32.192Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Assam",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 45,
+    "fields": {
+      "guid": "d6297dff9f4e4381fc1d5cc955a96745655e4bb0",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.198Z",
+      "updated_at": "2019-07-09T10:47:32.198Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Bihar",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 46,
+    "fields": {
+      "guid": "a6eac9b317d69f9a0547ed154edc1d03d8919723",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.204Z",
+      "updated_at": "2019-07-09T10:47:32.204Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Chandigarh",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 47,
+    "fields": {
+      "guid": "13463759040f4cf8820c9e4414c53c77bb259184",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.209Z",
+      "updated_at": "2019-07-09T10:47:32.210Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Chhattisgarh",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 48,
+    "fields": {
+      "guid": "0a153d8bf5f3ed5d6aa78f1830a809b3f3588639",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.217Z",
+      "updated_at": "2019-07-09T10:47:32.217Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Dadra and Nagar Haveli",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 49,
+    "fields": {
+      "guid": "95e51c15632b62df8164b3941e56961e81dd645c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.222Z",
+      "updated_at": "2019-07-09T10:47:32.222Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Daman and Diu",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 50,
+    "fields": {
+      "guid": "2912595ca8dceee70e665e49a9b2e040125b5ced",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.228Z",
+      "updated_at": "2019-07-09T10:47:32.228Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Delhi",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 51,
+    "fields": {
+      "guid": "35e67c5a5795237e4a36e34530d22ddfe7783e20",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.233Z",
+      "updated_at": "2019-07-09T10:47:32.233Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Goa",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 52,
+    "fields": {
+      "guid": "0915ec8c6deec00edf606d114535304f2424a9c2",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.238Z",
+      "updated_at": "2019-07-09T10:47:32.238Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Gujarat",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 53,
+    "fields": {
+      "guid": "13f553e42629ed37192da01ea41cc2c9fb39a60c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.242Z",
+      "updated_at": "2019-07-09T10:47:32.242Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Haryana",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 54,
+    "fields": {
+      "guid": "eea95ae987121b42a3c510266bbc79acf229d9ac",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.248Z",
+      "updated_at": "2019-07-09T10:47:32.248Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Himachal Pradesh",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 55,
+    "fields": {
+      "guid": "2b7ee1cf63bf43480a8ff3fbf3c0cb1ad3d07f40",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.254Z",
+      "updated_at": "2019-07-09T10:47:32.254Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Jammu and Kashmir",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 56,
+    "fields": {
+      "guid": "46e1817a032c0ce2044d096abea7292638cec886",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.259Z",
+      "updated_at": "2019-07-09T10:47:32.259Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Jharkhand",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 57,
+    "fields": {
+      "guid": "524467ae8041bccbcdd9a388c1ec38132b7afac1",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.263Z",
+      "updated_at": "2019-07-09T10:47:32.263Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Karnataka",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 58,
+    "fields": {
+      "guid": "c54927dfd03a42bc0c16df2f93a926859567257d",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.269Z",
+      "updated_at": "2019-07-09T10:47:32.269Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Kerala",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 59,
+    "fields": {
+      "guid": "40680cf56a050b87929cc1b57e21c204e83951cf",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.274Z",
+      "updated_at": "2019-07-09T10:47:32.274Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Lakshadweep",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 60,
+    "fields": {
+      "guid": "5cb2b43261256c28759a15c16a5d9bb79ca812ee",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.279Z",
+      "updated_at": "2019-07-09T10:47:32.279Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Madhya Pradesh",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 61,
+    "fields": {
+      "guid": "14cbee6a2edf1f893803f96248b6f4b7b2bb7d77",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.284Z",
+      "updated_at": "2019-07-09T10:47:32.284Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Maharashtra",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 62,
+    "fields": {
+      "guid": "fefee3b6ed77132e77ccc914e10ac9e09ac5ea79",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.289Z",
+      "updated_at": "2019-07-09T10:47:32.289Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Manipur",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 63,
+    "fields": {
+      "guid": "2f085c4f381e42ba4fa8dc98475f2d270f64570e",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.294Z",
+      "updated_at": "2019-07-09T10:47:32.294Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Meghalaya",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 64,
+    "fields": {
+      "guid": "7721149be046a6fc0728cae79fb20fff36c67919",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.299Z",
+      "updated_at": "2019-07-09T10:47:32.299Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Mizoram",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 65,
+    "fields": {
+      "guid": "48bd34a59555f4b4722c7a0278d5ed1e3de51ac1",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.305Z",
+      "updated_at": "2019-07-09T10:47:32.305Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Nagaland",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 66,
+    "fields": {
+      "guid": "dcb9d764c39cb32bc4c3b014705f536431ca725c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.310Z",
+      "updated_at": "2019-07-09T10:47:32.310Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Odisha",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 67,
+    "fields": {
+      "guid": "61f8dafb4115fa802aee71bb8d1f7be0c3074a43",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.316Z",
+      "updated_at": "2019-07-09T10:47:32.316Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Puducherry",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 68,
+    "fields": {
+      "guid": "c36322629bce4cbb76f1774433df2452889803e6",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.322Z",
+      "updated_at": "2019-07-09T10:47:32.322Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Punjab",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 69,
+    "fields": {
+      "guid": "b5a8773c0fff5a580afd4c2f56b310d9a87c667d",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.327Z",
+      "updated_at": "2019-07-09T10:47:32.327Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Rajasthan",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 70,
+    "fields": {
+      "guid": "6b79e51b5bda964f03bade9da99ade7032b279f7",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.334Z",
+      "updated_at": "2019-07-09T10:47:32.334Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Sikkim",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 71,
+    "fields": {
+      "guid": "de3a8f2dfae0cbe573f5e143e9a6be8da784f642",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.339Z",
+      "updated_at": "2019-07-09T10:47:32.339Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Tamil Nadu",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 72,
+    "fields": {
+      "guid": "4853181b73f9a663e1205d2df0603edfb6e1f9bc",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.344Z",
+      "updated_at": "2019-07-09T10:47:32.344Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Telangana",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 73,
+    "fields": {
+      "guid": "6af597dceac86cc41fd7e403102c4e2dbffb1527",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.349Z",
+      "updated_at": "2019-07-09T10:47:32.349Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Tripura",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 74,
+    "fields": {
+      "guid": "2ce5bd62b8e582ac4ad54d2ae6f01c1e6884d3e2",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.355Z",
+      "updated_at": "2019-07-09T10:47:32.355Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Uttarakhand",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 75,
+    "fields": {
+      "guid": "e83c1ac6276fb78feff69634700a9e563c990e15",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.362Z",
+      "updated_at": "2019-07-09T10:47:32.362Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Uttar Pradesh",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 76,
+    "fields": {
+      "guid": "73a31238eeff56ae6b309a994b666f12574ad911",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.367Z",
+      "updated_at": "2019-07-09T10:47:32.367Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "West Bengal",
+      "list_name": "STATES"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 77,
+    "fields": {
+      "guid": "5437db6ac24d9ae21f48c471e2019dc9c886b9bb",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.372Z",
+      "updated_at": "2019-07-09T10:47:32.372Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "04",
+      "list_name": "REGION"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 78,
+    "fields": {
+      "guid": "4a65d860bbecf12d4cd4ff92cbcc804cb7ef983a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.377Z",
+      "updated_at": "2019-07-09T10:47:32.377Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "APPLE",
+      "list_name": "CONSIGNMENT_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 79,
+    "fields": {
+      "guid": "a2531ef063f61b0509c9eaed9665d9eeced75f47",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.382Z",
+      "updated_at": "2019-07-09T10:47:32.382Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "UNICORN",
+      "list_name": "CONSIGNMENT_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 80,
+    "fields": {
+      "guid": "2490bf9fd676f43b5707c3233433174e1cec3371",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.387Z",
+      "updated_at": "2019-07-09T10:47:32.387Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "iPhone Display Adhesive",
+      "list_name": "SERIALIZABLE_INVENTORY_ITEM"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 81,
+    "fields": {
+      "guid": "1ed97f217cf033069242153836328cad9aeddce1",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.393Z",
+      "updated_at": "2019-07-09T10:47:32.393Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Imac Display Adhesive",
+      "list_name": "SERIALIZABLE_INVENTORY_ITEM"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 82,
+    "fields": {
+      "guid": "731549f59b5692ae486b2e85afa71ce6f84e34e9",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "iPhone Battery Adhesive",
+      "list_name": "SERIALIZABLE_INVENTORY_ITEM"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 83,
+    "fields": {
+      "guid": "6d507e9d651d4ea3af1274844cbbaecd",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "HN661-01867",
+      "list_name": "LOANER_INVENTORY_PART_NUMBERS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 84,
+    "fields": {
+      "guid": "1d50ca70d1eb4978b10b6c565518a50e",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "HN661-01909",
+      "list_name": "LOANER_INVENTORY_PART_NUMBERS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 85,
+    "fields": {
+      "guid": "008ffa4ebe5b4ae1aab0f433379d8b0c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "HN661-08772",
+      "list_name": "LOANER_INVENTORY_PART_NUMBERS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 86,
+    "fields": {
+      "guid": "008ffa4ebe5b4ae1aab0f433379d8b0c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "HN661-08255",
+      "list_name": "LOANER_INVENTORY_PART_NUMBERS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 87,
+    "fields": {
+      "guid": "aa9d60bccea24b808e667b996ee64b9b",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "For Display Damage Only",
+      "list_name": "LOANER_INVENTORY_PENALTY_REASONS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 88,
+    "fields": {
+      "guid": "4f20e99ceb93446bb7b6f46ec9a24b9b",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Exchange Price Returnable Damage",
+      "list_name": "LOANER_INVENTORY_PENALTY_REASONS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 89,
+    "fields": {
+      "guid": "c69fe75efdf14d0bb94ee4142828318f",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.398Z",
+      "updated_at": "2019-07-09T10:47:32.398Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "Lost Or Excessive Damage",
+      "list_name": "LOANER_INVENTORY_PENALTY_REASONS"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 90,
+    "fields": {
+      "guid": "76fd04eb0f8a374cf8992086ef6d186b657edc4a",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.076Z",
+      "updated_at": "2019-07-09T10:47:32.076Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "BSU",
+      "list_name": "CUSTOMER_TYPE"
+    }
+  },
+  {
+    "model": "lists.item",
+    "pk": 91,
+    "fields": {
+      "guid": "99b8ee425f921f60301f83dc3d83f15cb540362c",
+      "created_by": 1,
+      "last_modified_by": null,
+      "created_at": "2019-07-09T10:47:32.025Z",
+      "updated_at": "2019-07-09T10:47:32.025Z",
+      "deleted_at": null,
+      "is_deleted": false,
+      "version": "v1",
+      "value": "NTF",
+      "list_name": "GSX_REPAIR_TYPE"
+    }
+  }
+
+
+
+
+
+
+]

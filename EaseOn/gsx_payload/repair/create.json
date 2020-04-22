@@ -1,0 +1,136 @@
+{
+  "notes": [
+    {
+      "type": "CUSTOMER_INTAKE_NOTES",
+      "content": "Battery Issue not chaging"
+    }
+  ],
+  "loaners": [
+    {
+      "partUsed": "string",
+      "returnStatusCode": "DOA",
+      "partNumber": "string",
+      "fromConsignedStock": true,
+      "componentIssue": {
+        "componentCode": "string",
+        "reproducibility": "A",
+        "issueCode": "string"
+      },
+      "device": {
+        "id": "string"
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "id": "string",
+      "type": "POP"
+    }
+  ],
+  "repairClassification": "SINGLE",
+  "repairType": "SVNR",
+  "serviceNonRepairType": "NTF",
+  "questionDetails": [
+    {
+      "templateId": "string",
+      "trees": [
+        {
+          "treeId": "string",
+          "questions": [
+            {
+              "questionId": "string",
+              "answers": [
+                {
+                  "answerId": "string",
+                  "answerPhrase": "string",
+                  "questions": [
+                    {
+                      "questionId": "string",
+                      "answers": [
+                        null
+                      ],
+                      "questionPhrase": "string",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "coverageOption": "BATTERY",
+  "unitReceivedDateTime": "2019-08-05T13:57:42.979Z",
+  "repairFlags": {
+    "requestReviewByApple": true,
+    "markComplete": true
+  },
+  "boxRequired": true,
+  "loanerStockUnavailable": true,
+  "reservationId": "string",
+  "referenceNumber": "string",
+  "purchaseOrderNumber": "string",
+  "addressCosmeticDamage": true,
+  "componentIssues": [
+    {
+      "componentCode": "string",
+      "reproducibility": "A",
+      "priority": 0,
+      "type": "TECH",
+      "issueCode": "string",
+      "order": 0
+    }
+  ],
+  "parts": [
+    {
+      "number": "string",
+      "partUsed": "string",
+      "kgbDeviceDetail": {
+        "id": "string"
+      },
+      "fromConsignedStock": true,
+      "componentIssue": {
+        "componentCode": "string",
+        "reproducibility": "A",
+        "issueCode": "string"
+      },
+      "coverageOption": "BATTERY",
+      "pricingOption": "string"
+    }
+  ],
+  "consumerLaw": "RFD",
+  "device": {
+    "configuration": {
+      "hardDiskSize": "32",
+      "osVersion": "12.3.1",
+    },
+    "id": "FCGT24E5HFM2"
+  },
+  "techId": "8FSUAZ6D62",
+  "account": {
+    "soldtoContactEmail": "unicorn_tech_aprvlnotreqrd@unicorn.com",
+    "soldToContactPhone": "9657946755"
+  },
+  "customer": {
+    "firstName": "Vivek",
+    "lastName": "Srivastava",
+    "primaryPhone": "9657946755",
+    "emailAddress": "developer.viveksrivastava@gmail.com",
+    "sendSMSOnPrimaryPhone": true,
+    "address": [
+      {
+        "line4": "Nagras Road",
+        "city": "Pune",
+        "postalCode": "229010",
+        "countryCode": "IN",
+        "stateCode": "MH",
+        "line3": "Aundh",
+        "line2": "New Dp  Road",
+        "line1": "Kp Park"
+      }
+    ],
+    "type": "VAR",
+  }
+}
