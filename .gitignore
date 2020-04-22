@@ -24,6 +24,7 @@ Temporary Items
 .apdisk
 
 
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -92,3 +93,4 @@ media/
 db.sqlite3
 env.sh
 sftp-config.json
+*.swp
