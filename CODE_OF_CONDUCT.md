@@ -55,7 +55,7 @@ permanently any contributor for other behaviors that they deem inappropriate,
 threatening, offensive, or harmful.
 
 ## Reporting Guidelines
-If you are subject to or witness unacceptable behavior, or have any other concerns, please notify a community organizer as soon as possible by emailing easeon.help@gmail.com. Please read [Reporting Guidelines](reporting_guidelines.md) for details.
+If you are subject to or witness unacceptable behavior, or have any other concerns, please notify a community organizer as soon as possible by emailing to admin@easeon.in. Please read [Reporting Guidelines](reporting_guidelines.md) for details.
 
 Additionally, community organizers are available to help community members engage with local law enforcement or to otherwise help those experiencing unacceptable behavior feel safe. In the context of in-person events, organizers will also provide escorts as desired by the person experiencing distress.
 
