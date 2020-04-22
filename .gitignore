@@ -94,3 +94,10 @@ db.sqlite3
 env.sh
 sftp-config.json
 *.swp
+
+### Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json  
