@@ -15,18 +15,23 @@ class CustomerSerializer(BaseSerializer):
 
     class Meta(BaseMeta):
         model = Customer
-        read_only_fields = [
-            'id',
-            'url',
-            'created_by',
-            'created_at',
-            'is_deleted',
-            'guid',
-            'updated_at',
-            'deleted_at',
-            'version',
-            'last_visit_on',
-            'last_modified_by',
+        fields = [
+            "url", 
+            "state", 
+            "customer_type",
+            "country", 
+            "first_name",
+            "last_name",
+            "city",
+            "address_line_1",
+            "address_line_2",
+            "street",
+            "email",
+            "contact_number",
+            "last_visit_on",
+            "pin_code",
+            "token_number",
+            "user_messages"
         ]
 
     # def create(self, validated_data):

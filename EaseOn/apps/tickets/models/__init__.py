@@ -8,3 +8,4 @@ from .orderline import *
 from .ticket import *
 from .upload_content import *
 from .voucher import *
+from .gsx_info import *

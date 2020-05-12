@@ -88,6 +88,12 @@ class OrganizationFilter(django_filters.FilterSet):
     city = django_filters.CharFilter(lookup_expr='icontains')
     state = django_filters.CharFilter(lookup_expr='icontains')
     contact_number = django_filters.CharFilter(lookup_expr='icontains')
+    created_at_before = django_filters.DateTimeFilter(
+        field_name="created_at",
+        lookup_expr="lte")
+    created_at_after = django_filters.DateTimeFilter(
+        field_name="created_at",
+        lookup_expr="gte")
 
     class Meta(object):
         model = models.Organization

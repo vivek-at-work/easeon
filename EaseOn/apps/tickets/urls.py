@@ -10,6 +10,7 @@ from tickets.viewsets import (
     SerializableOrderLineViewSet,
     TicketViewSet,
     VoucherViewSet,
+    GSXInfoViewSet,
 )
 
 ticket_router = DefaultRouter()
@@ -30,4 +31,9 @@ ticket_router.register(
     r'device_part_reports',
     DevicePartReportViewSet,
     basename='devicepartreport',
+)
+ticket_router.register(
+    r'gsx_info',
+    GSXInfoViewSet,
+    basename='gsxinfo',
 )

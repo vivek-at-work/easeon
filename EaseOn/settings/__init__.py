@@ -38,6 +38,7 @@ ADMIN_NAME = env('ADMIN_NAME')
 ADMIN_EMAIL = env('ADMIN_EMAIL')
 ADMIN_CONTACT_NUMBER = env('ADMIN_CONTACT_NUMBER')
 ADMINS = [(ADMIN_NAME, ADMIN_EMAIL)]
+APPEND_SLASH =False
 TEST_EMAILS = [
     'developer.viveksrivastava@gmail.com',
     'ervivek.rbl@gmail.com',
@@ -131,14 +132,6 @@ STATIC_URL = '/django_static/'
 STATICFILES_DIRS = []
 STATIC_ROOT = os.path.join(BASE_DIR, 'django_static')
 
-CORS_ORIGIN_WHITELIST = (
-    'https://google.com',
-    'http://localhost:9000',
-    'http://127.0.0.1:9000',
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-    'https://www.easeon.in'
-)
 CORS_ORIGIN_ALLOW_ALL = True
 
 

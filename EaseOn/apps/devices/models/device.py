@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+from core import utils
 
 from core.gsx import DEVICE_DIAGNOSTICS_INELIGIBLE, GSXRequest
 from core.models import BaseModel
@@ -7,6 +8,7 @@ from core.utils import send_mail, time_by_adding_business_days
 from devices.restricted_devices import restricted_identifiers
 from django.conf import settings
 from django.db import models
+from django.apps import apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from devices.exceptions import DeviceDetailsExceptions
@@ -92,35 +94,24 @@ class Device(BaseModel):
     def identifier(self, number):
         self._set_device_identifier(number)
 
-    @property
-    def can_create_ticket(self):
-        '''Can not create ticket for device if
-        device is stolen or has previously open
-        tickets.'''
-        return not self.is_stolen_device()
 
     def is_stolen_device(self):
         di = [self.alternate_device_id, self.serial_number]
         return any(elem in restricted_identifiers for elem in di)
 
-    @property
-    def tickets(self):
-        return self.tickets.all()
-
+ 
     @property
     def open_tickets(self):
-        return self.tickets.all().open()
+        Ticket = apps.get_model(utils.get_ticket_model())
+        return Ticket.objects.filter(device__serial_number=self.serial_number).open()
 
     @property
     def user_messages(self):
         if self.is_stolen_device():
-            return """Contact with {} Kindly immediate contact with Nagmani Sir on
-            cell number  {} before proceed the repair of device.""".format(
-                settings.ADMIN_NAME, settings.ADMIN_CONTACT_NUMBER
-            )
+            return """Kindly immediatly contact with administrator before proceed the repair of device."""
+
         if self.open_tickets.count():
-            return """This Device has pending open tickets.
-            Close them before proceeding for a new one"""
+            return """This Device has pending open tickets.Close them before proceeding for a new one"""
 
     def get_parts(self, gsx_username, authtoken, **kwargs):
         payload = {
@@ -708,10 +699,9 @@ def restricted_device_update(sender, instance, *args, **kwargs):
             instance.identifier
         )
         context = {'summary': summary, 'detail': details}
-        subject = """Urgent !! A Restricted Device {0}
-        has been accessed .""".format(
+        subject = """Urgent !! A Restricted Device {0} has been accessed .""".format(
             instance.identifier
         )
 
         context['receiver_short_name'] = settings.ADMIN_NAME
-        send_mail(subject, template, settings.ADMIN_EMAIL, **context)
+        send_mail(subject, template, [settings.ADMIN_EMAIL], **context)

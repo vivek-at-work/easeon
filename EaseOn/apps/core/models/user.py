@@ -73,6 +73,7 @@ class User(AbstractBaseUser):
     gsx_technician_id = models.CharField(max_length=100)
     gsx_user_name = models.CharField(max_length=100)
     gsx_auth_token = models.CharField(max_length=100)
+    gsx_ship_to = models.CharField(max_length=100,default='0001026647')
     gsx_token_last_refreshed_on = models.DateTimeField(null=True)
     is_admin = models.BooleanField(default=False)  # a superuser
     USERNAME_FIELD = 'email'
@@ -86,6 +87,7 @@ class User(AbstractBaseUser):
         'city',
         'gsx_technician_id',
         'gsx_user_name',
+        'gsx_ship_to'
         'gsx_auth_token',
     ]
     objects = UserManager()
@@ -160,13 +162,13 @@ class User(AbstractBaseUser):
                     self, ','.join(receivers)
                 )
             )
-        for mail_receiver in receivers:
+        else:
             logging.info(
                 'user {} approval mail will be sent on admin emails {}'.format(
                     self.email, ','.join(receivers)
                 )
-            )
-            utils.send_mail(subject, template, mail_receiver, **context)
+            )           
+            utils.send_mail(subject, template, *receivers, **context)
         return receivers
 
     def send_email_verification_mail(self):
@@ -272,7 +274,7 @@ class User(AbstractBaseUser):
             )
         )
 
-    def refresh_gsx_token(self, gsx_token=None):
+    def refresh_gsx_token(self, gsx_token=None,gsx_ship_to=None):
         req = None
         result = None
         if gsx_token:
@@ -280,14 +282,16 @@ class User(AbstractBaseUser):
             'authenticate', 
             'token',
              self.gsx_user_name,
-             gsx_token
+             gsx_token,
+             gsx_ship_to
             )
         else:
             req = GSXRequest(
             'authenticate', 
             'token',
              self.gsx_user_name,
-             self.gsx_auth_token
+             self.gsx_auth_token,
+             self.gsx_ship_to
             )
         
         if req:

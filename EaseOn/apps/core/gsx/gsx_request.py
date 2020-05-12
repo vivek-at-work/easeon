@@ -47,10 +47,10 @@ def get_connection(gsx_user_name,auth_token):
                     key_file=GSX_KEY_FILE_PATH,
                 )
 
-def get_headers(auth_token):
+def get_headers(auth_token,ship_to):
     return {
             'X-Apple-SoldTo': GSX_SOLD_TO,
-            'X-Apple-ShipTo': GSX_SHIP_TO,
+            'X-Apple-ShipTo': ship_to,
             'X-Apple-Trace-ID': str(get_uuid()),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -69,11 +69,12 @@ def _prepare_response(gsx_user_name, **kwargs):
 
 
 class GSXRequest:
-    def __init__(self, service, method, gsx_user_name, auth_token):       
+    def __init__(self, service, method, gsx_user_name, auth_token, ship_to):       
         self.service = service
         self.method = method
         self.gsx_user_name = gsx_user_name
         self.auth_token = auth_token
+        self.ship_to = ship_to
         self.url = get_resource_url(self.service, self.method)
         self.can_handle_token_timout = True
     
@@ -95,8 +96,9 @@ class GSXRequest:
             'POST',
             get_resource_url('authenticate', 'token'),
             body=json.dumps({'userAppleId':self.gsx_user_name, 'authToken':self.auth_token}),
-            headers=get_headers(self.auth_token)
+            headers=get_headers(self.auth_token,self.ship_to)
         )
+        
         response = connection.getresponse()
         output = response.read()
         result = json.loads(output) if is_json(output) else output
@@ -116,14 +118,20 @@ class GSXRequest:
     def _send_request(self,method,url,payload_string=None):
         connection = get_connection(self.gsx_user_name,self.auth_token)
         if method == 'GET':
-            connection.request(method, url, headers=get_headers(self.auth_token))
+            connection.request(method, url, headers=get_headers(self.auth_token,self.ship_to))
+            logging.info(
+                'GSX Request Method  %s for endpoint %s with headers %s',method,
+                url,get_headers(self.auth_token,self.ship_to))
         if method == 'POST':
             connection.request(
                 method,
                 url,
                 body=payload_string,
-                headers=get_headers(self.auth_token)
+                headers=get_headers(self.auth_token,self.ship_to)
             )
+            logging.info(
+                'GSX Request Method  %s for endpoint %s with headers %s and data %s',method,
+                url,get_headers(self.auth_token,self.ship_to),payload_string)
         response = connection.getresponse()
         output = response.read()
         message = json.loads(output) if is_json(output) else output

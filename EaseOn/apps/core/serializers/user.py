@@ -27,14 +27,22 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'pin_code',
             'last_name',
             'full_name',
+            'date_joined',
             'contact_number',
             'is_active',
             'is_superuser',
             'gsx_technician_id',
+            'gsx_ship_to',
             'gsx_user_name',
             'can_update',
+            'role'
         )
 
     def get_can_update(self, obj):
         requesting_user = self.context['request'].user
         return requesting_user.is_superuser and (requesting_user.id != obj.id)
+
+
+
+class ChangeUserRoleSerializer(serializers.Serializer):
+    user_type = serializers.ChoiceField(choices=USER_MODEL.USER_TYPE_CHOICES)

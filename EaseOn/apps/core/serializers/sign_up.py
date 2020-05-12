@@ -20,6 +20,7 @@ class SignUpSerializer(serializers.HyperlinkedModelSerializer):
                 'token',
                 data['gsx_user_name'],
                 data['gsx_auth_token'],
+                data['gsx_ship_to']
             )
             result = req.post(
                 userAppleId=data['gsx_user_name'],
@@ -49,4 +50,5 @@ class SignUpSerializer(serializers.HyperlinkedModelSerializer):
             'gsx_technician_id',
             'gsx_user_name',
             'gsx_auth_token',
+            'gsx_ship_to',
         )

@@ -16,6 +16,12 @@ class LoanerInventoryItemFilter(django_filters.FilterSet):
     serial_number = django_filters.CharFilter(lookup_expr='icontains')
     part_number = django_filters.CharFilter(lookup_expr='icontains')
     description = django_filters.CharFilter(lookup_expr='icontains')
+    created_at_before = django_filters.DateTimeFilter(
+        field_name="created_at",
+        lookup_expr="lte")
+    created_at_after = django_filters.DateTimeFilter(
+        field_name="created_at",
+        lookup_expr="gte")
 
     class Meta(object):
         model = models.LoanerInventoryItem

@@ -279,7 +279,7 @@ class EmailVerificationView(generics.GenericAPIView):
                     {
                         'flag': result,
                         'detail': _(
-                            'Your Email Has been Verified Please Check with admin.'
+                            'Your email has been verified. Please check with admin.'
                         ),
                     },
                     status=status.HTTP_200_OK,
@@ -289,7 +289,7 @@ class EmailVerificationView(generics.GenericAPIView):
                     {
                         'flag': result,
                         'detail': _(
-                            'Your Email Has not been Verified Please Check with admin.'
+                            'Your email has not been verified. Please Check with admin.'
                         ),
                     },
                     status=status.HTTP_200_OK,

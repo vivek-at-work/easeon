@@ -6,7 +6,6 @@ from django.db import transaction
 from django.db.models import Q
 from rest_framework import serializers
 
-
 class DeviceSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = Device
@@ -16,7 +15,6 @@ class DeviceSerializer(BaseSerializer):
             'configuration',
             'identifier',
             'user_messages',
-            'can_create_ticket',
             'serial_number',
             'alternate_device_id'
         ]

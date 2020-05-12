@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from core import utils
 from core.models import BaseModel
 from django.db import models
 from django.utils import timezone
+from django.apps import apps
 
 
 class Customer(BaseModel):
@@ -20,13 +22,6 @@ class Customer(BaseModel):
     pin_code = models.CharField(max_length=50)
     token_number = models.CharField(max_length=100)
 
-    # class Meta(object):
-    #     constraints = [
-    #         models.UniqueConstraint(
-    #             fields=['email', 'contact_number'],
-    #             name='email_contact_number_unique',
-    #         )
-    #     ]
 
     @property
     def full_name(self):
@@ -43,6 +38,18 @@ class Customer(BaseModel):
             self.country,
             self.pin_code,
         )
+    
+    @property
+    def open_tickets(self):
+        Ticket = apps.get_model(utils.get_ticket_model())
+        return Ticket.objects.filter(customer__email=self.email,
+        customer__contact_number=self.contact_number,
+        ).open()
+
+    @property
+    def user_messages(self):
+        if self.open_tickets.count():
+            return """This Customer has pending open tickets.Close them before proceeding for a new one"""
 
     @property
     def time_since_last_visit(self):

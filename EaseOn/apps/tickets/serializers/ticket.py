@@ -14,6 +14,7 @@ from tickets import serializers as t_serializer
 from .device_part_report import DevicePartReportSerializer
 from .upload_content_serializer import UploadContentSerializer
 from .voucher import VoucherSerializer
+from .gsx_info import GSXInfoSerializer
 
 
 def device_do_not_have_open_tickets(device):
@@ -31,23 +32,18 @@ def customer_do_not_have_open_tickets(customer):
 
 
 class TicketListSerializer(BaseSerializer):
-    currently_assigned_to_name = serializers.SlugRelatedField(
-       source='currently_assigned_to', read_only=True, slug_field='full_name'
-    )
 
     class Meta(BaseMeta):
         model = models.Ticket
         fields = [
             'id',
             'url',
-            'created_by',
             'created_at',
             'is_deleted',
             'reference_number',
             'closed_on',
             'closed_by',
             'organization',
-            'currently_assigned_to_name',
             'repair_type',
             'status',
             'coverage_type',
@@ -220,7 +216,6 @@ class DeviceSerializer(BaseSerializer):
             'configuration',
             'identifier',
             'user_messages',
-            'can_create_ticket',
             'serial_number',
             'alternate_device_id'
         ]
@@ -246,6 +241,7 @@ class TicketPrintSerializer(BaseSerializer):
     serializable_order_lines = t_serializer.SerializableOrderLineSerializer(
         many=True
     )
+    gsx_informations = GSXInfoSerializer(many=True)
     uploaded_contents = UploadContentSerializer(many=True, read_only=True)
     can_update_ticket = serializers.SerializerMethodField()
     can_print_delivery_report = serializers.SerializerMethodField()
@@ -277,18 +273,25 @@ class TicketPrintSerializer(BaseSerializer):
                 )
             )
 
-        if not obj.has_consolidated_loaner_items:
+        if not obj.has_consolidated_loaner_items():
             messages.append(
                 """Consolidation of loaner Items is Pending.
              Check If Any of the loaner record is not moarked retuned"""
             )
 
-        if not obj.has_consolidated_order_lines:
+        if not obj.has_consolidated_order_lines():
             messages.append(
                 """Consolidation of Order Line Items is Pending.
              Check atleast one OrderLine or serilizable Orderline
              record should exist"""
             )
+        if not obj.has_consolidated_gsx_repair_info():
+            messages.append(
+                """Consolidation of GSX Repair Info is Pending.
+             Check atleast one GSX Repair Info
+             record should exist"""
+            )
+
 
         user = self.get_user()
         manager_flag = user.managed_locations.filter(

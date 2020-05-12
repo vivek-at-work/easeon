@@ -78,6 +78,12 @@ class TicketFilter(django_filters.FilterSet):
     organization = django_filters.CharFilter(field_name='organization__code')
     device = DeviceFilter(field_name='device')
     customer = CustomerFilter(field_name='customer')
+    created_at_before = django_filters.DateTimeFilter(
+        field_name="created_at",
+        lookup_expr="lte")
+    created_at_after = django_filters.DateTimeFilter(
+        field_name="created_at",
+        lookup_expr="gte")
 
     class Meta(object):
         model = models.Ticket

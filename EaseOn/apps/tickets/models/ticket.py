@@ -155,18 +155,21 @@ class Ticket(BaseModel):
     def can_be_closed(self):
         return self.status in CLOSE_STATUS_VALUES
 
-    def has_consolidated_loaner_items(self, obj):
+    def has_consolidated_loaner_items(self):
         flag = True
-        for i in self.loaner_records:
+        for i in self.loaner_records.all():
             if not i.is_returned:
                 flag = False
         return flag
 
-    def has_consolidated_order_lines(self, obj):
+    def has_consolidated_order_lines(self):
         return (
             self.order_lines.all().count()
             or self.serializable_order_lines.all().count()
         )
+    def has_consolidated_gsx_repair_info(self):
+        return self.gsx_informations.all().count()
+        
 
     @property
     def turn_around_time(self):

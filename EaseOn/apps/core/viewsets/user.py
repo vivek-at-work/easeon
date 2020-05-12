@@ -25,6 +25,12 @@ class UserFilter(django_filters.FilterSet):
     is_active = django_filters.BooleanFilter()
     is_admin = django_filters.BooleanFilter()
     full_name = FullNameFilter(field_name=None)
+    date_joined_before = django_filters.DateTimeFilter(
+        field_name="date_joined",
+        lookup_expr="lte")
+    date_joined_after = django_filters.DateTimeFilter(
+        field_name="date_joined",
+        lookup_expr="gte")
     class Meta:
         model = get_user_model()
         fields = [
@@ -199,11 +205,9 @@ class UserViewSet(BaseViewSet):
 
     @decorators.action(methods=['post', 'get'], detail=True)
     def refresh_gsx_token(self, request, pk=None):
-        # import pdb
-        # pdb.set_trace()
         user = self.get_object()
         gsx_token = self._get_gsx_token(request)
-        result = user.refresh_gsx_token(gsx_token)
+        result = user.refresh_gsx_token(gsx_token,user.gsx_ship_to)
         return response.Response(result, status=status.HTTP_200_OK)
 
     @decorators.action(methods=['post', 'get'], detail=True)
@@ -309,5 +313,27 @@ class UserViewSet(BaseViewSet):
         result = req.get()
         return response.Response(result, status=status.HTTP_200_OK)
 
+
+    @decorators.action(
+        methods=['POST'],
+        detail=True,
+        serializer_class=serializers.ChangeUserRoleSerializer,
+    )
+    def change_user_role(self, request,pk):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.get_object()
+        user.user_type=serializer.validated_data['user_type']
+        user.save()
+        return response.Response(serializers.UserSerializer(
+            user,context={'request': request}).data, status=status.HTTP_200_OK)
+    @decorators.action(
+        methods=['GET'],
+        detail=False
+    )
+    def available_user_roles(self, request):
+        roles = get_user_model().USER_TYPE_CHOICES
+        return response.Response(roles, status=status.HTTP_200_OK)
+    
     def get_queryset(self):
         return get_user_model().objects.all()
