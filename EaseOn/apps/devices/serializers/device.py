@@ -6,6 +6,7 @@ from django.db import transaction
 from django.db.models import Q
 from rest_framework import serializers
 
+
 class DeviceSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = Device
@@ -16,7 +17,7 @@ class DeviceSerializer(BaseSerializer):
             'identifier',
             'user_messages',
             'serial_number',
-            'alternate_device_id'
+            'alternate_device_id',
         ]
 
     def validate_identifier(self, value):
@@ -30,5 +31,3 @@ class DeviceSerializer(BaseSerializer):
                 'Not a valid serial number or IMEI number.'
             )
         return value
-
-

@@ -12,6 +12,7 @@ from inventory.serializers import LoanerItemSerializer, RepairItemSerializer
 from rest_framework import decorators, response, status
 from rest_framework.parsers import MultiPartParser
 from tickets import models, serializers
+from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class UserNameFilter(django_filters.CharFilter):
@@ -79,11 +80,11 @@ class TicketFilter(django_filters.FilterSet):
     device = DeviceFilter(field_name='device')
     customer = CustomerFilter(field_name='customer')
     created_at_before = django_filters.DateTimeFilter(
-        field_name="created_at",
-        lookup_expr="lte")
+        field_name='created_at', lookup_expr='lte'
+    )
     created_at_after = django_filters.DateTimeFilter(
-        field_name="created_at",
-        lookup_expr="gte")
+        field_name='created_at', lookup_expr='gte'
+    )
 
     class Meta(object):
         model = models.Ticket
@@ -93,7 +94,7 @@ class TicketFilter(django_filters.FilterSet):
 class TicketViewSet(viewsets.BaseViewSet):
     serializer_class = serializers.TicketSerializer
     filter_class = TicketFilter
-    # permission_classes = (TicketPermissions,)
+    permission_classes = [HasManagerRightsToUpdateOrDelete]
     retrieve_serializer_class = serializers.TicketPrintSerializer
     search_fields = (
         'reference_number',
@@ -104,7 +105,13 @@ class TicketViewSet(viewsets.BaseViewSet):
     list_serializer_class = serializers.TicketListSerializer
 
     def get_queryset(self):
-        return models.Ticket.objects.all()
+        if self.request.user.is_superuser:
+            return models.Ticket.objects.all()
+        else:
+            organizations = self.request.user.locations.filter(
+                tickets=True, is_active=True
+            ).values_list('organization', flat=True)
+            return models.Ticket.objects.filter(organization__in=organizations)
 
     @decorators.action(methods=['GET'], detail=True)
     def pdf(self, request, pk=None):

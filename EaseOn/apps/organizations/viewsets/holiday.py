@@ -4,6 +4,7 @@ from core.viewsets import BaseViewSet
 from organizations.models import Holiday
 from organizations.serializers import HolidaySerializer
 from rest_framework import decorators, response
+from core.permissions import SuperUserOrManagerWriteOnly
 
 
 class HolidayFilter(django_filters.FilterSet):
@@ -22,6 +23,7 @@ class HolidayViewSet(BaseViewSet):
     'A Service Provider  Membership View Set'
     serializer_class = HolidaySerializer
     filter_class = HolidayFilter
+    permission_classes = (SuperUserOrManagerWriteOnly,)
 
     def get_queryset(self):
         model = Holiday

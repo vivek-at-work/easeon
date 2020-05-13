@@ -32,7 +32,6 @@ def customer_do_not_have_open_tickets(customer):
 
 
 class TicketListSerializer(BaseSerializer):
-
     class Meta(BaseMeta):
         model = models.Ticket
         fields = [
@@ -84,7 +83,7 @@ class TicketSerializer(BaseSerializer):
             .exists()
         ):
             raise serializers.ValidationError(
-                'Not a valid expected delivery date.'
+                'Not a valid Expected delivery date.'
             )
         return values
 
@@ -142,7 +141,7 @@ class TicketSerializer(BaseSerializer):
         default=serializers.CurrentUserDefault(),
     )
     currently_assigned_to_name = serializers.SlugRelatedField(
-       source='currently_assigned_to', read_only=True, slug_field='full_name'
+        source='currently_assigned_to', read_only=True, slug_field='full_name'
     )
 
     def __init__(self, *args, **kwargs):
@@ -193,7 +192,7 @@ class TicketSerializer(BaseSerializer):
             'closed_by',
             'last_modified_by',
             'subscribers',
-            'currently_assigned_to_name'
+            'currently_assigned_to_name',
         ]
         c_u_d = serializers.CurrentUserDefault
         extra_kwargs = {
@@ -207,7 +206,6 @@ class DeviceSerializer(BaseSerializer):
     product_name = serializers.ReadOnlyField()
     configuration = serializers.ReadOnlyField()
 
-
     class Meta(BaseMeta):
         model = devices.models.Device
         fields = [
@@ -217,7 +215,7 @@ class DeviceSerializer(BaseSerializer):
             'identifier',
             'user_messages',
             'serial_number',
-            'alternate_device_id'
+            'alternate_device_id',
         ]
 
 
@@ -246,8 +244,9 @@ class TicketPrintSerializer(BaseSerializer):
     can_update_ticket = serializers.SerializerMethodField()
     can_print_delivery_report = serializers.SerializerMethodField()
     currently_assigned_to_name = serializers.SlugRelatedField(
-       source='currently_assigned_to', read_only=True, slug_field='full_name'
+        source='currently_assigned_to', read_only=True, slug_field='full_name'
     )
+
     def get_can_update_ticket(self, obj):
         status_flag = not obj.is_closed
 
@@ -291,7 +290,6 @@ class TicketPrintSerializer(BaseSerializer):
              Check atleast one GSX Repair Info
              record should exist"""
             )
-
 
         user = self.get_user()
         manager_flag = user.managed_locations.filter(

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Serializer for Service Provider Membership Models"""
 from core.serializers import BaseSerializer
+from core.models import OPERATOR
 from organizations.models import OrganizationRights
 from rest_framework import serializers
 
@@ -25,8 +26,13 @@ class OrganizationRightsSerializer(BaseSerializer):
         #     )
         if not self.get_user().is_superuser and value != self.get_user():
             raise serializers.ValidationError(
-                'Can not create/update membership for other users.'
+                'Can not create/update rights for other users.'
             )
+        if value.role != OPERATOR:
+            raise serializers.ValidationError(
+                'Can not create/update rights for user who is not an Operator.'
+            )
+
         return value
 
     def get_can_toggle_status(self, obj):

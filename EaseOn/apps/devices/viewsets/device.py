@@ -14,6 +14,7 @@ from rest_framework import (
     views,
 )
 from devices.exceptions import DeviceDetailsExceptions
+from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class DeviceFilter(django_filters.FilterSet):
@@ -31,6 +32,7 @@ class DeviceFilter(django_filters.FilterSet):
 
 class DeviceViewSet(BaseViewSet):
     serializer_class = serializers.DeviceSerializer
+    permission_classes = [HasManagerRightsToUpdateOrDelete]
     queryset = models.Device.objects.all()
     filter_class = DeviceFilter
 

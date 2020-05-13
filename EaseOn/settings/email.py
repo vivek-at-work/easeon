@@ -7,7 +7,7 @@ environ.Env.read_env()  # reading .env file
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #  env('DEBUG'):
-#if not env('DEBUG', cast=bool):
+# if not env('DEBUG', cast=bool):
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = not True
 EMAIL_USE_SSL = True

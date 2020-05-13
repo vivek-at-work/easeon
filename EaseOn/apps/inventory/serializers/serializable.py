@@ -9,8 +9,6 @@ dc = get_list_choices('SERIALIZABLE_INVENTORY_ITEM')
 
 
 class SerializableInventoryListSerializer(BaseSerializer):
-
-
     class Meta(BaseMeta):
         model = SerializableInventoryItem
         read_only_fields = [

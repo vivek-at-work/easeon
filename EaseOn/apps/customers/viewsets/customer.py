@@ -2,6 +2,7 @@
 import django_filters
 from core.viewsets import BaseViewSet
 from customers import models, serializers
+from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class CustomerFilter(django_filters.FilterSet):
@@ -20,5 +21,6 @@ class CustomerFilter(django_filters.FilterSet):
 class CustomerViewSet(BaseViewSet):
     queryset = models.Customer.objects
     serializer_class = serializers.CustomerSerializer
+    permission_classes = [HasManagerRightsToUpdateOrDelete]
     search_fields = ('contact_number', 'email')
     filter_class = CustomerFilter

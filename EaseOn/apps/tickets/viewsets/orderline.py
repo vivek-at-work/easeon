@@ -3,6 +3,7 @@ from core import viewsets
 from django.db import transaction
 from rest_framework import decorators, response, status
 from tickets import models, serializers
+from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class OrderLineViewSet(viewsets.BaseBulkCreateViewSet):
@@ -12,6 +13,7 @@ class OrderLineViewSet(viewsets.BaseBulkCreateViewSet):
 
     queryset = models.OrderLine.objects.all()
     serializer_class = serializers.OrderLineSerializer
+    permission_classes = [HasManagerRightsToUpdateOrDelete]
 
     def destroy(self, request, *args, **kwargs):
         try:

@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 pre-commit = "*"
+pylint = "*"
 
 [packages]
 django-environ = "*"

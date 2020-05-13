@@ -6,9 +6,6 @@ from rest_framework import serializers
 
 
 class RepairItemListSerializer(BaseSerializer):
-
-
-
     class Meta(BaseMeta):
         model = RepairInventoryItem
         read_only_fields = [

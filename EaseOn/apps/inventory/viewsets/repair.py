@@ -7,6 +7,8 @@ from inventory.serializers import (
     RepairItemSerializer,
 )
 
+from core.permissions import IsOperatorOrSuperUser
+
 
 class RepairInventoryItemFilter(django_filters.FilterSet):
     """doc string for OrganizationFilter"""
@@ -16,11 +18,11 @@ class RepairInventoryItemFilter(django_filters.FilterSet):
     part_number = django_filters.CharFilter(lookup_expr='icontains')
     description = django_filters.CharFilter(lookup_expr='icontains')
     created_at_before = django_filters.DateTimeFilter(
-        field_name="created_at",
-        lookup_expr="lte")
+        field_name='created_at', lookup_expr='lte'
+    )
     created_at_after = django_filters.DateTimeFilter(
-        field_name="created_at",
-        lookup_expr="gte")
+        field_name='created_at', lookup_expr='gte'
+    )
 
     class Meta(object):
         model = models.RepairInventoryItem
@@ -32,6 +34,7 @@ class RepairItemViewSet(BaseBulkCreateViewSet):
     list_serializer_class = RepairItemListSerializer
     delete_serializer_class = RepairItemListSerializer
     filter_class = RepairInventoryItemFilter
+    permission_classes = [IsOperatorOrSuperUser]
     filter_fields = (
         'serial_number',
         'organization',

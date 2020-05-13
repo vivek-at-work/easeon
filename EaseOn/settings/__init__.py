@@ -38,7 +38,7 @@ ADMIN_NAME = env('ADMIN_NAME')
 ADMIN_EMAIL = env('ADMIN_EMAIL')
 ADMIN_CONTACT_NUMBER = env('ADMIN_CONTACT_NUMBER')
 ADMINS = [(ADMIN_NAME, ADMIN_EMAIL)]
-APPEND_SLASH =False
+APPEND_SLASH = False
 TEST_EMAILS = [
     'developer.viveksrivastava@gmail.com',
     'ervivek.rbl@gmail.com',
@@ -76,7 +76,7 @@ LOCAL_APPS = [
     'slas',
     'tickets',
     'tokens',
-    'gsx'
+    'gsx',
 ]
 
 

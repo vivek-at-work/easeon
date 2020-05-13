@@ -22,7 +22,6 @@ class Customer(BaseModel):
     pin_code = models.CharField(max_length=50)
     token_number = models.CharField(max_length=100)
 
-
     @property
     def full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
@@ -38,12 +37,13 @@ class Customer(BaseModel):
             self.country,
             self.pin_code,
         )
-    
+
     @property
     def open_tickets(self):
         Ticket = apps.get_model(utils.get_ticket_model())
-        return Ticket.objects.filter(customer__email=self.email,
-        customer__contact_number=self.contact_number,
+        return Ticket.objects.filter(
+            customer__email=self.email,
+            customer__contact_number=self.contact_number,
         ).open()
 
     @property

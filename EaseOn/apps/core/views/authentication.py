@@ -4,12 +4,6 @@ import time
 
 from core import serializers
 from core.permissions import IsSuperUser
-
-# from core.serializers import (
-#     LoginSerializer,
-#     OTPOptionsSerializer,
-#     TokenSerializer,
-# )
 from core.utils import (
     account_activation_token,
     default_create_token,
@@ -41,45 +35,6 @@ sensitive_post_parameters_m = method_decorator(  # pylint:disable=C0103
         'password', 'old_password', 'new_password1', 'new_password2'
     )
 )
-
-
-# class OTPOptionsView(generics.GenericAPIView):
-#     """
-#     Accept the following POST parameters: username, password
-#     Returns the User Email and Contact Number Post Validation of username and password.
-#     """
-
-#     permission_classes = (permissions.AllowAny,)
-#     serializer_class = LoginSerializer
-#     token_model = TokenModel
-
-#     @sensitive_post_parameters_m
-#     def dispatch(self, *args, **kwargs):
-#         return super(OTPOptionsView, self).dispatch(*args, **kwargs)
-
-#     def get_response_serializer(self):
-#         '''
-#         Get Serializer Depending upon the settings
-#         '''
-#         return OTPOptionsSerializer
-
-#     def post(self, request, *args, **kwargs):
-#         '''
-#         Handle the post request
-#         '''
-
-#         self.serializer = self.get_serializer(
-#             data=request.data, context={'request': request}
-#         )
-#         self.serializer.is_valid(raise_exception=True)
-#         user = self.serializer.validated_data['user']
-#         serializer_class = self.get_response_serializer()
-#         serializer = serializer_class(
-#             instance=user, context={'request': request}
-#         )
-
-#         data = serializer.data
-#         return response.Response(data, status=status.HTTP_200_OK)
 
 
 class LogoutView(generics.GenericAPIView):

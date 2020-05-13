@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import time
 
-from core.gsx import GSXRequest
+# from core.gsx import GSXRequest
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from gsx.core import GSXRequest
 
 USER_MODEL = get_user_model()
 
@@ -20,7 +21,7 @@ class SignUpSerializer(serializers.HyperlinkedModelSerializer):
                 'token',
                 data['gsx_user_name'],
                 data['gsx_auth_token'],
-                data['gsx_ship_to']
+                data['gsx_ship_to'],
             )
             result = req.post(
                 userAppleId=data['gsx_user_name'],

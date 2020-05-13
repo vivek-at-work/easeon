@@ -19,7 +19,7 @@ from rest_framework.documentation import include_docs_urls
 from slas.urls import sla_router
 from tickets.urls import ticket_router
 from tokens.urls import token_router
-
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework_swagger.views import get_swagger_view
 
 # from reports.urls import scheduler_router
@@ -52,9 +52,7 @@ urlpatterns = [
         include(('core.urls', 'core'), namespace='core'),
     ),
     url(
-        r'{0}/{1}gsx/'.format(
-            API_GATEWAY, settings.CURRENT_API_URL
-        ),
+        r'{0}/{1}gsx/'.format(API_GATEWAY, settings.CURRENT_API_URL),
         include(('gsx.urls', 'gsx'), namespace='gsx'),
     ),
     path(
@@ -78,5 +76,8 @@ urlpatterns = [
     url(
         r'backend/oauth/',
         include('oauth2_provider.urls', namespace='oauth2_provider'),
-    )
+    ),
 ]
+
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()

@@ -1,20 +1,13 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-- otp.serializer
-~~~~~~~~~~~~~~
-
-- This file contains pyotp app serializers
-"""
-
-# future
 from __future__ import unicode_literals
 from rest_framework import serializers
 from core.gsx import GSXRequest
 import re
 
+
 class NoneSerializer(serializers.Serializer):
     pass
+
 
 def gsx_validate(value, what=None):
     """
@@ -64,44 +57,3 @@ def gsx_validate(value, what=None):
             result = k
 
     return (result == what) if what else result
-
-
-class DeviceSerializer(serializers.Serializer):
-    """DeviceSerializer
-
-    """
-
-    identifier = serializers.CharField()
-
-    def validate_identifier(self, value):
-        """
-        Check that device identifier is valid.
-        """
-        is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-        is_valid_sn = gsx_validate(value, 'serialNumber')
-        if not is_valid_alternate_device_id and not is_valid_sn:
-            raise serializers.ValidationError(
-                'Not a valid serial number or IMEI number.'
-            )
-        return value
-
-
-    def create(self, validated_data):
-        """
-
-        :param validated_data: valid data
-        :return: pyotp object
-        """
-        req = GSXRequest(
-            'repair',
-            'product/details?activationDetails=true',
-            gsx_username,
-            authtoken,
-        )
-        device = {'id': self.identifier}
-        received_on = time_by_adding_business_days(0).isoformat()
-        response = req.post(unitReceivedDateTime=received_on, device=device)
-        if "errorId" in response:
-            raise DeviceDetailsExceptions(response['errors'][0]['message'],response)
-        return response
-

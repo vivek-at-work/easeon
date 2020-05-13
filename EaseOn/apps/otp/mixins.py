@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 
 # 3rd party
 import pyotp
+import logging
 
 # local
 from core import utils
@@ -19,11 +20,14 @@ from core import utils
 # Django
 from django.conf import settings
 from django.core.validators import validate_email
+
 # own app
 from otp.models import PyOTP
 
 # from django.urls import reverse
 from rest_framework.reverse import reverse
+
+logger = logging.getLogger('easeOn')
 
 
 class OTPMixin(object):
@@ -80,15 +84,16 @@ class OTPMixin(object):
         otp = response.get('otp')
         uid = response.get('otp_uuid')
         response['verify_url'] = 'core/verify-otp/hotp/{}'.format(uid)
-        receiving_address =  data.get('contact_number',None)
-        is_valid_email=False
+        receiving_address = data.get('contact_number', None)
+        is_valid_email = False
         try:
             validate_email(receiving_address)
             is_valid_email = True
-        except:
+        except Exception as e:
+            logging.error(
+                'recived invalid email %s error as %s', receiving_address, e,
+            )
             is_valid_email = False
-
-
 
         if not is_valid_email:
             utils.send_otp(receiving_address, otp)
@@ -103,7 +108,9 @@ class OTPMixin(object):
                 ),
                 'action_name': otp,
             }
-            subject = 'Login OTP for your {0} account'.format(settings.SITE_HEADER)
+            subject = 'Login OTP for your {0} account'.format(
+                settings.SITE_HEADER
+            )
             utils.send_mail(subject, template, receiving_address, **context)
         del response['otp']
         return response

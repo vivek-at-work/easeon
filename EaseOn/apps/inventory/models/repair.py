@@ -31,8 +31,7 @@ class RepairInventoryItem(InventoryItem):
     all_objects = RepairInventoryManager(alive_only=False)
 
     class Meta:
-        ordering = ["-id"]
-
+        ordering = ['-id']
 
     def __str__(self):
         return self.serial_number

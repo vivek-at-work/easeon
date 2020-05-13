@@ -27,6 +27,7 @@ def get_organization_model():
 def get_ticket_model():
     return 'tickets.Ticket'
 
+
 def time_by_adding_business_days(add_days, from_date=timezone.now()):
     start_date = from_date.date()
     start_time = from_date.time()

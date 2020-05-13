@@ -27,7 +27,6 @@ class ListItemFilter(django_filters.FilterSet):
 class ItemViewSet(BaseBulkCreateViewSet):
     serializer_class = ItemModelSerializer
     permission_classes = (SuperUserOrReadOnly,)
-    # pagination_class = ItemPagination
     search_fields = ('list_name',)
     filter_class = ListItemFilter
     queryset = Item.objects.all()

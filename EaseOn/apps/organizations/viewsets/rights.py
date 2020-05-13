@@ -8,11 +8,11 @@ from organizations.serializers import OrganizationRightsSerializer
 from rest_framework import decorators, permissions, response
 
 
-class OrganizationPermissions(permissions.BasePermission):
+class MemershipPermissions(permissions.BasePermission):
 
     READ_ROLES = [SUPER_USER, OPERATOR]
-    CREATE_ROLES = [SUPER_USER]
-    UPDATE_ROLES = [OPERATOR, SUPER_USER]
+    CREATE_ROLES = [SUPER_USER, OPERATOR]
+    UPDATE_ROLES = [SUPER_USER]
     DESTROY_ROLES = [SUPER_USER]
 
     def has_permission(self, request, view):
@@ -113,6 +113,7 @@ class MembershipFilter(django_filters.FilterSet):
 class MembershipViewSet(BaseViewSet):
     'Membership View Set'
     serializer_class = OrganizationRightsSerializer
+    permission_classes = [MemershipPermissions]
     filter_class = MembershipFilter
 
     def get_queryset(self):

@@ -51,7 +51,8 @@ class OTPOptionsSerializer(serializers.Serializer):
         user = data['user']
         return {
             'email': user.email,
-            'otp_receive_options': user.contact_number.split(",")+[user.email],
+            'otp_receive_options': user.contact_number.split(',')
+            + [user.email],
             'message': self._get_message(),
         }
 

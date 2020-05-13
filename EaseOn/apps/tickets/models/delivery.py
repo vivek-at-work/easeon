@@ -16,14 +16,14 @@ class Delivery(BaseModel):
     actual_service_cost = models.FloatField(default=0.0)
     actual_hardware_cost = models.FloatField(default=0.0)
     device_pickup_time = models.DateTimeField(blank=True, null=True)
-    #gsx_reference_number = models.CharField(
+    # gsx_reference_number = models.CharField(
     #    max_length=30, blank=True, null=True
-    #)
+    # )
     actual_issue = models.CharField(max_length=1000)
     action_taken = models.CharField(max_length=1000)
     final_operating_system = models.CharField(max_length=50)
-    #gsx_repair_type = models.CharField(max_length=50)
-    #comptia_code = models.CharField(max_length=50)
+    # gsx_repair_type = models.CharField(max_length=50)
+    # comptia_code = models.CharField(max_length=50)
     outward_condition = models.CharField(max_length=1000)
     reference_number = models.CharField(max_length=50, unique=True)
     customer_signature = models.ImageField(upload_to='signatures', null=True)

@@ -70,11 +70,11 @@ class Ticket(BaseModel):
     organization = models.ForeignKey(
         Organization, related_name='tickets', on_delete=models.DO_NOTHING
     )
-    device = models.ForeignKey(
-        Device, related_name='tickets', on_delete=models.DO_NOTHING
+    device = models.OneToOneField(
+        Device, related_name='ticket', on_delete=models.DO_NOTHING
     )
-    customer = models.ForeignKey(
-        Customer, related_name='tickets', on_delete=models.DO_NOTHING
+    customer = models.OneToOneField(
+        Customer, related_name='ticket', on_delete=models.DO_NOTHING
     )
     password = models.CharField(max_length=100, default='NA', null=True)
     initial_operating_system = models.CharField(
@@ -167,9 +167,9 @@ class Ticket(BaseModel):
             self.order_lines.all().count()
             or self.serializable_order_lines.all().count()
         )
+
     def has_consolidated_gsx_repair_info(self):
         return self.gsx_informations.all().count()
-        
 
     @property
     def turn_around_time(self):

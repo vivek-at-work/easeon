@@ -79,7 +79,7 @@ class BaseViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         serializer = self.get_serializer_class()(
             obj, data=request.data, partial=True, context={'request': request}
-        ) 
+        )
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         headers = self.get_success_headers(serializer.data)

@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 import sys
 
@@ -13,6 +12,8 @@ from django.db.migrations.state import ProjectState
 from django.db.utils import OperationalError
 
 USER = get_user_model()
+
+
 class Command(BaseCommand):
     """
     Detect if any apps have missing migration files

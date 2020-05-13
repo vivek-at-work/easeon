@@ -13,6 +13,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from devices.exceptions import DeviceDetailsExceptions
 
+
 def validate(value, what=None):
     """
     Tries to guess the meaning of value or validate that
@@ -94,16 +95,16 @@ class Device(BaseModel):
     def identifier(self, number):
         self._set_device_identifier(number)
 
-
     def is_stolen_device(self):
         di = [self.alternate_device_id, self.serial_number]
         return any(elem in restricted_identifiers for elem in di)
 
- 
     @property
     def open_tickets(self):
         Ticket = apps.get_model(utils.get_ticket_model())
-        return Ticket.objects.filter(device__serial_number=self.serial_number).open()
+        return Ticket.objects.filter(
+            device__serial_number=self.serial_number
+        ).open()
 
     @property
     def user_messages(self):
@@ -572,7 +573,7 @@ class Device(BaseModel):
         return response
 
     def get_warranty(self, gsx_username, authtoken, **kwargs):
-        print("584")
+        print('584')
         # {'errorId': '557cd1d8-2dcd-40f4-b27d-bfe89eccac43', 'errors': [{'code': 'DEVICE_INFORMATION_INVALID', 'message': 'Invalid Device Information.'}]}
         if settings.GSX_DUMMY_RESPONSE:
             return {
@@ -628,8 +629,10 @@ class Device(BaseModel):
         device = {'id': self.identifier}
         received_on = time_by_adding_business_days(0).isoformat()
         response = req.post(unitReceivedDateTime=received_on, device=device)
-        if "errorId" in response:
-            raise DeviceDetailsExceptions(response['errors'][0]['message'],response)
+        if 'errorId' in response:
+            raise DeviceDetailsExceptions(
+                response['errors'][0]['message'], response
+            )
         return response
 
     def get_repair_eligibility(self, gsx_username, authtoken, **kwargs):

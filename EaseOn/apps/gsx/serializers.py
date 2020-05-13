@@ -1,21 +1,14 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-- otp.serializer
-~~~~~~~~~~~~~~
-
-- This file contains pyotp app serializers
-"""
-
-# future
 from __future__ import unicode_literals
 from rest_framework import serializers
 from core.utils import time_by_adding_business_days
 from gsx.core import GSXRequest
 import re
 
+
 class NoneSerializer(serializers.Serializer):
     pass
+
 
 def gsx_validate(value, what=None):
     """
@@ -66,16 +59,19 @@ def gsx_validate(value, what=None):
 
     return (result == what) if what else result
 
+
 class BaseGSXSerializer(serializers.Serializer):
-         
-    @property  
+    @property
     def gsx_user_name(self):
         return self.context['request'].user.gsx_user_name
-    
-    @property  
-    def gsx_auth_token(self):
-        return  self.context['request'].user.gsx_auth_token
 
+    @property
+    def gsx_auth_token(self):
+        return self.context['request'].user.gsx_auth_token
+
+    @property
+    def gsx_ship_to(self):
+        return self.context['request'].user.gsx_ship_to
 
 
 class DeviceSerializer(BaseGSXSerializer):
@@ -97,7 +93,6 @@ class DeviceSerializer(BaseGSXSerializer):
             )
         return value
 
-
     def create(self, validated_data):
         """
 
@@ -109,11 +104,13 @@ class DeviceSerializer(BaseGSXSerializer):
             'product/details?activationDetails=true',
             self.gsx_user_name,
             self.gsx_auth_token,
+            self.gsx_ship_to,
         )
         device = {'id': validated_data['identifier']}
         received_on = time_by_adding_business_days(0).isoformat()
         response = req.post(unitReceivedDateTime=received_on, device=device)
         return response
+
 
 class DiagnosticSuitesSerializer(BaseGSXSerializer):
     """
@@ -134,18 +131,16 @@ class DiagnosticSuitesSerializer(BaseGSXSerializer):
             )
         return value
 
-
     def create(self, validated_data):
         req = GSXRequest(
             'diagnostics',
             'suites',
             self.gsx_user_name,
             self.gsx_auth_token,
+            self.gsx_ship_to,
         )
         response = req.get(deviceId=validated_data['identifier'])
         return response
-
-
 
 
 class RepairEligibilitySerializer(BaseGSXSerializer):
@@ -167,13 +162,13 @@ class RepairEligibilitySerializer(BaseGSXSerializer):
             )
         return value
 
-
     def create(self, validated_data):
         req = GSXRequest(
             'repair',
             'eligibility',
             self.gsx_user_name,
             self.gsx_auth_token,
+            self.gsx_ship_to,
         )
         device = {'id': validated_data['identifier']}
         response = req.post(device=device)
@@ -199,17 +194,18 @@ class DiagnosticsLookupSerializer(BaseGSXSerializer):
             )
         return value
 
-
     def create(self, validated_data):
         req = GSXRequest(
             'diagnostics',
             'lookup',
             self.gsx_user_name,
             self.gsx_auth_token,
+            self.gsx_ship_to,
         )
         device = {'id': validated_data['identifier']}
         response = req.post(device=device)
         return response
+
 
 class RunDiagnosticsSerializer(BaseGSXSerializer):
     """
@@ -231,19 +227,18 @@ class RunDiagnosticsSerializer(BaseGSXSerializer):
             )
         return value
 
-
     def create(self, validated_data):
         req = GSXRequest(
             'diagnostics',
-             'initiate-test',
+            'initiate-test',
             self.gsx_user_name,
             self.gsx_auth_token,
+            self.gsx_ship_to,
         )
         device = {'id': validated_data['identifier']}
         diagnostics = {'suiteId': validated_data['suiteId']}
-        response = req.post(device=device,diagnostics=diagnostics,)
+        response = req.post(device=device, diagnostics=diagnostics,)
         return response
-
 
 
 class DiagnosticsStatusSerializer(BaseGSXSerializer):
@@ -252,7 +247,6 @@ class DiagnosticsStatusSerializer(BaseGSXSerializer):
     """
 
     identifier = serializers.CharField()
-   
 
     def validate_identifier(self, value):
         """
@@ -266,15 +260,14 @@ class DiagnosticsStatusSerializer(BaseGSXSerializer):
             )
         return value
 
-
     def create(self, validated_data):
         req = GSXRequest(
             'diagnostics',
-             'status',
+            'status',
             self.gsx_user_name,
             self.gsx_auth_token,
+            self.gsx_ship_to,
         )
         device = {'id': validated_data['identifier']}
         response = req.post(device=device)
         return response
-
