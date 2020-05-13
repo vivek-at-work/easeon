@@ -148,7 +148,7 @@ PASSWORD_RESET_URL = '{}/{}/'.format(
 ).strip('/')
 
 
-VALID_CLIENT_DOMAIN_NAMES = ['uipl.co.in', 'unicornstore.in','easeon.in']
+VALID_CLIENT_DOMAIN_NAMES = ['uipl.co.in', 'unicornstore.in', 'easeon.in']
 
 # GSX
 

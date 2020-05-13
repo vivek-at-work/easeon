@@ -34,4 +34,12 @@ class SerializableItemViewSet(BaseBulkCreateViewSet):
     ordering = ['id']
 
     def get_queryset(self):
-        return models.SerializableInventoryItem.objects.all()
+        if self.request.user.is_superuser:
+            return models.SerializableInventoryItem.objects.all()
+        else:
+            organizations = self.request.user.locations.filter(
+                non_serialized_inventory=True, is_active=True
+            ).values_list('organization', flat=True)
+            return models.SerializableInventoryItem.objects.filter(
+                organization__in=organizations
+            )

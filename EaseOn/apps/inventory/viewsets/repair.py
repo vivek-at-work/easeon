@@ -45,4 +45,12 @@ class RepairItemViewSet(BaseBulkCreateViewSet):
     ordering = ['id']
 
     def get_queryset(self):
-        return models.RepairInventoryItem.objects.all()
+        if self.request.user.is_superuser:
+            return models.RepairInventoryItem.objects.all()
+        else:
+            organizations = self.request.user.locations.filter(
+                repair_inventory=True, is_active=True
+            ).values_list('organization', flat=True)
+            return models.RepairInventoryItem.objects.filter(
+                organization__in=organizations
+            )

@@ -47,7 +47,15 @@ class LoanerItemViewSet(BaseBulkCreateViewSet):
     search_fields = ('serial_number', 'part_number', 'description')
 
     def get_queryset(self):
-        return models.LoanerInventoryItem.objects
+        if self.request.user.is_superuser:
+            return models.LoanerInventoryItem.objects.all()
+        else:
+            organizations = self.request.user.locations.filter(
+                loaner_inventory=True, is_active=True
+            ).values_list('organization', flat=True)
+            return models.LoanerInventoryItem.objects.filter(
+                organization__in=organizations
+            )
 
 
 class PenaltyAmountViewSet(BaseBulkCreateViewSet):
