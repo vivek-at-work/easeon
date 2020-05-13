@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_filters
-from core.permissions import SuperUserOrReadOnly
+from core.permissions import IsOperatorOrSuperUser
 from core.utils.pagination import PageNumberPagination
 from core.viewsets import BaseBulkCreateViewSet
 from lists.models import LIST_NAME_CHOICES, Item
@@ -26,7 +26,7 @@ class ListItemFilter(django_filters.FilterSet):
 
 class ItemViewSet(BaseBulkCreateViewSet):
     serializer_class = ItemModelSerializer
-    permission_classes = (SuperUserOrReadOnly,)
+    permission_classes = (IsOperatorOrSuperUser,)
     search_fields = ('list_name',)
     filter_class = ListItemFilter
     queryset = Item.objects.all()
