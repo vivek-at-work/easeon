@@ -49,7 +49,17 @@ class OrganizationPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.role == SUPER_USER:
             return True
-
+        if (
+            view.action
+            in [
+                'get_holidays'
+                
+            ]
+            and request.user
+            and request.user.is_authenticated
+            and request.user.role in self.READ_ROLES
+        ):
+            return True
         if (
             view.action
             in [
@@ -58,7 +68,7 @@ class OrganizationPermissions(permissions.BasePermission):
                 'partial_update',
                 'destroy',
                 'add_holiday',
-                'get_holidays'
+                
             ]
             and request.user
             and request.user.is_authenticated
