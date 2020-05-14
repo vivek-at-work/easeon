@@ -51,14 +51,6 @@ class OrganizationPermissions(permissions.BasePermission):
             return True
 
         if (
-            view.action in ['create', 'destroy']
-            and request.user
-            and request.user.is_authenticated
-            and request.user.role in self.CREATE_DELETE_ROLES
-        ):
-            return request.user.role == SUPER_USER
-
-        if (
             view.action
             in [
                 'retrieve',
@@ -66,6 +58,7 @@ class OrganizationPermissions(permissions.BasePermission):
                 'partial_update',
                 'destroy',
                 'add_holiday',
+                'get_holidays'
             ]
             and request.user
             and request.user.is_authenticated
