@@ -20,3 +20,4 @@ class HasManagerRightsToUpdateOrDelete(IsOperatorOrSuperUser):
                 return request.user == obj.organization.manager
             elif hasattr(obj, 'ticket') and obj.ticket is not None:
                 return request.user == obj.ticket.organization.manager
+        return True

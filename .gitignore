@@ -87,6 +87,7 @@ target/
 __pycache__/
 local_settings.py
 django_static/
+data-backup/
 media/
 
 .env
