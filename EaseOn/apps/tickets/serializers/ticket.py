@@ -150,9 +150,8 @@ class TicketSerializer(BaseSerializer):
         context = kwargs.get('context', None)
         if context:
             request = kwargs['context']['request']
-            queryset = request.user.locations.filter(
-                tickets=True, is_active=True
-            )
+            #rganization.objects.all(id__in=OrganizationRights.objects.all().values_list('organization',flat=True))
+            queryset = organizations.models.Organization.objects.filter(id__in=request.user.locations.filter(tickets=True, is_active=True).values_list('organization',flat=True))
             if request.user.is_superuser:
                 queryset = organizations.models.Organization.objects.all()
             self.fields['organization'] = serializers.HyperlinkedRelatedField(
