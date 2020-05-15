@@ -22,6 +22,7 @@ from .user_manager import UserManager
 SUPER_USER = 'SuperUser'
 OPERATOR = 'Operator'
 TOKEN_USER = 'TokenUser'
+AUDITOR = 'Auditor'
 
 
 def validate_user_email_domain(value):
@@ -46,7 +47,7 @@ def validate_user_email_domain(value):
 class User(AbstractBaseUser):
     '''A User'''
 
-    USER_TYPE_CHOICES = ((1, SUPER_USER), (2, OPERATOR), (3, TOKEN_USER))
+    USER_TYPE_CHOICES = ((1, SUPER_USER), (2, OPERATOR), (3, TOKEN_USER),(4,AUDITOR))
     email = models.EmailField(
         max_length=100, unique=True, validators=[validate_user_email_domain]
     )
@@ -324,3 +325,5 @@ def send_activation_mail_to_user(sender, user, attributes, **kwargs):
 def set_user_type(sender, instance, *args, **kwargs):
     if instance.is_admin:
         instance.user_type = 1
+    if instance.user_type == 1:
+        instance.is_admin = True

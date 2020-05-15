@@ -2,7 +2,26 @@
 import django_filters
 from core.viewsets import BaseViewSet
 from customers import models, serializers
-from core.permissions import HasManagerRightsToUpdateOrDelete
+from core.permissions import IsOperatorOrSuperUser
+from core.models import SUPER_USER
+
+class HasRightsToUpdateOrDeleteCustomer(IsOperatorOrSuperUser):
+    """
+    Allows super user to update customers.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.role == SUPER_USER:
+            return True
+
+        if (
+            view.action in ['destroy', 'update']
+            and request.user
+            and request.user.is_authenticated
+        ):
+           return request.user.role == SUPER_USER
+        
+        return True
 
 
 class CustomerFilter(django_filters.FilterSet):
@@ -21,6 +40,6 @@ class CustomerFilter(django_filters.FilterSet):
 class CustomerViewSet(BaseViewSet):
     queryset = models.Customer.objects
     serializer_class = serializers.CustomerSerializer
-    permission_classes = [HasManagerRightsToUpdateOrDelete]
+    permission_classes = [HasRightsToUpdateOrDeleteCustomer]
     search_fields = ('contact_number', 'email')
     filter_class = CustomerFilter

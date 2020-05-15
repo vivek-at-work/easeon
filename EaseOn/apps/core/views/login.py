@@ -126,6 +126,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                         'need_to_change_password'
                     ] = user.need_to_change_password
                     res['user']['is_superuser'] = user.is_superuser
+                    res['user']['role'] = user.role
                     response = HttpResponse(
                         content=json.dumps(res), status=status
                     )

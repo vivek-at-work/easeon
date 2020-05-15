@@ -5,7 +5,6 @@ from rest_framework import *
 from .application import *
 from .base import *
 from .gsx_request import *
-from .login import *
 from .otp_options_serializer import *
 from .password_change import *
 from .password_reset import *

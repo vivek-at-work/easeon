@@ -18,14 +18,12 @@ from .gsx_info import GSXInfoSerializer
 
 
 def device_do_not_have_open_tickets(device):
-    return
-    if device.tickets.all().open().count():
+    if device.open_tickets.count():
         raise serializers.ValidationError('Device has previous open tickets.')
 
 
 def customer_do_not_have_open_tickets(customer):
-    return
-    if customer.tickets.all().open().count():
+    if customer.open_tickets.count():
         raise serializers.ValidationError(
             'Customer has previous open tickets.'
         )

@@ -4,7 +4,7 @@ from rest_framework import permissions
 SUPER_USER = 'SuperUser'
 OPERATOR = 'Operator'
 TOKEN_USER = 'TokenUser'
-
+AUDITOR ='Auditor'
 
 class IsSuperUser(permissions.BasePermission):
     """
@@ -51,7 +51,7 @@ class IsOperatorOrSuperUser(permissions.BasePermission):
     Allows All access to SuperUsers and Operators .
     """
 
-    ALLOWED_ROLES = [SUPER_USER, OPERATOR]
+    ALLOWED_ROLES = [SUPER_USER, OPERATOR, AUDITOR]
 
     def has_permission(self, request, view):
         if (
