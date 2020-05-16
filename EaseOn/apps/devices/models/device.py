@@ -110,7 +110,7 @@ class Device(BaseModel):
     def user_messages(self):
         if self.is_stolen_device():
             return """Kindly immediatly contact with administrator before proceed the repair of device."""
-        open_tickets = self.open_tickets().values_list(
+        open_tickets = self.open_tickets().all().values_list(
             'reference_number', flat=True
         )
         if self.open_tickets.count():

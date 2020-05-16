@@ -48,7 +48,7 @@ class Customer(BaseModel):
 
     @property
     def user_messages(self):
-        open_tickets = self.open_tickets().values_list(
+        open_tickets = self.open_tickets().all().values_list(
             'reference_number', flat=True
         )
         if open_tickets:
