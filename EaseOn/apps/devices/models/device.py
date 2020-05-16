@@ -110,9 +110,9 @@ class Device(BaseModel):
     def user_messages(self):
         if self.is_stolen_device():
             return """Kindly immediatly contact with administrator before proceed the repair of device."""
-
+        open_tickets = self.open_tickets().values_list('reference_number',flat=True)
         if self.open_tickets.count():
-            return """This Device has pending open tickets.Close them before proceeding for a new one"""
+            return """This Device has pending open tickets.Close them before proceeding for a new one {0}""".format(",".join(open_tickets))
 
     def get_parts(self, gsx_username, authtoken, **kwargs):
         payload = {

@@ -48,8 +48,10 @@ class Customer(BaseModel):
 
     @property
     def user_messages(self):
-        if self.open_tickets.count():
-            return """This Customer has pending open tickets.Close them before proceeding for a new one"""
+        open_tickets = self.open_tickets().values_list('reference_number',flat=True)
+        if open_tickets:
+            return """This Customer has pending open tickets.Close them before 
+            proceeding for a new one {0}""".format(",".join(open_tickets))
 
     @property
     def time_since_last_visit(self):

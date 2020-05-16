@@ -7,7 +7,7 @@ from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from .rights import OrganizationRights
 
 class Organization(BaseModel):
     """An Organization """
@@ -140,3 +140,7 @@ def onOrganizationSave(sender, instance, *args, **kwargs):
         *get_user_model().objects.all_superusers_email(),
         **context
     )
+
+@receiver(post_save, sender=Organization)
+def delete_if_managers_have_rights(sender, instance, *args, **kwargs):
+    instance.memberships.all().filter(user=instance.manager).delete()
