@@ -154,8 +154,7 @@ class TicketSerializer(BaseSerializer):
                     tickets=True, is_active=True
                 ).values_list('organization', flat=True)
             )
-            if request.user.is_superuser:
-                queryset = organizations.models.Organization.objects.all()
+            queryset = organizations.models.Organization.objects.all()
             self.fields['organization'] = serializers.HyperlinkedRelatedField(
                 queryset=queryset, view_name='organization-detail'
             )
