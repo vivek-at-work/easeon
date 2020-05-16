@@ -3,7 +3,7 @@ from core.serializers import BaseMeta, BaseSerializer
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
 from rest_framework import serializers
-
+from django.db.models import Q
 
 class RepairItemListSerializer(BaseSerializer):
     class Meta(BaseMeta):
