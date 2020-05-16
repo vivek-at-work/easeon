@@ -112,7 +112,11 @@ class GSXRequest:
         result = json.loads(output) if is_json(output) else output
         if 'authToken' in result:
             get_user_model().objects.filter(
-                    gsx_user_name=self.gsx_user_name).update(gsx_auth_token=result['authToken'],gsx_token_last_refreshed_on=timezone.now())
+                gsx_user_name=self.gsx_user_name
+            ).update(
+                gsx_auth_token=result['authToken'],
+                gsx_token_last_refreshed_on=timezone.now(),
+            )
             self.auth_token = result['authToken']
             return True
         return False

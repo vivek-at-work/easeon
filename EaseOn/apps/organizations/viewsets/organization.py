@@ -50,11 +50,7 @@ class OrganizationPermissions(permissions.BasePermission):
         if request.user.role == SUPER_USER:
             return True
         if (
-            view.action
-            in [
-                'get_holidays'
-                
-            ]
+            view.action in ['get_holidays']
             and request.user
             and request.user.is_authenticated
             and request.user.role in self.READ_ROLES
@@ -68,7 +64,6 @@ class OrganizationPermissions(permissions.BasePermission):
                 'partial_update',
                 'destroy',
                 'add_holiday',
-                
             ]
             and request.user
             and request.user.is_authenticated

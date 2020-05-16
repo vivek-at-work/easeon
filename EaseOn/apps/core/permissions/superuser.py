@@ -4,7 +4,8 @@ from rest_framework import permissions
 SUPER_USER = 'SuperUser'
 OPERATOR = 'Operator'
 TOKEN_USER = 'TokenUser'
-AUDITOR ='Auditor'
+AUDITOR = 'Auditor'
+
 
 class IsSuperUser(permissions.BasePermission):
     """

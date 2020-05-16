@@ -5,6 +5,7 @@ from customers import models, serializers
 from core.permissions import IsOperatorOrSuperUser
 from core.models import SUPER_USER
 
+
 class HasRightsToUpdateOrDeleteCustomer(IsOperatorOrSuperUser):
     """
     Allows super user to update customers.
@@ -19,8 +20,8 @@ class HasRightsToUpdateOrDeleteCustomer(IsOperatorOrSuperUser):
             and request.user
             and request.user.is_authenticated
         ):
-           return request.user.role == SUPER_USER
-        
+            return request.user.role == SUPER_USER
+
         return True
 
 

@@ -47,7 +47,12 @@ def validate_user_email_domain(value):
 class User(AbstractBaseUser):
     '''A User'''
 
-    USER_TYPE_CHOICES = ((1, SUPER_USER), (2, OPERATOR), (3, TOKEN_USER),(4,AUDITOR))
+    USER_TYPE_CHOICES = (
+        (1, SUPER_USER),
+        (2, OPERATOR),
+        (3, TOKEN_USER),
+        (4, AUDITOR),
+    )
     email = models.EmailField(
         max_length=100, unique=True, validators=[validate_user_email_domain]
     )
