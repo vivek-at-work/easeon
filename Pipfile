@@ -19,6 +19,8 @@ django = "==2.2.10"
 pyotp = "*"
 django-rest-swagger = "*"
 pillow = "*"
+django-extensions = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"

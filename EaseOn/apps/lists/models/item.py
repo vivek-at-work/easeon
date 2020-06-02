@@ -13,7 +13,7 @@ LIST_NAME_CHOICES = (
     ('CUSTOMER_TYPE', 'Customer Type'),
     ('UNIT_PART', 'Unit Part'),
     ('STATES', 'States'),
-    ('COUNTRIES', 'Countries'),
+    ('COUNTRY', 'COUNTRY'),
     ('SERIALIZABLE_INVENTORY_ITEM', 'Serializable Inventory Item'),
     ('LOANER_INVENTORY_PART_NUMBERS', 'Loaner Inventory Part Numbers'),
     ('LOANER_INVENTORY_PENALTY_REASONS', 'Loaner Inventory Penalty Reasons'),

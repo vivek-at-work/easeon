@@ -4,6 +4,7 @@ from customers.models import Customer
 from django.db import transaction
 from lists.models import get_list_choices
 from rest_framework import serializers
+from customers.validators import validate_open_tickets
 
 c_types = get_list_choices('CUSTOMER_TYPE')
 
@@ -12,6 +13,14 @@ class CustomerSerializer(BaseSerializer):
     state = serializers.ChoiceField(choices=get_list_choices('STATES'))
     customer_type = serializers.ChoiceField(choices=c_types)
     country = serializers.ChoiceField(choices=get_list_choices('COUNTRY'))
+
+
+    def validate(self,data):
+        if 'view' in self.context:
+            action = self.context['view'].action
+            if(action=='create'):
+                validate_open_tickets(data)
+        return data
 
     class Meta(BaseMeta):
         model = Customer

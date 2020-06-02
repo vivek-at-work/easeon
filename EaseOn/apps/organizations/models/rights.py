@@ -47,10 +47,14 @@ class OrganizationRights(BaseModel):
             sender=self.__class__, membership=self, attributes=['is_active']
         )
 
+@receiver(pre_save, sender=OrganizationRights)
+def set_active_if_super_user(sender, instance, *args, **kwargs):
+    if not instance.id and instance.created_by.is_superuser:
+        instance.is_active = True
 
 @receiver(post_save, sender=OrganizationRights)
 def onMembershipSave(sender, instance, *args, **kwargs):
-    if kwargs.get('created', False):
+    if kwargs.get('created', False) and not instance.is_active:
         template = settings.EMAIL_TEMPLATES.get('alert')
         details = """A new Rights request received from user {} for organization {} please login to approve""".format(
             instance.user.full_name, instance.organization.code

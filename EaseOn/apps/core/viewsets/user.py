@@ -176,6 +176,22 @@ class UserViewSet(BaseViewSet):
         return response.Response(
             self.serializer_class(user, context=context).data
         )
+    
+    @decorators.action(methods=['get'], detail=False)
+    def me(self, request):
+        user = request.user
+        context = {'request': request}
+        return response.Response(
+            self.serializer_class(user, context=context).data
+        )
+    
+    @decorators.action(methods=['get'], detail=False)
+    def rocket_chat_auth_get(self, request):
+        user = request.user
+        return response.Response(
+            {'loginToken':str(request.auth)}
+        )
+
 
     @decorators.action(methods=['post'], detail=True)
     def deactivate(self, request, pk=None):

@@ -5,68 +5,21 @@ from core import utils
 from core.gsx import DEVICE_DIAGNOSTICS_INELIGIBLE, GSXRequest
 from core.models import BaseModel
 from core.utils import send_mail, time_by_adding_business_days
-from devices.restricted_devices import restricted_identifiers
 from django.conf import settings
 from django.db import models
 from django.apps import apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from devices.exceptions import DeviceDetailsExceptions
-
-
-def validate(value, what=None):
-    """
-    Tries to guess the meaning of value or validate that
-    value looks like what it's supposed to be.
-
-    >>> validate('XD368Z/A', 'partNumber')
-    True
-    >>> validate('XGWL2Z/A', 'partNumber')
-    True
-    >>> validate('ZM661-5883', 'partNumber')
-    True
-    >>> validate('661-01234', 'partNumber')
-    True
-    >>> validate('B661-6909', 'partNumber')
-    True
-    >>> validate('G143111400', 'dispatchId')
-    True
-    >>> validate('R164323085', 'dispatchId')
-    True
-    >>> validate('blaa', 'serialNumber')
-    False
-    >>> validate('MacBook Pro (Retina, Mid 2012)', 'productName')
-    True
-    """
-    result = None
-
-    if not isinstance(value, str):
-        raise ValueError(
-            '%s is not valid input (%s != string)' % (value, type(value))
-        )
-
-    rex = {
-        'partNumber': r'^([A-Z]{1,4})?\d{1,3}\-?(\d{1,5}|[A-Z]{1,2})(/[A-Z])?$',
-        'serialNumber': r'^[A-Z0-9]{11,12}$',
-        'eeeCode': r'^[A-Z0-9]{3,4}$',
-        'returnOrder': r'^7\d{9}$',
-        'repairNumber': r'^\d{12}$',
-        'dispatchId': r'^[A-Z]+\d{9,15}$',
-        'alternateDeviceId': r'^\d{15}$',
-        'diagnosticEventNumber': r'^\d{23}$',
-        'productName': r'^i?Mac',
-    }
-
-    for k, v in rex.items():
-        if re.match(v, value):
-            result = k
-
-    return (result == what) if what else result
+from devices.validators import validate_restricted_device,validate_identifier,gsx_validate
 
 
 class Device(BaseModel):
-    serial_number = models.CharField(null=True, max_length=20)
-    alternate_device_id = models.CharField(null=True, max_length=20)
+    serial_number = models.CharField(null=True,
+     max_length=20,
+     validators=[validate_identifier,validate_restricted_device])
+    alternate_device_id = models.CharField(null=True, max_length=20,
+    validators=[validate_identifier,validate_restricted_device])
     product_name = models.CharField(null=True, max_length=100)
     configuration = models.CharField(null=True, max_length=100)
 
@@ -75,7 +28,7 @@ class Device(BaseModel):
         verbose_name_plural = 'Devices'
 
     def _set_device_identifier(self, number):
-        if validate(number, 'alternateDeviceId'):
+        if gsx_validate(number, 'alternateDeviceId'):
             self.alternate_device_id = number
         else:
             self.serial_number = number
@@ -95,9 +48,7 @@ class Device(BaseModel):
     def identifier(self, number):
         self._set_device_identifier(number)
 
-    def is_stolen_device(self):
-        di = [self.alternate_device_id, self.serial_number]
-        return any(elem in restricted_identifiers for elem in di)
+ 
 
     @property
     def open_tickets(self):
@@ -106,17 +57,8 @@ class Device(BaseModel):
             device__serial_number=self.serial_number
         ).open()
 
-    @property
-    def user_messages(self):
-        if self.is_stolen_device():
-            return """Kindly immediatly contact with administrator before proceed the repair of device."""
-        open_tickets = self.open_tickets.values_list(
-            'reference_number', flat=True
-        )
-        if self.open_tickets.count():
-            return """This Device has pending open tickets.Close them before proceeding for a new one {0}""".format(
-                ','.join(open_tickets)
-            )
+       
+        
 
     def get_parts(self, gsx_username, authtoken, **kwargs):
         payload = {
@@ -688,27 +630,27 @@ class Device(BaseModel):
         return self.identifier
 
 
-@receiver(post_save, sender=Device)
-def restricted_device_update(sender, instance, *args, **kwargs):
-    if instance.is_stolen_device():
-        template = settings.EMAIL_TEMPLATES.get('action')
-        details = """We have found that a restricted
-                     device with identifier {0}
-                     has been accessed by the
-                     user {1} you may contact him
-                     on {2}.""".format(
-            instance.identifier,
-            instance.created_by.full_name,
-            instance.created_by.contact_number,
-        )
-        summary = '''Urgent !! A Restricted
-            Device {0} has been accessed .'''.format(
-            instance.identifier
-        )
-        context = {'summary': summary, 'detail': details}
-        subject = """Urgent !! A Restricted Device {0} has been accessed .""".format(
-            instance.identifier
-        )
+# @receiver(post_save, sender=Device)
+# def restricted_device_update(sender, instance, *args, **kwargs):
+#     if instance.validate_restricted_device():
+#         template = settings.EMAIL_TEMPLATES.get('action')
+#         details = """We have found that a restricted
+#                      device with identifier {0}
+#                      has been accessed by the
+#                      user {1} you may contact him
+#                      on {2}.""".format(
+#             instance.identifier,
+#             instance.created_by.full_name,
+#             instance.created_by.contact_number,
+#         )
+#         summary = '''Urgent !! A Restricted
+#             Device {0} has been accessed .'''.format(
+#             instance.identifier
+#         )
+#         context = {'summary': summary, 'detail': details}
+#         subject = """Urgent !! A Restricted Device {0} has been accessed .""".format(
+#             instance.identifier
+#         )
 
-        context['receiver_short_name'] = settings.ADMIN_NAME
-        send_mail(subject, template, [settings.ADMIN_EMAIL], **context)
+#         context['receiver_short_name'] = settings.ADMIN_NAME
+#         send_mail(subject, template, [settings.ADMIN_EMAIL], **context)

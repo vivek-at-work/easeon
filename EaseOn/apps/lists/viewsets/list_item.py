@@ -11,7 +11,7 @@ from rest_framework import decorators, response
 class ListItemFilter(django_filters.FilterSet):
     """doc string for OrganizationFilter"""
 
-    list_name = django_filters.CharFilter()
+    list_name = django_filters.MultipleChoiceFilter(choices=LIST_NAME_CHOICES)
     value = django_filters.CharFilter(lookup_expr='icontains')
 
     class Meta(object):

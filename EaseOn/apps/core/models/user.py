@@ -326,9 +326,11 @@ def send_activation_mail_to_user(sender, user, attributes, **kwargs):
         utils.send_mail(subject, template, user.email, **context)
 
 
-@receiver(pre_save, sender=User)
-def set_user_type(sender, instance, *args, **kwargs):
-    if instance.is_admin:
-        instance.user_type = 1
-    if instance.user_type == 1:
-        instance.is_admin = True
+# @receiver(pre_save, sender=User)
+# def set_user_type(sender, instance, *args, **kwargs):
+#     if instance.is_admin:
+#         instance.user_type = 1
+#         return
+#     else:
+#         instance.is_admin = True
+#         instance.user_type = 2

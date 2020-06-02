@@ -4,7 +4,7 @@ View For Ticket related Operations
 """
 import django_filters
 from core import viewsets
-from devices.models import validate
+from devices.validators import gsx_validate
 from django.contrib.postgres.search import SearchVector
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -37,11 +37,11 @@ class DeviceFilter(django_filters.CharFilter):
 
     def filter(self, qs, value):
         if value:
-            if validate(value, 'alternateDeviceId'):
+            if gsx_validate(value, 'alternateDeviceId'):
                 d = {'device__alternateDeviceId': value}
-            elif validate(value, 'serialNumber'):
+            elif gsx_validate(value, 'serialNumber'):
                 d = {'device__serial_number': value}
-            elif validate(value, 'productName'):
+            elif gsx_validate(value, 'productName'):
                 d = {'device__product_name': value}
             else:
                 return qs

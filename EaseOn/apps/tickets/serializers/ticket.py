@@ -213,7 +213,6 @@ class DeviceSerializer(BaseSerializer):
             'product_name',
             'configuration',
             'identifier',
-            'user_messages',
             'serial_number',
             'alternate_device_id',
         ]

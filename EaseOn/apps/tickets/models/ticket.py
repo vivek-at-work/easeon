@@ -3,7 +3,7 @@
 Ticket Models
 """
 from datetime import date, datetime, time
-
+import random
 from core.gsx import GSXRequest, format_customer, format_device
 from core.models import BaseManager, BaseModel, BaseQuerySet, User
 from core.utils import get_random_string, time_by_adding_business_days
@@ -187,7 +187,7 @@ class Ticket(BaseModel):
         code = self.organization.code
         index = self.organization.tickets.count() + 1
         suffix = settings.TICKET_SUFFIX
-        reference_number = '{0}{1}{2}'.format(code, index, suffix)
+        reference_number = '{}{}{}{}'.format(code, index,random.randint(0, 99), suffix)
         self.reference_number = reference_number
 
     def refresh_escalation_timestamps(self, closed=False):

@@ -53,11 +53,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 THIRD_PART_PACKAGES = [
+    'django_extensions',
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'oauth2_provider',
+   
 ]
 LOCAL_APPS = [
     name
@@ -132,8 +134,11 @@ STATIC_URL = '/django_static/'
 STATICFILES_DIRS = []
 STATIC_ROOT = os.path.join(BASE_DIR, 'django_static')
 
-CORS_ORIGIN_ALLOW_ALL = True
 
+CORS_ORIGIN_WHITELIST  = [
+    'http://139.162.33.109:3000'
+]
+CORS_ALLOW_CREDENTIALS = True
 
 SERVER_IP = env('SERVER_IP').strip('/')
 CLIENT_URL = env('CLIENT_URL').strip('/')
