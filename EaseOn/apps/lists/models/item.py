@@ -17,7 +17,8 @@ LIST_NAME_CHOICES = (
     ('SERIALIZABLE_INVENTORY_ITEM', 'Serializable Inventory Item'),
     ('LOANER_INVENTORY_PART_NUMBERS', 'Loaner Inventory Part Numbers'),
     ('LOANER_INVENTORY_PENALTY_REASONS', 'Loaner Inventory Penalty Reasons'),
-    ('CONSIGNMENT_TYPE','Consignmenet Types')
+    ('CONSIGNMENT_TYPE', 'Consignment Types'),
+    ('REPORT_TYPES','Report Types')
 )
 
 

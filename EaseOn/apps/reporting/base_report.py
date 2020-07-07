@@ -1,11 +1,17 @@
+"""
+Base Report
+"""
 import os
 import uuid
+import datetime
 from django.db import connection
 from django.conf import settings
-from .db_query import REPORT_SQL_MAPPING,STATUS_REPORT
 
-import datetime
+
 def validate_date(date_text):
+    """
+    Dates should be in YYYY-MM-DD format
+    """
     try:
         datetime.datetime.strptime(date_text, "%Y-%m-%d")
     except ValueError:
@@ -59,13 +65,10 @@ class Report():
 
     def create(self):
         db_cursor = connection.cursor()
-        SQL_for_file_output = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(self.db_query)
+        query = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(self.db_query)
         with open(self.target_path, 'w') as f_output:
-            db_cursor.copy_expert(SQL_for_file_output, f_output)
-    
+            db_cursor.copy_expert(query, f_output)
+
     def send(self,report_target):
         self._fetch_data()
         report_target.send(self.target_path)
-    
-
-

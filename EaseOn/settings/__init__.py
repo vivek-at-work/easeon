@@ -60,12 +60,7 @@ THIRD_PART_PACKAGES = [
     'rest_framework.authtoken',
     'corsheaders',
     'oauth2_provider',
-   
-]
-LOCAL_APPS = [
-    name
-    for name in os.listdir(APPS_DIR)
-    if os.path.isdir(os.path.join(APPS_DIR, name))
+    'django_celery_beat'
 ]
 
 LOCAL_APPS = [
@@ -142,7 +137,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'django_static')
 
 
 CORS_ORIGIN_WHITELIST  = [
-    'https://easeon.in'
+    'https://easeon.in',
+    'http://localhost:3000',
+
 ]
 CORS_ALLOW_CREDENTIALS = True
 

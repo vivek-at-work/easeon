@@ -125,7 +125,7 @@ class Organization(BaseModel):
         loaner_record_report.create()
         return loaner_record_report, f"Order Line Report for {self.code}"
 
-    def send_report_by_mail(self,report_type,*receivers):
+    def send_report_by_mail(self,report_type,start_date,end_date,*receivers):
         if len(receivers)==0:
             receivers = [self.manager.email]
         report_target = SMTPReportTarget()

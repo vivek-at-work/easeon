@@ -57,14 +57,14 @@ class UserViewSet(BaseViewSet):
         methods=['get'], detail=True, url_name='rights',
     )
     def rights(self, request, pk=None):
+        from lists.models import get_list_choices
         user = self.get_object()
         right_type = self.request.query_params.get('right_type', None)
         rights = []
         if user.is_superuser:
             organizations = Organization.objects.all()
             for organization in organizations:
-                rights.append(
-                    {
+                org_right =  {
                         'organization_name': organization.name,
                         'organization_code': organization.code,
                         'organization': reverse(
@@ -84,7 +84,9 @@ class UserViewSet(BaseViewSet):
                         'customer_info_download': True,
                         'is_active': True,
                     }
-                )
+                if right_type in get_list_choices('REPORT_TYPES'):
+                    org_right[right_type] = True
+                rights.append(org_right)
         else:
             organizations = user.managed_locations.filter(is_deleted=False)
             for organization in organizations:

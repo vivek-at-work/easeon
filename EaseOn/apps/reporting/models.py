@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from .tasks import send_a_report
 
 
 
@@ -21,4 +22,6 @@ class ReportRequest(BaseModel):
 
 @receiver(post_save, sender=ReportRequest)
 def process_request(sender, instance, created, **kwargs):
-    pass
+    send_a_report.delay(instance.organization.id,
+                        instance.report_type, instance.start_date,
+                        instance.end_date, instance.created_by.email)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
+from core.utils import get_organization_model
 from .models import ReportRequest
 from django.apps import apps
 from lists.models import get_list_choices
@@ -18,7 +19,7 @@ class ReportRequestSerializer(BaseSerializer):
                 queryset=get_organization_queryset(), view_name='organization-detail'
             )
     class Meta(BaseMeta):
-        model = Customer
+        model = ReportRequest
         fields = [
             'url',
             'organization',

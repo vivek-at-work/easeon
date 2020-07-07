@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib
 import random
-from datetime import datetime, time
 from django.db import models
 from django.utils import timezone
 from .querysets import BaseManager
@@ -9,7 +8,11 @@ from .user import User
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    """
+    Base Model for all django models in EaseOn App
+    """
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      editable=False)
     updated_at = models.DateTimeField(auto_now=True)
     guid = models.CharField(max_length=40, editable=False)
     is_deleted = models.BooleanField(default=False)
@@ -48,20 +51,15 @@ class BaseModel(models.Model):
         return not (self.is_deleted and self.deleted_at is not None)
 
     def delete(self, using=None, keep_parents=False):
-        self.deleted_at = now()
+        self.deleted_at = timezone.now()
         self.is_deleted = True
         self.save()
 
     def hard_delete(self):
-        return super(SoftDeleteModel, self).delete()
+        return super(BaseModel, self).delete()
 
-    def save(
-        self,
-        force_insert=False,
-        force_update=False,
-        using=None,
-        update_fields=None,
-    ):
+    def save(self, force_insert=False, force_update=False,
+             using=None,update_fields=None):
         if not self.guid:
             self.guid = hashlib.sha1(
                 str(random.random()).encode('utf-8')

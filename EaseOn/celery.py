@@ -15,11 +15,11 @@ app.autodiscover_tasks()
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
 
-app.conf.beat_schedule = {
-    'add-every-day-9pm': {
-        'task': 'organizations.tasks.send_daily_status_reports_for_all_centres',
-        'schedule': crontab(hour='15',
-                            minute=30,
-                            )
-    },
-}
+# app.conf.beat_schedule = {
+#     'add-every-day-9pm': {
+#         'task': 'organizations.tasks.send_daily_status_reports_for_all_centres',
+#         'schedule': crontab(hour='15',
+#                             minute=30,
+#                             )
+#     },
+# }

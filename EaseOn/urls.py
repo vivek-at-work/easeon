@@ -19,6 +19,7 @@ from rest_framework.documentation import include_docs_urls
 from slas.urls import sla_router
 from tickets.urls import ticket_router
 from tokens.urls import token_router
+from reporting.urls import report_router
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework_swagger.views import get_swagger_view
 
@@ -34,8 +35,7 @@ ROUTER.extend(sla_router)
 ROUTER.extend(inventory_router)
 ROUTER.extend(lists_router)
 ROUTER.extend(token_router)
-# ROUTER.extend(scheduler_router)
-
+ROUTER.extend(report_router)
 schema_view = get_swagger_view(title=settings.SITE_HEADER)
 
 
