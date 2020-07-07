@@ -1,0 +1,16 @@
+# Create your tasks here
+from __future__ import absolute_import, unicode_literals
+from core.utils import get_organization_model
+from django.apps import apps
+from celery import shared_task
+from celery.task.schedules import crontab
+from celery.decorators import periodic_task
+from reporting import STATUS_REPORT , LOANER_RECORD_REPORT, ORDER_LINE_REPORT
+
+@shared_task
+def send_daily_status_reports_for_all_centres():
+    Organization = apps.get_model(*get_organization_model().split('.', 1))
+    for organization in Organization.objects.all():
+        organization.send_report_by_mail(STATUS_REPORT)
+        organization.send_report_by_mail(LOANER_RECORD_REPORT)
+        organization.send_report_by_mail(ORDER_LINE_REPORT)

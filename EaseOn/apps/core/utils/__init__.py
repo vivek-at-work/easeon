@@ -69,6 +69,9 @@ def send_mail(subject, message, *receivers, **kwargs):
     )
     if message.endswith('.html'):
         msg.attach_alternative(html_content, 'text/html')
+    if 'files' in kwargs:
+        for item in kwargs['files']:
+            msg.attach_file(item)
     msg.send()
 
 

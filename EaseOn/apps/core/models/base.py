@@ -2,19 +2,18 @@
 import hashlib
 import random
 from datetime import datetime, time
-
 from django.db import models
 from django.utils import timezone
-
 from .querysets import BaseManager
-from .softdelete import SoftDeleteModel
-from .tenant_model import BaseTenantModel
-from .timestamp_model import TimeStampedModel
 from .user import User
 
 
-class BaseModel(TimeStampedModel, SoftDeleteModel):
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
     guid = models.CharField(max_length=40, editable=False)
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True)
     created_by = models.ForeignKey(
         User,
         related_name='created_%(class)s',
@@ -31,7 +30,9 @@ class BaseModel(TimeStampedModel, SoftDeleteModel):
     objects = BaseManager()
     all_objects = BaseManager(alive_only=False)
 
-    class Meta(TimeStampedModel.Meta):
+    class Meta():
+        get_latest_by = 'created_at'
+        ordering = ('-updated_at', '-created_at')
         abstract = True
 
     def _increment_version(self):
@@ -41,21 +42,18 @@ class BaseModel(TimeStampedModel, SoftDeleteModel):
         )
         self.version = preposed_object_version
 
-    def set_created_by(self, user):
-        if self.created_by is None:
-            self.created_by = user
-        else:
-            self._update_last_modified_by(user)
 
-    def _update_last_modified_by(self, user):
+    @property
+    def is_alive(self):
+        return not (self.is_deleted and self.deleted_at is not None)
 
-        self.last_modified_by = user
+    def delete(self, using=None, keep_parents=False):
+        self.deleted_at = now()
+        self.is_deleted = True
+        self.save()
 
-    # def save(self, **kwargs):
-    #     self.update_modified = kwargs.pop(
-    #         'update_modified', getattr(self, 'update_modified', True)
-    #     )
-    #     super(TimeStampedModel, self).save(**kwargs)
+    def hard_delete(self):
+        return super(SoftDeleteModel, self).delete()
 
     def save(
         self,

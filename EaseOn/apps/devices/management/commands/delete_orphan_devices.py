@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 import argparse
 
 from devices.models import Device
@@ -18,17 +19,13 @@ class Command(BaseCommand):
                 )
             )
             count = results.count()
-            self.stdout.write(
-                '{} orphan device records found.'.format(count), ending='\n'
+            logging.info(
+                f"{count} Orphan device records found."
             )
             results.hard_delete()
-            self.stdout.write(
-                '{} orphan device records have been deleted.'.format(count),
-                ending='\n',
+            logging.info(
+                f"{count} Orphan device records have been deleted."
             )
 
         except Exception:
-            self.stderr.write(
-                'Could not perform orphan device records deletion.',
-                ending='\n',
-            )
+            loggin.error('Could not perform Orphan device records deletion.')

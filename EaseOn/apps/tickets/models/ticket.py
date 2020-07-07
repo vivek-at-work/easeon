@@ -4,7 +4,7 @@ Ticket Models
 """
 from datetime import date, datetime, time
 import random
-from core.gsx import GSXRequest, format_customer, format_device
+from gsx.core import GSXRequest, format_customer, format_device
 from core.models import BaseManager, BaseModel, BaseQuerySet, User
 from core.utils import get_random_string, time_by_adding_business_days
 from customers.models import Customer

@@ -3,7 +3,7 @@ import json
 
 import django_filters
 from core import serializers
-from core.gsx import GSXRequest
+from gsx.core import GSXRequest
 from core.permissions import SuperUserOrReadOnly
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -211,7 +211,7 @@ class UserViewSet(BaseViewSet):
 
     @decorators.action(methods=['get'], detail=False)
     def check_gsx_connectivity(self, request):
-        req = GSXRequest('authenticate', 'check')
+        req = GSXRequest('authenticate', 'check',None,None,None)
         return response.Response(req.get(), status=status.HTTP_200_OK)
 
     def _get_gsx_token(self, request):

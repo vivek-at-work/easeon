@@ -21,6 +21,12 @@ django-rest-swagger = "*"
 pillow = "*"
 django-extensions = "*"
 gunicorn = "*"
+gevent = "*"
+pandas = "*"
+numpy = "*"
+django-pandas = "*"
+celery = {extras = ["redis"], version = "*"}
+redis = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"

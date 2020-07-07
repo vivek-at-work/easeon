@@ -2,7 +2,7 @@
 import re
 from core import utils
 
-from core.gsx import DEVICE_DIAGNOSTICS_INELIGIBLE, GSXRequest
+from gsx.core import DEVICE_DIAGNOSTICS_INELIGIBLE, GSXRequest
 from core.models import BaseModel
 from core.utils import send_mail, time_by_adding_business_days
 from django.conf import settings

@@ -2,7 +2,7 @@
 import logging
 
 from core import utils
-from core.gsx import GSXRequest
+from gsx.core import GSXRequest
 from core.utils import account_activation_token
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -16,7 +16,7 @@ from django.urls import reverse
 from django.utils import encoding, http, timezone
 from otp.mixins import OTPMixin
 
-from .signals import user_attributes_changed
+from .signals import attributes_changed
 from .user_manager import UserManager
 
 SUPER_USER = 'SuperUser'
@@ -93,7 +93,8 @@ class User(AbstractBaseUser):
         'city',
         'gsx_technician_id',
         'gsx_user_name',
-        'gsx_ship_to' 'gsx_auth_token',
+        'gsx_ship_to',
+        'gsx_auth_token',
     ]
     objects = UserManager()
 
@@ -266,7 +267,7 @@ class User(AbstractBaseUser):
                 self.email, self.is_active
             )
         )
-        user_attributes_changed.send(
+        attributes_changed.send(
             sender=self.__class__, user=self, attributes=['is_active']
         )
 
@@ -288,7 +289,7 @@ class User(AbstractBaseUser):
                 'token',
                 self.gsx_user_name,
                 gsx_token,
-                gsx_ship_to,
+                self.gsx_ship_to
             )
         else:
             req = GSXRequest(
@@ -296,7 +297,7 @@ class User(AbstractBaseUser):
                 'token',
                 self.gsx_user_name,
                 self.gsx_auth_token,
-                self.gsx_ship_to,
+                self.gsx_ship_to
             )
 
         if req:
@@ -307,7 +308,7 @@ class User(AbstractBaseUser):
         return self.email
 
 
-@receiver(user_attributes_changed)
+@receiver(attributes_changed)
 def send_activation_mail_to_user(sender, user, attributes, **kwargs):
     if 'is_active' in attributes and getattr(user, 'is_active'):
         if not user.is_superuser:
@@ -324,13 +325,3 @@ def send_activation_mail_to_user(sender, user, attributes, **kwargs):
             'summary': summary,
         }
         utils.send_mail(subject, template, user.email, **context)
-
-
-# @receiver(pre_save, sender=User)
-# def set_user_type(sender, instance, *args, **kwargs):
-#     if instance.is_admin:
-#         instance.user_type = 1
-#         return
-#     else:
-#         instance.is_admin = True
-#         instance.user_type = 2

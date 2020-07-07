@@ -36,10 +36,10 @@ def get_resource_url(service, method):
 
 
 def get_connection(gsx_user_name, auth_token):
-    if not gsx_user_name:
-        raise Exception('GSX User Name not provided.')
-    if not auth_token:
-        raise Exception('GSX Auth Token not provided.')
+    # if not gsx_user_name:
+    #     raise Exception('GSX User Name not provided.')
+    # if not auth_token:
+    #     raise Exception('GSX Auth Token not provided.')
 
     if path.exists(GSX_CERT_FILE_PATH) and path.exists(GSX_KEY_FILE_PATH):
         return http.client.HTTPSConnection(
@@ -48,15 +48,19 @@ def get_connection(gsx_user_name, auth_token):
 
 
 def get_headers(auth_token, ship_to):
-    return {
+    head = {
         'X-Apple-SoldTo': GSX_SOLD_TO,
-        'X-Apple-ShipTo': ship_to,
+        'X-Apple-ShipTo':settings.GSX_SHIP_TO,
         'X-Apple-Trace-ID': str(get_uuid()),
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Accept-Language': 'en_US',
-        'X-Apple-Auth-Token': auth_token,
     }
+    if ship_to:
+        head['X-Apple-ShipTo'] =  ship_to
+    if auth_token:
+        head['X-Apple-Auth-Token'] = auth_token 
+    return head
 
 
 def _prepare_response(gsx_user_name, **kwargs):
@@ -77,6 +81,10 @@ class GSXRequest:
         self.ship_to = ship_to
         self.url = get_resource_url(self.service, self.method)
         self.can_handle_token_timout = True
+        self.is_connectivity_request = False
+        if method == 'check':
+            self.is_connectivity_request = True
+
 
     def _process_errors(self, message):
         error_codes = []
@@ -148,9 +156,13 @@ class GSXRequest:
             )
         response = connection.getresponse()
         output = response.read()
-        message = json.loads(output) if is_json(output) else output
+        if self.is_connectivity_request:
+            message = json.loads(output) if is_json(output) else output
+            return message, None, None
+        else:
+            message = str(output)
         message, error_codes, is_unauthorized = self._process_errors(message)
-        if is_unauthorized and self.can_handle_token_timout:
+        if is_unauthorized and self.can_handle_token_timout and not self.is_connectivity_request:
             if self.handle_token_timeout():
                 return self._send_request(method, url, payload_string)
         return message, error_codes, is_unauthorized
@@ -159,6 +171,8 @@ class GSXRequest:
         if data:
             query_string = urllib.parse.urlencode(data)
             url = self.url + '?' + query_string
+        else:
+            url = self.url
         message, error_codes, is_unauthorized = self._send_request('GET', url)
         return message
 

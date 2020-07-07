@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from customers.models import Customer
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
@@ -6,8 +7,7 @@ from tickets.models import Ticket
 
 
 class Command(BaseCommand):
-    help = 'Delete All Cutomers those not have a ticket'
-
+    help = 'Delete All Cutomer Records those not have a ticket'
     def handle(self, *args, **kwargs):
         try:
             results = Customer.all_objects.exclude(
@@ -16,17 +16,9 @@ class Command(BaseCommand):
                 )
             )
             count = results.count()
-            self.stdout.write(
-                '{} orphan customer records found'.format(count), ending='\n'
-            )
+            logging.info(f"{count} Orphan Customer records found.")
             results.hard_delete()
-            self.stdout.write(
-                '{} orphan customer records have been deleted'.format(count),
-                ending='\n',
-            )
+            logging.info(f"{count} Orphan customer records have been deleted")
 
         except Exception:
-            self.stderr.write(
-                'Could not perform orphan customer records deletion',
-                ending='\n',
-            )
+            logging.error('Could not perform orphan customer records deletion')

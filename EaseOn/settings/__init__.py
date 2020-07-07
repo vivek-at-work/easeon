@@ -11,6 +11,7 @@ from .gsx import *
 from .logging import *
 from .rest import *
 from .social import *
+from .celery import *
 
 root = environ.Path(__file__) - 1  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False))  # set default values and casting
@@ -79,6 +80,7 @@ LOCAL_APPS = [
     'tickets',
     'tokens',
     'gsx',
+    'reporting'
 ]
 
 
@@ -99,6 +101,10 @@ MIDDLEWARE = [
 ]
 ROOT_URLCONF = 'EaseOn.urls'
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'EaseOn/', 'templates')
+REPORTS_DIR = os.path.join(BASE_DIR, 'reports')
+if not os.path.exists(REPORTS_DIR):
+    os.mkdir(REPORTS_DIR)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -136,7 +142,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'django_static')
 
 
 CORS_ORIGIN_WHITELIST  = [
-    'http://139.162.33.109:3000'
+    'https://easeon.in'
 ]
 CORS_ALLOW_CREDENTIALS = True
 
