@@ -15,6 +15,7 @@ from rest_framework import viewsets
 from rest_framework.authtoken.models import Token as TokenModel
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.exceptions import NotAuthenticated
 
 from oauth2_provider.models import (
     get_access_token_model,
@@ -108,7 +109,6 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         response = None
         if status == 200:
             import json
-
             access_token = json.loads(body).get('access_token')
             if access_token is not None:
                 token = get_access_token_model().objects.get(
@@ -132,8 +132,10 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     )
                 else:
                     response = HttpResponse(content=body, status=status)
-        for k, v in headers.items():
-            response[k] = v
+            for k, v in headers.items():
+                response[k] = v
+        else:
+            raise NotAuthenticated(detail="Unable To Login", code=status)
         return response
 
     def refresh_token(self, request):
@@ -165,6 +167,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     )
                 else:
                     response = HttpResponse(content=body, status=status)
+        
         for k, v in headers.items():
             response[k] = v
         return response

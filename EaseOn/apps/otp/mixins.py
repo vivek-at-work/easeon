@@ -90,9 +90,6 @@ class OTPMixin(object):
             validate_email(receiving_address)
             is_valid_email = True
         except Exception as e:
-            logging.error(
-                'recived invalid email %s error as %s', receiving_address, e,
-            )
             is_valid_email = False
 
         if not is_valid_email:

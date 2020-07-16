@@ -1,8 +1,0 @@
-[Unit]
-Description=easeOn socket
-
-[Socket]
-ListenStream=/run/easeOn.sock
-
-[Install]
-WantedBy=sockets.target

@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 from rest_framework import serializers
 from core.utils import time_by_adding_business_days
 from gsx.core import GSXRequest
+from django.contrib.auth import get_user_model
 import re
-
+USER = get_user_model()
 
 class NoneSerializer(serializers.Serializer):
     pass
@@ -63,15 +64,23 @@ def gsx_validate(value, what=None):
 class BaseGSXSerializer(serializers.Serializer):
     @property
     def gsx_user_name(self):
-        return self.context['request'].user.gsx_user_name
+        return self.user.gsx_user_name
 
     @property
     def gsx_auth_token(self):
-        return self.context['request'].user.gsx_auth_token
+        return self.user.gsx_auth_token
 
     @property
     def gsx_ship_to(self):
-        return self.context['request'].user.gsx_ship_to
+        return self.user.gsx_ship_to
+
+    @property
+    def user(self):
+        if self.context['request'].user.is_authenticated:
+            return self.context['request'].user
+        else:
+            return USER.objects.get(email='rajat@uipl.co.in')
+
 
 
 class DeviceSerializer(BaseGSXSerializer):

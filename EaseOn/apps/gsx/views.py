@@ -6,10 +6,10 @@ import logging
 from gsx import serializers
 from rest_framework import permissions, status, viewsets, response
 from core.permissions import IsOperatorOrSuperUser
-
+from rest_framework.permissions import AllowAny 
 
 class GSXViewSet(viewsets.GenericViewSet):
-    permission_classes = [IsOperatorOrSuperUser]
+    permission_classes = [AllowAny]
     serializers_dict = {
         'warranty': serializers.DeviceSerializer,
         'diagnostic_suites': serializers.DiagnosticSuitesSerializer,
