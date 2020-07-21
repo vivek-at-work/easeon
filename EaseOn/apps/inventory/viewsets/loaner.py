@@ -8,7 +8,7 @@ from inventory.serializers import (
     PenaltyAmountSerializer,
 )
 from core.permissions import IsOperatorOrSuperUser
-
+from django.db.models import Q
 
 class LoanerInventoryItemFilter(django_filters.FilterSet):
     """Filter Set Class for Loaner Inventory"""
@@ -31,7 +31,7 @@ class LoanerInventoryItemFilter(django_filters.FilterSet):
 
 class LoanerItemViewSet(BaseBulkCreateViewSet):
     """View Set for loaner inventory"""
-
+    rights_for = 'loaner_inventory'
     serializer_class = LoanerItemSerializer
     list_serializer_class = LoanerItemListSerializer
     delete_serializer_class = LoanerItemListSerializer
@@ -50,12 +50,10 @@ class LoanerItemViewSet(BaseBulkCreateViewSet):
         if self.request.user.is_superuser:
             return models.LoanerInventoryItem.objects.all()
         else:
-            organizations = self.request.user.locations.filter(
-                loaner_inventory=True, is_active=True
-            ).values_list('organization', flat=True)
+            organizations , managed_organizations = self.get_user_organizations()
             return models.LoanerInventoryItem.objects.filter(
-                organization__in=organizations
-            )
+               Q(organization__in=organizations) | Q(organization__in=managed_organizations))
+
 
 
 class PenaltyAmountViewSet(BaseBulkCreateViewSet):

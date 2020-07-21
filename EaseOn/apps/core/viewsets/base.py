@@ -9,7 +9,19 @@ BaseReadOnlyViewSet = viewsets.ReadOnlyModelViewSet
 class BaseViewSet(viewsets.ModelViewSet):
     retrieve_serializer_class = None
     ordering = ['-id']
+    rights_for = 'tickets'
+    def get_user_organizations_filter_by_right(self):
+        return {self.rights_for:True, 'is_active':True}
 
+    def get_user_organizations(self):
+        organizations = self.request.user.locations.filter(
+               **self.get_user_organizations_filter_by_right()
+            ).values_list('organization', flat=True)
+        managed_organizations = self.request.user.managed_locations.filter(
+            is_deleted=False).values_list('id', flat=True)
+        return organizations , managed_organizations
+        
+    
     def create(self, request, *args, **kwargs):
         if self.retrieve_serializer_class is not None:
             serializer = self.get_serializer(data=request.data)

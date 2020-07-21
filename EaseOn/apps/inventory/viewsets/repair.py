@@ -6,7 +6,7 @@ from inventory.serializers import (
     RepairItemListSerializer,
     RepairItemSerializer,
 )
-
+from django.db.models import Q
 from core.permissions import IsOperatorOrSuperUser
 
 
@@ -30,6 +30,7 @@ class RepairInventoryItemFilter(django_filters.FilterSet):
 
 
 class RepairItemViewSet(BaseBulkCreateViewSet):
+    rights_for = 'repair_inventory'
     serializer_class = RepairItemSerializer
     list_serializer_class = RepairItemListSerializer
     delete_serializer_class = RepairItemListSerializer
@@ -48,9 +49,6 @@ class RepairItemViewSet(BaseBulkCreateViewSet):
         if self.request.user.is_superuser:
             return models.RepairInventoryItem.objects.all()
         else:
-            organizations = self.request.user.locations.filter(
-                repair_inventory=True, is_active=True
-            ).values_list('organization', flat=True)
+            organizations , managed_organizations = self.get_user_organizations()
             return models.RepairInventoryItem.objects.filter(
-                organization__in=organizations
-            )
+               Q(organization__in=organizations) | Q(organization__in=managed_organizations))
