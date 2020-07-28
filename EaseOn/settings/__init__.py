@@ -13,7 +13,7 @@ from .rest import *
 from .social import *
 from .celery import *
 from .django_extentions import *
-
+from .chat import *
 root = environ.Path(__file__) - 1  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False))  # set default values and casting
 environ.Env.read_env()  # reading .env file
@@ -76,7 +76,8 @@ LOCAL_APPS = [
     'tickets',
     'tokens',
     'gsx',
-    'reporting'
+    'reporting',
+    'rocketchat'
 ]
 
 

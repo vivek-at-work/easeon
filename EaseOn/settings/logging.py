@@ -28,23 +28,21 @@ LOGGING = {
             'address': '/dev/log',
             'formatter': 'verbose',
         },
-        # Warning messages are sent to admin emails
         'mail_admins': {
             'level': 'WARNING',
             'class': 'django.utils.log.AdminEmailHandler',
         },
     },
     'loggers': {
-        # This is the "catch all" logger
         '': {
-            'handlers': ['console', 'syslog'],
-            'level': 'INFO',
+            'handlers': ['syslog','console'],
+            'level': 'ERROR',
             'disabled': False,
         },
-        'thingsforwork': {
-            'handlers': ['console', 'syslog'],
-            'level': 'DEBUG',
-            'propagate': False,
+        'easeon': {
+            'handlers': ['syslog','console'],
+            'level': 'INFO',
+            'disabled': False,
         },
     },
 }

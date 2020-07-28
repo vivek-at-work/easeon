@@ -26,6 +26,7 @@ class EaseOnAuthenticationBackend(ModelBackend):
                 user = user_model.objects.get(email=email)
                 logging.info('Existing user found for email {0}'.format(email))
             else:
+                logging.error('Provided Email is not valid user email')
                 return None
         except user_model.DoesNotExist:
             logging.error(

@@ -79,7 +79,7 @@ class BaseGSXSerializer(serializers.Serializer):
         if self.context['request'].user.is_authenticated:
             return self.context['request'].user
         else:
-            return USER.objects.get(email='rajat@uipl.co.in')
+            return USER.objects.get(email='kuldeep.rawat@unicornstore.in')
 
 
 

@@ -16,36 +16,33 @@ class OTPOptionsSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
-    def _authenticate_via_email(self, email, password):
-        user = None
-        if email and password:
-            user = authenticate(
+    def _authenticate(self, email, password):
+        return authenticate(
                 self.context.get('request'),
                 **{'email': email, 'password': password}
             )
-            if not user:
-                raise Exception()
-            return user
-        else:
-            msg = 'Must include "email" and "password".'
-            raise exceptions.ValidationError(msg)
 
     def validate(self, attrs):
+        failed_login_msz = 'Could not Validate User with provided credentials.'
         email = attrs.get('email')
         password = attrs.get('password')
-        try:
-            unauthenticated_user = get_user_model().objects.get(
-                email__iexact=email
-            )
-            if not unauthenticated_user.is_active:
-                msg = 'User account has been disabled.'
-                raise exceptions.ValidationError(msg)
-            user = self._authenticate_via_email(email, password)
-            attrs['user'] = user
-            return attrs
-        except Exception:
-            msg = 'Unable to login with provided credentials.'
+        if email and password:
+            user_by_email = get_user_model().objects.filter(
+                email__iexact=email, is_active=True
+            ).exists()
+            if not user_by_email:
+                raise exceptions.ValidationError("User does not exists.")
+            else:
+                user = self._authenticate(email, password)
+                if user:
+                    attrs['user'] = user
+                    return attrs
+                else:
+                    raise exceptions.ValidationError(failed_login_msz)
+        else:
+            msg = 'Insufficient Login information provided.'
             raise exceptions.ValidationError(msg)
+
 
     def to_representation(self, data):
         user = data['user']
