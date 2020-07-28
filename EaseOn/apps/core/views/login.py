@@ -7,6 +7,7 @@ import logging
 from core.serializers import OTPOptionsSerializer
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
+from django.conf import settings
 from otp.models import PyOTP
 
 from otp.serializers import HotpSerializer, VerifyOtpSerializer
@@ -118,10 +119,10 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                 )
                 user = token.user
                 app_authorized.send(sender=self, request=request, token=token)
-                chat_login = self.create_chat_login(user.email,
-                user.username,
-                serializer.data.get('password'),
-                user.full_name)
+                chat_login = {}
+                if settings.ENABLE_CHAT:
+                    chat_login = self.create_chat_login(user.email,
+                    serializer.data.get('password'),user.full_name)
                 if user:
                     res = {}
                     res['auth'] = json.loads(body)
@@ -179,12 +180,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
             response[k] = v
         return response
 
-    def create_chat_login(self, email,username,password,name):
-        return {
-            'data': {
-
-            }
-        }
+    def create_chat_login(self, email,password,name):
         username = email.replace("@",'-')
         if email=="admin@easeon.in":
             return RocketChat().users_create_token(username="admin").json()
@@ -198,7 +194,6 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                 password =password,
                 username=username).json()
             print(cretion_repsone)
-        
         return RocketChat(username,password).users_create_token(username=username).json()
 
 
