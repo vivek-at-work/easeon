@@ -7,13 +7,13 @@ from gsx.core import GSXRequest
 from core.permissions import SuperUserOrReadOnly
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from organizations.models import Organization
+from organizations.models import Organization , OrganizationRights
 from organizations.serializers import (
     OrganizationRightsSerializer,
     OrganizationSerializer,
 )
 from rest_framework import decorators, response, status
-from rest_framework.reverse import reverse
+
 
 from .base import BaseViewSet
 from core.filters import FullNameFilter
@@ -59,72 +59,26 @@ class UserViewSet(BaseViewSet):
     def rights(self, request, pk=None):
         from lists.models import get_list_choices
         user = self.get_object()
+        #GET Organization Based Or Rights
         right_type = self.request.query_params.get('right_type', None)
         rights = []
         if user.is_superuser or user.is_privileged:
             organizations = Organization.objects.all()
             for organization in organizations:
-                org_right =  {
-                        'organization_name': organization.name,
-                        'organization_code': organization.code,
-                        'organization': reverse(
-                            'organization-detail',
-                            kwargs={'pk': organization.id},
-                            request=request,
-                        ),
-                        'upcoming_holidays': organization.holidays.all().values_list(
-                            'date', flat=True
-                        ),
-                        'tickets': True,
-                        'repair_inventory': True,
-                        'loaner_inventory': True,
-                        'non_serialized_inventory': True,
-                        'daily_status_report_download': True,
-                        'daily_status_report_download_with_customer_info': True,
-                        'customer_info_download': True,
-                        'is_active': True,
-                    }
-                if right_type in get_list_choices('REPORT_TYPES'):
-                    org_right[right_type] = True
-                rights.append(org_right)
+                organization_right = OrganizationRights.get_allow_all_object(request,organization,right_type)
+                rights.append(organization_right)
         else:
             organizations = user.managed_locations.filter(is_deleted=False)
             for organization in organizations:
-                rights.append(
-                    {
-                        'organization_name': organization.name,
-                        'organization_code': organization.code,
-                        'organization': reverse(
-                            'organization-detail',
-                            kwargs={'pk': organization.id},
-                            request=request,
-                        ),
-                        'tickets': True,
-                        'repair_inventory': True,
-                        'loaner_inventory': True,
-                        'non_serialized_inventory': True,
-                        'daily_status_report_download': True,
-                        'daily_status_report_download_with_customer_info': True,
-                        'customer_info_download': True,
-                        'is_active': True,
-                    }
-                )
-            for location in user.locations.filter():
+                organization_right = OrganizationRights.get_allow_all_object(request,organization,right_type)
+                rights.append(organization_right)
+            for location in user.locations.filter(is_deleted=False):
                 location_right = OrganizationRightsSerializer(
                     location, context={'request': request}
                 ).data
+                if right_type is not None and right_type.strip("'") in get_list_choices('REPORT_TYPES'):
+                    location_right[right_type] = False
                 rights.append(location_right)
-        if right_type is not None:
-            rights = [
-                {
-                    'organization': right['organization'],
-                    'organization_code': right['organization_code'],
-                    'organization_name': right['organization_name'],
-                    right_type: right[right_type],
-                }
-                for right in rights
-                if right[right_type] is True
-            ]
         return response.Response({'results': rights})
 
     @decorators.action(
