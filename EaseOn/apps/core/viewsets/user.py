@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-
+import logging
 import django_filters
 from core import serializers
 from gsx.core import GSXRequest
@@ -174,6 +174,12 @@ class UserViewSet(BaseViewSet):
     def activate(self, request, pk=None):
         user = self.get_object()
         user.toggle_activation(True)
+        user.save()
+        logging.info(
+            'user {} has been activated '.format(
+                user.email
+            )
+        )
         context = {'request': request}
         return response.Response(
             self.serializer_class(user, context=context).data
@@ -187,26 +193,16 @@ class UserViewSet(BaseViewSet):
             self.serializer_class(user, context=context).data
         )
     
-    @decorators.action(methods=['get'], detail=False)
-    def rocket_chat_auth_get(self, request):
-        user = request.user
-        return response.Response(
-            {'loginToken':str(request.auth)}
-        )
-
-
     @decorators.action(methods=['post'], detail=True)
     def deactivate(self, request, pk=None):
         user = self.get_object()
         user.toggle_activation(False)
-        return response.Response(
-            self.serializer_class(user, context={'request': request}).data
+        user.save()
+        logging.info(
+            'user {} has been deactivated '.format(
+                user.email
+            )
         )
-
-    @decorators.action(methods=['post'], detail=True)
-    def make_superuser(self, request, pk=None):
-        user = self.get_object()
-        user.toggle_admin_status(not user.is_superuser)
         return response.Response(
             self.serializer_class(user, context={'request': request}).data
         )
@@ -342,8 +338,13 @@ class UserViewSet(BaseViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = self.get_object()
-        user.user_type = serializer.validated_data['user_type']
+        user.change_role(int(serializer.validated_data['user_type']))
         user.save()
+        logging.info(
+            'user {} admin status changed to {}'.format(
+                user.email, user.is_admin
+            )
+        )
         return response.Response(
             serializers.UserSerializer(
                 user, context={'request': request}
@@ -354,7 +355,10 @@ class UserViewSet(BaseViewSet):
     @decorators.action(methods=['GET'], detail=False)
     def available_user_roles(self, request):
         roles = get_user_model().USER_TYPE_CHOICES
-        return response.Response(roles, status=status.HTTP_200_OK)
+        roles_list = []
+        for x, y in roles:
+            roles_list.append({'value':x,'label':y})
+        return response.Response(roles_list, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         return get_user_model().objects.all()

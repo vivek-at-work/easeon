@@ -20,10 +20,10 @@ from .signals import attributes_changed
 from .user_manager import UserManager
 
 SUPER_USER = 'SuperUser'
-OPERATOR = 'Operator'
+OPERATOR = 'Technician'
 TOKEN_USER = 'TokenUser'
 AUDITOR = 'Auditor'
-
+PRIVILEGED = 'Privileged'
 
 def validate_user_email_domain(value):
     """
@@ -52,6 +52,7 @@ class User(AbstractBaseUser):
         (2, OPERATOR),
         (3, TOKEN_USER),
         (4, AUDITOR),
+        (5, PRIVILEGED),
     )
     email = models.EmailField(
         max_length=100, unique=True, validators=[validate_user_email_domain]
@@ -260,24 +261,17 @@ class User(AbstractBaseUser):
 
     def toggle_activation(self, is_active):
         self.is_active = is_active
-        self.save()
-        logging.info(
-            'user {} activation status changed to {}'.format(
-                self.email, self.is_active
-            )
-        )
         attributes_changed.send(
             sender=self.__class__, user=self, attributes=['is_active']
         )
 
-    def toggle_admin_status(self, is_admin):
-        self.is_admin = is_admin
-        self.save()
-        logging.info(
-            'user {} admin status changed to {}'.format(
-                self.email, self.is_admin
-            )
-        )
+    def change_role(self, role):
+        if role==1:
+            self.is_admin = True
+        else:
+            self.is_admin = False
+        self.user_type=role
+        
 
     def refresh_gsx_token(self, gsx_token=None, gsx_ship_to=None):
         req = None

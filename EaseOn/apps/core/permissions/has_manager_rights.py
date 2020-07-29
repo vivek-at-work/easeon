@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .superuser import SUPER_USER, IsOperatorOrSuperUser
+from .superuser import SUPER_USER, IsOperatorOrSuperUser , PRIVILEGED
 
 
 class HasManagerRightsToUpdateOrDelete(IsOperatorOrSuperUser):
@@ -8,7 +8,7 @@ class HasManagerRightsToUpdateOrDelete(IsOperatorOrSuperUser):
     """
 
     def has_object_permission(self, request, view, obj):
-        if request.user.role == SUPER_USER:
+        if request.user.role == SUPER_USER or request.user.role == PRIVILEGED:
             return True
 
         if (
