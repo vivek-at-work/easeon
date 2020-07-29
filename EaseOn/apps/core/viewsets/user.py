@@ -61,7 +61,7 @@ class UserViewSet(BaseViewSet):
         user = self.get_object()
         right_type = self.request.query_params.get('right_type', None)
         rights = []
-        if user.is_superuser:
+        if user.is_superuser or user.is_privileged:
             organizations = Organization.objects.all()
             for organization in organizations:
                 org_right =  {

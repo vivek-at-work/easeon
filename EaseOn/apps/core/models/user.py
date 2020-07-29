@@ -117,6 +117,10 @@ class User(AbstractBaseUser):
     def is_superuser(self):
         'is a superuser'
         return self.is_admin
+    
+    @property
+    def is_privileged(self):
+        return self.role == PRIVILEGED
 
     @property
     def role(self):

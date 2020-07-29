@@ -46,7 +46,7 @@ class RepairItemViewSet(BaseBulkCreateViewSet):
     ordering = ['id']
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_privileged:
             return models.RepairInventoryItem.objects.all()
         else:
             organizations , managed_organizations = self.get_user_organizations()

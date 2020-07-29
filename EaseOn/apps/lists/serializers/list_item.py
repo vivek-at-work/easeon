@@ -10,7 +10,7 @@ class ItemModelSerializer(BaseSerializer):
         Check that list_name is valid.
         """
         user = self.get_user()
-        if user.is_superuser:
+        if user.is_superuser or user.is_privileged:
             valid_list_names = [x for x, y in LIST_NAME_CHOICES]
             if value not in valid_list_names:
                 raise serializers.ValidationError('Not a valid list type.')

@@ -40,7 +40,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_can_update(self, obj):
         requesting_user = self.context['request'].user
-        return requesting_user.is_superuser and (requesting_user.id != obj.id)
+        return (requesting_user.is_superuser or requesting_user.is_privileged) and (requesting_user.id != obj.id)
 
 
 class ChangeUserRoleSerializer(serializers.Serializer):
