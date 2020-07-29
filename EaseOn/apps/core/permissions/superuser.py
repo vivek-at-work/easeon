@@ -2,17 +2,17 @@
 from rest_framework import permissions
 
 SUPER_USER = 'SuperUser'
-OPERATOR = 'Operator'
+OPERATOR = 'Technician'
 TOKEN_USER = 'TokenUser'
 AUDITOR = 'Auditor'
-
+PRIVILEGED  = 'Privileged'
 
 class IsSuperUser(permissions.BasePermission):
     """
     Allows access only to Super users.
     """
 
-    ALLOWED_ROLES = [SUPER_USER]
+    ALLOWED_ROLES = [SUPER_USER, PRIVILEGED]
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
@@ -31,7 +31,7 @@ class SuperUserOrReadOnly(permissions.BasePermission):
     Allows read access to Operators.
     """
 
-    ALLOWED_ROLES = [SUPER_USER, OPERATOR]
+    ALLOWED_ROLES = [SUPER_USER, OPERATOR,PRIVILEGED]
 
     def has_permission(self, request, view):
         if (
@@ -52,7 +52,7 @@ class IsOperatorOrSuperUser(permissions.BasePermission):
     Allows All access to SuperUsers and Operators .
     """
 
-    ALLOWED_ROLES = [SUPER_USER, OPERATOR, AUDITOR]
+    ALLOWED_ROLES = [SUPER_USER, OPERATOR, AUDITOR,PRIVILEGED]
 
     def has_permission(self, request, view):
         if (
@@ -69,7 +69,7 @@ class SuperUserOrManagerWriteOnly(IsOperatorOrSuperUser):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if request.user.role == SUPER_USER:
+        if request.user.role == SUPER_USER or request.user.role == PRIVILEGED:
             return True
 
         return obj.organization.manager == request.user
@@ -81,7 +81,7 @@ class IsTokenUserOrSuperUser(permissions.BasePermission):
     Write access to SuperUsers and Operators .
     """
 
-    ALLOWED_ROLES = [SUPER_USER, TOKEN_USER]
+    ALLOWED_ROLES = [SUPER_USER, TOKEN_USER,PRIVILEGED]
 
     def has_permission(self, request, view):
         if (

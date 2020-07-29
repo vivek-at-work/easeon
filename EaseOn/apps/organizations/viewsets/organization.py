@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import django_filters
 from core.filters import FullNameFilter
-from core.permissions import OPERATOR, SUPER_USER
+from core.permissions import OPERATOR, SUPER_USER , PRIVILEGED
 from core.utils import PageNumberPagination
 from core.viewsets import BaseViewSet
 from django.contrib.auth import get_user_model
@@ -11,9 +11,9 @@ from rest_framework import decorators, permissions, response, status
 
 class OrganizationPermissions(permissions.BasePermission):
 
-    READ_ROLES = [SUPER_USER, OPERATOR]
-    CREATE_DELETE_ROLES = [SUPER_USER]
-    UPDATE_ROLES = [OPERATOR, SUPER_USER]
+    READ_ROLES = [SUPER_USER, OPERATOR,PRIVILEGED]
+    CREATE_DELETE_ROLES = [SUPER_USER,PRIVILEGED]
+    UPDATE_ROLES = [OPERATOR, SUPER_USER,PRIVILEGED]
 
     def has_permission(self, request, view):
         if (
