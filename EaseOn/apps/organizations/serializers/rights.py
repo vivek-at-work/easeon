@@ -24,7 +24,7 @@ class OrganizationRightsSerializer(BaseSerializer):
         #     raise serializers.ValidationError(
         #         'Can not create/update membership for a superuser.'
         #     )
-        if not self.get_user().is_superuser and value != self.get_user():
+        if not (self.get_user().is_superuser or self.get_user().is_privileged) and value != self.get_user():
             raise serializers.ValidationError(
                 'Can not create/update rights for other users.'
             )
@@ -37,18 +37,9 @@ class OrganizationRightsSerializer(BaseSerializer):
 
     def get_can_toggle_status(self, obj):
         return (
-            self.get_user().is_superuser
-            or obj.organization.manager == self.get_user()
+            (self.get_user().is_superuser or  self.get_user().is_privileged)
+            or (obj.organization.manager == self.get_user())
         )
-
-    # def validate_uniques(self,data,key,value):
-    #     d = {key:value}
-    #     if not self.instance:
-    #         if Organization.objects.all().filter(**d).exists():
-    #             raise serializers.ValidationError("{0} Already been used with previous existing organization.".format(key))
-    #     else:
-    #         if Organization.objects.exclude(id=self.instance.id).filter(**d).exists():
-    #             raise serializers.ValidationError("{0} Already been used with previous existing organization.".format(key))
 
     def validate(self, data):
         """
