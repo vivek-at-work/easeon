@@ -7,9 +7,14 @@ from core.serializers import (
     PasswordResetSerializer,
 )
 from rest_framework import generics, permissions, response, status
+from django.utils.decorators import method_decorator
+from django.views.decorators.debug import sensitive_post_parameters
 
-from .authentication import sensitive_post_parameters_m
-
+sensitive_post_parameters_m = method_decorator(  # pylint:disable=C0103
+    sensitive_post_parameters(
+        'password', 'old_password', 'new_password1', 'new_password2'
+    )
+)
 
 class PasswordResetView(generics.GenericAPIView):
     """
@@ -80,6 +85,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
                     request.data, identifier
                 )
             )
+            raise identifier
 
 
 class PasswordChangeView(generics.GenericAPIView):

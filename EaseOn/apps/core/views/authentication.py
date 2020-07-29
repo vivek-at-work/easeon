@@ -16,9 +16,9 @@ from django.contrib.auth import logout as django_logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ValidationError
 from django.utils import encoding, http
-from django.utils.decorators import method_decorator
+
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.debug import sensitive_post_parameters
+
 from rest_framework import (
     decorators,
     generics,
@@ -30,11 +30,7 @@ from rest_framework import (
 from rest_framework.authtoken.models import Token as TokenModel
 from rest_framework.reverse import reverse_lazy
 
-sensitive_post_parameters_m = method_decorator(  # pylint:disable=C0103
-    sensitive_post_parameters(
-        'password', 'old_password', 'new_password1', 'new_password2'
-    )
-)
+
 
 
 class LogoutView(generics.GenericAPIView):
