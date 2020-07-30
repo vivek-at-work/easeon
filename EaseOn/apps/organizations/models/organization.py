@@ -104,24 +104,21 @@ class Organization(BaseModel):
         return dashboard_data
 
 
-    def create_status_report(self, date_text=time_by_adding_business_days(0).strftime("%Y-%m-%d")):       
-        status_report = StatusReport(file_name=f"{self.code}-{date_text}")
-        if date_text is not None:
-            status_report.filter_by_centre_and_date(self.id,date_text)
+    def create_status_report(self,start_date, end_date=time_by_adding_business_days(0).strftime("%Y-%m-%d")):       
+        status_report = StatusReport(file_name=f"Status_Report_{self.code}-{start_date}-{end_date}")
+        status_report.filter_by_centre_and_date(self.id,start_date,end_date)
         status_report.create()
         return status_report , f"Status Report with Customer Data for {self.code}"
     
-    def create_loaner_record_report(self, date_text=time_by_adding_business_days(0).strftime("%Y-%m-%d")):
-        loaner_record_report = LoanerRecordReport(file_name=f"{self.code}-{date_text}")
-        if date_text is not None:
-            loaner_record_report.filter_by_centre_and_date(self.id,date_text)
+    def create_loaner_record_report(self,start_date, end_date=time_by_adding_business_days(0).strftime("%Y-%m-%d")):
+        loaner_record_report = LoanerRecordReport(file_name=f"Loaner_Record_Report{self.code}-{start_date}-{end_date}")
+        loaner_record_report.filter_by_centre_and_date(self.id,start_date,end_date)
         loaner_record_report.create()
         return loaner_record_report , f"Loaner Record Report for {self.code}"
     
-    def create_order_line_report(self, date_text=time_by_adding_business_days(0).strftime("%Y-%m-%d")):
-        loaner_record_report = OrderLineReport(file_name=f"{self.code}-{date_text}")
-        if date_text is not None:
-            loaner_record_report.filter_by_centre_and_date(self.id,date_text)
+    def create_order_line_report(self,start_date, end_date=time_by_adding_business_days(0).strftime("%Y-%m-%d")):
+        loaner_record_report = OrderLineReport(file_name=f"Loaner_Record_Report{self.code}-{start_date}-{end_date}")
+        loaner_record_report.filter_by_centre_and_date(self.id,start_date,end_date)
         loaner_record_report.create()
         return loaner_record_report, f"Order Line Report for {self.code}"
 
@@ -129,7 +126,7 @@ class Organization(BaseModel):
         if len(receivers)==0:
             receivers = [self.manager.email]
         report_target = SMTPReportTarget()
-        report, subject = getattr(self, f'create_{report_type.lower()}')()        
+        report, subject = getattr(self, f'create_{report_type.lower()}')(start_date,end_date)        
         report_target.send(subject,report,*receivers)
 
 
