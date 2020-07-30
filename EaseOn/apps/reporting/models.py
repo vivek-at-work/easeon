@@ -19,9 +19,14 @@ class ReportRequest(BaseModel):
     end_date = models.DateField()
     report_type =  models.CharField(max_length=50)
     is_processed = models.BooleanField(default=False)
+    
+    def process(self):
+        send_a_report.delay(self.organization.id,
+                        self.report_type, self.start_date,
+                        self.end_date, self.created_by.email)
+
 
 @receiver(post_save, sender=ReportRequest)
 def process_request(sender, instance, created, **kwargs):
-    send_a_report.delay(instance.organization.id,
-                        instance.report_type, instance.start_date,
-                        instance.end_date, instance.created_by.email)
+    instance.process()
+

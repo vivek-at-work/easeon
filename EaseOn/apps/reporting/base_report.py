@@ -13,7 +13,10 @@ def validate_date(date_text):
     Dates should be in YYYY-MM-DD format
     """
     try:
-        datetime.datetime.strptime(date_text, "%Y-%m-%d")
+        if type(date_text)==datetime.date:
+            datetime.datetime.strftime(date_text, "%Y-%m-%d")
+        else:
+            datetime.datetime.strptime(date_text, "%Y-%m-%d")
     except ValueError:
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
     return True
