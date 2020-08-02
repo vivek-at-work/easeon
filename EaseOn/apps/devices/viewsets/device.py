@@ -8,14 +8,8 @@ from devices import models, serializers
 from devices.exceptions import DeviceDetailsExceptions
 from django.conf import settings
 from django.db.models import Q
-from rest_framework import (
-    decorators,
-    generics,
-    permissions,
-    response,
-    status,
-    views,
-)
+from rest_framework import (decorators, generics, permissions,
+                            response, status, views)
 
 
 class DeviceFilter(django_filters.FilterSet):

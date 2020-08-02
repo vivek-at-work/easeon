@@ -8,11 +8,9 @@ from core.serializers import OTPOptionsSerializer
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
-from oauth2_provider.models import (
-    get_access_token_model,
-    get_application_model,
-    get_refresh_token_model,
-)
+from oauth2_provider.models import (get_access_token_model,
+                                    get_application_model,
+                                    get_refresh_token_model)
 from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.signals import app_authorized
 from oauth2_provider.views.mixins import OAuthLibMixin

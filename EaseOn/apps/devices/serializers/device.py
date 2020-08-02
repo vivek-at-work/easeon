@@ -2,11 +2,8 @@
 from core import utils
 from core.serializers import BaseMeta, BaseSerializer
 from devices.models import Device
-from devices.validators import (
-    validate_identifier,
-    validate_open_tickets,
-    validate_restricted_device,
-)
+from devices.validators import (validate_identifier, validate_open_tickets,
+                                validate_restricted_device)
 from rest_framework import serializers
 
 

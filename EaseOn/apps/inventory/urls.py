@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-from inventory.viewsets import (
-    LoanerItemViewSet,
-    PenaltyAmountViewSet,
-    RepairItemViewSet,
-    SerializableItemViewSet,
-)
+from inventory.viewsets import (LoanerItemViewSet, PenaltyAmountViewSet,
+                                RepairItemViewSet, SerializableItemViewSet)
 from rest_framework import routers
 
 inventory_router = routers.DefaultRouter()

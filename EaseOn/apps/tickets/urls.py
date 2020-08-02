@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 from core.router import DefaultRouter
 from django.conf.urls import url
-from tickets.viewsets import (
-    CommentViewSet,
-    DeliveryViewSet,
-    DevicePartReportViewSet,
-    GSXInfoViewSet,
-    LoanerRecordViewSet,
-    OrderLineViewSet,
-    SerializableOrderLineViewSet,
-    TicketViewSet,
-    VoucherViewSet,
-)
+from tickets.viewsets import (CommentViewSet, DeliveryViewSet,
+                              DevicePartReportViewSet, GSXInfoViewSet,
+                              LoanerRecordViewSet, OrderLineViewSet,
+                              SerializableOrderLineViewSet,
+                              TicketViewSet, VoucherViewSet)
 
 ticket_router = DefaultRouter()
 ticket_router.register(r'tickets', TicketViewSet, basename='ticket')

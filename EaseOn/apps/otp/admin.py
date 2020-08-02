@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 
 # Django
 from django.contrib import admin
-
 # own app
 from otp import models
 

@@ -3,10 +3,8 @@
 from core.admin import BASE_SITE
 from core.router import ROUTER
 from core.urls import core_router
-from core.views import (
-    account_approval_from_admin_done,
-    verify_email_and_request_account_approval_from_admin,
-)
+from core.views import (account_approval_from_admin_done,
+                        verify_email_and_request_account_approval_from_admin)
 from customers.urls import customer_router
 from devices.urls import devices_router
 from django.conf import settings

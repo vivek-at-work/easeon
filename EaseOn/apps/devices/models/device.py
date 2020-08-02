@@ -5,11 +5,8 @@ from core import utils
 from core.models import BaseModel
 from core.utils import send_mail, time_by_adding_business_days
 from devices.exceptions import DeviceDetailsExceptions
-from devices.validators import (
-    gsx_validate,
-    validate_identifier,
-    validate_restricted_device,
-)
+from devices.validators import (gsx_validate, validate_identifier,
+                                validate_restricted_device)
 from django.apps import apps
 from django.conf import settings
 from django.db import models

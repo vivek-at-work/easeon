@@ -4,11 +4,8 @@ import time
 
 from core import serializers
 from core.permissions import IsSuperUser
-from core.utils import (
-    account_activation_token,
-    default_create_token,
-    send_mail,
-)
+from core.utils import (account_activation_token,
+                        default_create_token, send_mail)
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login as django_login
@@ -17,14 +14,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ValidationError
 from django.utils import encoding, http
 from django.utils.translation import ugettext_lazy as _
-from rest_framework import (
-    decorators,
-    generics,
-    permissions,
-    response,
-    status,
-    views,
-)
+from rest_framework import (decorators, generics, permissions,
+                            response, status, views)
 from rest_framework.authtoken.models import Token as TokenModel
 from rest_framework.reverse import reverse_lazy
 

@@ -10,10 +10,8 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from gsx.core import GSXRequest
 from organizations.models import Organization, OrganizationRights
-from organizations.serializers import (
-    OrganizationRightsSerializer,
-    OrganizationSerializer,
-)
+from organizations.serializers import (OrganizationRightsSerializer,
+                                       OrganizationSerializer)
 from rest_framework import decorators, response, status
 
 from .base import BaseViewSet
