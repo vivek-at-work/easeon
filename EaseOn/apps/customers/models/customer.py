@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from core import utils
 from core.models import BaseModel
+from django.apps import apps
 from django.db import models
 from django.utils import timezone
-from django.apps import apps
 
 
 class Customer(BaseModel):

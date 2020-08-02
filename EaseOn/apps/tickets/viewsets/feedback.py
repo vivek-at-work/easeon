@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from core import viewsets
-from tickets import models, serializers
 from core.permissions import HasManagerRightsToUpdateOrDelete
+from tickets import models, serializers
 
 
 class FeedbackViewSet(viewsets.BaseViewSet):

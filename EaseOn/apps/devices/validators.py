@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
+
 from core import utils
 from devices.restricted_devices import restricted_identifiers
-from django.db.models import Q
-from django.core.exceptions import ValidationError
-from rest_framework import serializers
 from django.apps import apps
+from django.core.exceptions import ValidationError
+from django.db.models import Q
+from rest_framework import serializers
 
 
 def gsx_validate(value, what=None):

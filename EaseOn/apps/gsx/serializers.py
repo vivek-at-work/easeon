@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from rest_framework import serializers
-from core.utils import time_by_adding_business_days
-from gsx.core import GSXRequest
-from django.contrib.auth import get_user_model
+
 import re
+
+from core.utils import time_by_adding_business_days
+from django.contrib.auth import get_user_model
+from gsx.core import GSXRequest
+from rest_framework import serializers
 
 USER = get_user_model()
 

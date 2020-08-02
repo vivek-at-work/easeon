@@ -2,13 +2,15 @@
 import http
 import json
 import logging
+import time
 import urllib
 from os import path
-from django.utils import encoding, timezone
+
 from core.utils import get_uuid
 from django.conf import settings
 from django.contrib.auth import get_user_model
-import time
+from django.utils import encoding, timezone
+
 from .error_code import UNAUTHORIZED
 from .gsx_exceptions import GSXResourceNotAvailableError
 

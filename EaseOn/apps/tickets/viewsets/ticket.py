@@ -4,16 +4,16 @@ View For Ticket related Operations
 """
 import django_filters
 from core import viewsets
+from core.permissions import HasManagerRightsToUpdateOrDelete
 from devices.validators import gsx_validate
 from django.contrib.postgres.search import SearchVector
+from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import get_template
 from inventory.serializers import LoanerItemSerializer, RepairItemSerializer
 from rest_framework import decorators, response, status
 from rest_framework.parsers import MultiPartParser
 from tickets import models, serializers
-from core.permissions import HasManagerRightsToUpdateOrDelete
-from django.db.models import Q
 
 
 class UserNameFilter(django_filters.CharFilter):

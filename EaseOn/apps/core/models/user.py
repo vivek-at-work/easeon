@@ -2,7 +2,6 @@
 import logging
 
 from core import utils
-from gsx.core import GSXRequest
 from core.utils import account_activation_token
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -14,6 +13,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import encoding, http, timezone
+from gsx.core import GSXRequest
 from otp.mixins import OTPMixin
 
 from .signals import attributes_changed

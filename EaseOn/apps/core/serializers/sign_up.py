@@ -4,8 +4,8 @@ import time
 # from core.gsx import GSXRequest
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
 from gsx.core import GSXRequest
+from rest_framework import serializers
 
 USER_MODEL = get_user_model()
 

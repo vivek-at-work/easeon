@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
 from core.utils import get_organization_model
-from .models import ReportRequest
+from customers.validators import validate_open_tickets
 from django.apps import apps
 from lists.models import get_list_choices
 from rest_framework import serializers
-from customers.validators import validate_open_tickets
+
+from .models import ReportRequest
 
 report_types = get_list_choices('REPORT_TYPES')
 

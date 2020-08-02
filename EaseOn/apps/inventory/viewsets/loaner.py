@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import django_filters
+from core.permissions import IsOperatorOrSuperUser
 from core.viewsets import BaseBulkCreateViewSet
+from django.db.models import Q
 from inventory import models
 from inventory.serializers import (
     LoanerItemListSerializer,
     LoanerItemSerializer,
     PenaltyAmountSerializer,
 )
-from core.permissions import IsOperatorOrSuperUser
-from django.db.models import Q
 
 
 class LoanerInventoryItemFilter(django_filters.FilterSet):

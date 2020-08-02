@@ -16,9 +16,7 @@ from django.contrib.auth import logout as django_logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ValidationError
 from django.utils import encoding, http
-
 from django.utils.translation import ugettext_lazy as _
-
 from rest_framework import (
     decorators,
     generics,

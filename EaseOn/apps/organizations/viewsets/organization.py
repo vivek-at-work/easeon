@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import django_filters
 from core.filters import FullNameFilter
-from core.permissions import OPERATOR, SUPER_USER, PRIVILEGED
+from core.permissions import OPERATOR, PRIVILEGED, SUPER_USER
 from core.utils import PageNumberPagination
 from core.viewsets import BaseViewSet
 from django.contrib.auth import get_user_model

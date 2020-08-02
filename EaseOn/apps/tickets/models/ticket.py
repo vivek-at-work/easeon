@@ -2,9 +2,9 @@
 """
 Ticket Models
 """
-from datetime import date, datetime, time
 import random
-from gsx.core import GSXRequest, format_customer, format_device
+from datetime import date, datetime, time
+
 from core.models import BaseManager, BaseModel, BaseQuerySet, User
 from core.utils import get_random_string, time_by_adding_business_days
 from customers.models import Customer
@@ -15,6 +15,7 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
+from gsx.core import GSXRequest, format_customer, format_device
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
 from slas.models import SLA

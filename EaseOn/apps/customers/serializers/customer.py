@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
 from customers.models import Customer
+from customers.validators import validate_open_tickets
 from django.db import transaction
 from lists.models import get_list_choices
 from rest_framework import serializers
-from customers.validators import validate_open_tickets
 
 c_types = get_list_choices('CUSTOMER_TYPE')
 

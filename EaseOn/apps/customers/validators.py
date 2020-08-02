@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
+
 from core import utils
-from django.db.models import Q
-from django.core.exceptions import ValidationError
-from rest_framework import serializers
 from django.apps import apps
+from django.core.exceptions import ValidationError
+from django.db.models import Q
+from rest_framework import serializers
 
 
 def validate_open_tickets(payload):

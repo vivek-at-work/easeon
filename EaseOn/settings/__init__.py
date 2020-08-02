@@ -5,15 +5,15 @@ import sys
 import environ
 
 from .authentication import *
+from .celery import *
+from .chat import *
 from .db import *
+from .django_extentions import *
 from .email import *
 from .gsx import *
 from .logging import *
 from .rest import *
 from .social import *
-from .celery import *
-from .django_extentions import *
-from .chat import *
 
 root = environ.Path(__file__) - 1  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False))  # set default values and casting

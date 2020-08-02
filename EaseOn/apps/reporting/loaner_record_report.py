@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from .db_query import REPORT_SQL_MAPPING, LOANER_RECORD_REPORT
 from .base_report import Report, validate_date
+from .db_query import LOANER_RECORD_REPORT, REPORT_SQL_MAPPING
 
 
 class LoanerRecordReport(Report):

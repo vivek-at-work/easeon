@@ -2,12 +2,13 @@
 import mimetypes
 import os
 import re
-from django.conf import settings
-import requests
 
+from django.conf import settings
+
+import requests
 from rocketchat_API.APIExceptions.RocketExceptions import (
-    RocketConnectionException,
     RocketAuthenticationException,
+    RocketConnectionException,
     RocketMissingParamException,
 )
 

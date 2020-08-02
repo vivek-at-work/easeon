@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+
 from core.models import BaseManager, BaseModel, BaseQuerySet
 from core.utils import send_mail, time_by_adding_business_days
 from django.conf import settings
@@ -8,13 +9,15 @@ from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .rights import OrganizationRights
+
 from reporting import (
-    StatusReport,
-    SMTPReportTarget,
     LoanerRecordReport,
     OrderLineReport,
+    SMTPReportTarget,
+    StatusReport,
 )
+
+from .rights import OrganizationRights
 
 
 class Organization(BaseModel):

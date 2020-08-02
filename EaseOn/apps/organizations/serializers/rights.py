@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Serializer for Service Provider Membership Models"""
-from core.serializers import BaseSerializer
 from core.models import OPERATOR
+from core.serializers import BaseSerializer
 from organizations.models import OrganizationRights
 from rest_framework import serializers
 

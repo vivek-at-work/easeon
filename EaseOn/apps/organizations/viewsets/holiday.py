@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import django_filters
+from core.permissions import SuperUserOrManagerWriteOnly
 from core.viewsets import BaseViewSet
 from organizations.models import Holiday
 from organizations.serializers import HolidaySerializer
 from rest_framework import decorators, response
-from core.permissions import SuperUserOrManagerWriteOnly
 
 
 class HolidayFilter(django_filters.FilterSet):

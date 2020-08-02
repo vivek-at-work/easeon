@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from core import viewsets
+from core.permissions import HasManagerRightsToUpdateOrDelete
 from rest_framework import decorators, response
 from tickets import models, serializers
-from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class VoucherViewSet(viewsets.BaseViewSet):

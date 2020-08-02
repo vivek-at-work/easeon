@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 import re
-from core import utils
 
-from gsx.core import DEVICE_DIAGNOSTICS_INELIGIBLE, GSXRequest
+from core import utils
 from core.models import BaseModel
 from core.utils import send_mail, time_by_adding_business_days
-from django.conf import settings
-from django.db import models
-from django.apps import apps
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from devices.exceptions import DeviceDetailsExceptions
 from devices.validators import (
-    validate_restricted_device,
-    validate_identifier,
     gsx_validate,
+    validate_identifier,
+    validate_restricted_device,
 )
+from django.apps import apps
+from django.conf import settings
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from gsx.core import DEVICE_DIAGNOSTICS_INELIGIBLE, GSXRequest
 
 
 class Device(BaseModel):

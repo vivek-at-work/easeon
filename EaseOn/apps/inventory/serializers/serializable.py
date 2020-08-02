@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
+from django.db.models import Q
 from inventory.models import SerializableInventoryItem
 from lists.models import get_list_choices
 from organizations.models import Organization
 from rest_framework import serializers
-from django.db.models import Q
 
 dc = get_list_choices('SERIALIZABLE_INVENTORY_ITEM')
 

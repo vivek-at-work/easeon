@@ -2,10 +2,10 @@
 # future
 from __future__ import unicode_literals
 
-from gsx import views
 from core.router import DefaultRouter
-from gsx.views import GSXViewSet
 from django.conf.urls import url
+from gsx import views
+from gsx.views import GSXViewSet
 
 warranty = GSXViewSet.as_view({'post': 'warranty'})
 diagnostic_suites = GSXViewSet.as_view({'post': 'diagnostic_suites'})

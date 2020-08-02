@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from core import viewsets
+from core.permissions import HasManagerRightsToUpdateOrDelete
 from django.db import transaction
 from rest_framework import decorators, response, status
 from tickets import models, serializers
-from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class OrderLineViewSet(viewsets.BaseBulkCreateViewSet):

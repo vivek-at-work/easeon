@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
+from django.db.models import Q
 from inventory.models import (
     LoanerInventoryItem,
     LoanerItemPenaltyAmount,
@@ -9,7 +10,6 @@ from lists.models import get_list_choices
 from organizations.models import Organization
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from django.db.models import Q
 
 
 class LoanerItemListSerializer(BaseSerializer):

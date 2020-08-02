@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import sys
 
+from core.utils import time_by_adding_business_days
 from django.apps import apps
 from django.conf import settings
-from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
 from django.db import connections
 from django.db.migrations.autodetector import MigrationAutodetector
 from django.db.migrations.executor import MigrationExecutor
 from django.db.migrations.state import ProjectState
 from django.db.utils import OperationalError
-from core.utils import time_by_adding_business_days
 from gsx.core import GSXRequest
 
 USER = get_user_model()

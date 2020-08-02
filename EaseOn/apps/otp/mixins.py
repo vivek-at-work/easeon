@@ -10,9 +10,10 @@
 # future
 from __future__ import unicode_literals
 
+import logging
+
 # 3rd party
 import pyotp
-import logging
 
 # local
 from core import utils

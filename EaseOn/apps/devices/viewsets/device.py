@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import logging
+
 import django_filters
+from core.permissions import HasManagerRightsToUpdateOrDelete
 from core.viewsets import BaseViewSet
 from devices import models, serializers
+from devices.exceptions import DeviceDetailsExceptions
 from django.conf import settings
 from django.db.models import Q
-import logging
 from rest_framework import (
     decorators,
     generics,
@@ -13,8 +16,6 @@ from rest_framework import (
     status,
     views,
 )
-from devices.exceptions import DeviceDetailsExceptions
-from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class DeviceFilter(django_filters.FilterSet):

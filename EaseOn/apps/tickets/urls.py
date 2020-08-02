@@ -5,12 +5,12 @@ from tickets.viewsets import (
     CommentViewSet,
     DeliveryViewSet,
     DevicePartReportViewSet,
+    GSXInfoViewSet,
     LoanerRecordViewSet,
     OrderLineViewSet,
     SerializableOrderLineViewSet,
     TicketViewSet,
     VoucherViewSet,
-    GSXInfoViewSet,
 )
 
 ticket_router = DefaultRouter()

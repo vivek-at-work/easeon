@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import django_filters
+from core.models import SUPER_USER
+from core.permissions import IsOperatorOrSuperUser
 from core.viewsets import BaseViewSet
 from customers import models, serializers
-from core.permissions import IsOperatorOrSuperUser
-from core.models import SUPER_USER
 
 
 class HasRightsToUpdateOrDeleteCustomer(IsOperatorOrSuperUser):

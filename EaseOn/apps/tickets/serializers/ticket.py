@@ -12,9 +12,9 @@ from tickets import models
 from tickets import serializers as t_serializer
 
 from .device_part_report import DevicePartReportSerializer
+from .gsx_info import GSXInfoSerializer
 from .upload_content_serializer import UploadContentSerializer
 from .voucher import VoucherSerializer
-from .gsx_info import GSXInfoSerializer
 
 
 def device_do_not_have_open_tickets(device):

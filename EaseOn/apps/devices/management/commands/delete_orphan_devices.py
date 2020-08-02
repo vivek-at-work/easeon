@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import logging
 import argparse
+import logging
 
 from devices.models import Device
 from django.contrib.auth import get_user_model

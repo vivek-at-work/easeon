@@ -2,11 +2,12 @@
 """
 Base Report
 """
+import datetime
 import os
 import uuid
-import datetime
-from django.db import connection
+
 from django.conf import settings
+from django.db import connection
 
 
 def validate_date(date_text):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
-from lists.models import Item, LIST_NAME_CHOICES
+from lists.models import LIST_NAME_CHOICES, Item
 from rest_framework import serializers
 
 

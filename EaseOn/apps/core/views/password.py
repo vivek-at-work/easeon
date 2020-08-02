@@ -6,9 +6,9 @@ from core.serializers import (
     PasswordResetConfirmSerializer,
     PasswordResetSerializer,
 )
-from rest_framework import generics, permissions, response, status
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
+from rest_framework import generics, permissions, response, status
 
 sensitive_post_parameters_m = method_decorator(  # pylint:disable=C0103
     sensitive_post_parameters(

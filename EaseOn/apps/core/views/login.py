@@ -5,20 +5,18 @@ from __future__ import unicode_literals
 import logging
 
 from core.serializers import OTPOptionsSerializer
+from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
-from django.conf import settings
 from otp.models import PyOTP
-
 from otp.serializers import HotpSerializer, VerifyOtpSerializer
 from rest_framework import permissions
 from rest_framework import status as rest_status
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token as TokenModel
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.exceptions import NotAuthenticated
-from rocketchat.rocketchat import RocketChat
 
 from oauth2_provider.models import (
     get_access_token_model,
@@ -28,6 +26,7 @@ from oauth2_provider.models import (
 from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.signals import app_authorized
 from oauth2_provider.views.mixins import OAuthLibMixin
+from rocketchat.rocketchat import RocketChat
 
 USER = get_user_model()
 

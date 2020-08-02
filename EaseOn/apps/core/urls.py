@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from core import views
 from core.router import DefaultRouter
-
-
 from core.views import (
     AdminAccountApprove,
     EmailVerificationView,

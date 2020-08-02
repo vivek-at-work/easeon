@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import hashlib
 import random
+
 from django.db import models
 from django.utils import timezone
+
 from .querysets import BaseManager
 from .user import User
 

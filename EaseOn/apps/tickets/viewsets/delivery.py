@@ -3,8 +3,8 @@
 View For Ticket related Operations
 """
 from core import viewsets
-from tickets import models, serializers
 from core.permissions import HasManagerRightsToUpdateOrDelete
+from tickets import models, serializers
 
 
 class DeliveryViewSet(viewsets.BaseViewSet):

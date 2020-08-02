@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
+
 import django_filters
 from core import serializers
-from gsx.core import GSXRequest
+from core.filters import FullNameFilter
 from core.permissions import SuperUserOrReadOnly
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from gsx.core import GSXRequest
 from organizations.models import Organization, OrganizationRights
 from organizations.serializers import (
     OrganizationRightsSerializer,
@@ -14,9 +16,7 @@ from organizations.serializers import (
 )
 from rest_framework import decorators, response, status
 
-
 from .base import BaseViewSet
-from core.filters import FullNameFilter
 
 
 class UserFilter(django_filters.FilterSet):
