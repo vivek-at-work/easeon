@@ -4,9 +4,11 @@ from core.permissions import IsOperatorOrSuperUser
 from core.viewsets import BaseBulkCreateViewSet
 from django.db.models import Q
 from inventory import models
-from inventory.serializers import (LoanerItemListSerializer,
-                                   LoanerItemSerializer,
-                                   PenaltyAmountSerializer)
+from inventory.serializers import (
+    LoanerItemListSerializer,
+    LoanerItemSerializer,
+    PenaltyAmountSerializer,
+)
 
 
 class LoanerInventoryItemFilter(django_filters.FilterSet):

@@ -13,13 +13,16 @@ from __future__ import unicode_literals
 import logging
 
 from core.serializers import UserSerializer
+
 # Django
 from django.contrib.auth import get_user_model
 from oauth2_provider.models import AccessToken, Application
 from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.views.mixins import OAuthLibMixin
+
 # own app
 from otp import models, serializers
+
 # rest-framework
 from rest_framework import permissions, status, viewsets
 from rest_framework.authtoken.models import Token as TokenModel

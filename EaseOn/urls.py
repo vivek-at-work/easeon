@@ -3,8 +3,10 @@
 from core.admin import BASE_SITE
 from core.router import ROUTER
 from core.urls import core_router
-from core.views import (account_approval_from_admin_done,
-                        verify_email_and_request_account_approval_from_admin)
+from core.views import (
+    account_approval_from_admin_done,
+    verify_email_and_request_account_approval_from_admin,
+)
 from customers.urls import customer_router
 from devices.urls import devices_router
 from django.conf import settings
@@ -38,11 +40,7 @@ schema_view = get_swagger_view(title=settings.SITE_HEADER)
 
 
 urlpatterns = [
-    url(r'{}/admin/'.format(API_GATEWAY), BASE_SITE.urls),
-    url(
-        r'backend/auth/'.format(API_GATEWAY),
-        include('django.contrib.auth.urls'),
-    ),
+    url(r'{0}/admin/'.format(API_GATEWAY), BASE_SITE.urls),
     url(
         r'{0}/{1}authentication/'.format(
             API_GATEWAY, settings.CURRENT_API_URL

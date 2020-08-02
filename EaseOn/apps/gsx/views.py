@@ -19,6 +19,7 @@ class GSXViewSet(viewsets.GenericViewSet):
         'diagnostics_lookup': serializers.DiagnosticsLookupSerializer,
         'run_diagnosis_suite': serializers.RunDiagnosticsSerializer,
         'diagnostics_status': serializers.DiagnosticsStatusSerializer,
+        'customer_report_download': serializers.RunDiagnosticsSerializer,
     }
 
     def get_serializer_class(self):

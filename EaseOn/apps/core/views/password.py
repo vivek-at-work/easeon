@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from core.serializers import (PasswordChangeSerializer,
-                              PasswordResetConfirmSerializer,
-                              PasswordResetSerializer)
+from core.serializers import (
+    PasswordChangeSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetSerializer,
+)
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework import generics, permissions, response, status

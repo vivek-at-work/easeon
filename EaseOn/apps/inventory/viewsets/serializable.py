@@ -4,8 +4,10 @@ from core.permissions import IsOperatorOrSuperUser
 from core.viewsets import BaseBulkCreateViewSet
 from django.db.models import Q
 from inventory import models
-from inventory.serializers import (SerializableInventoryItemSerializer,
-                                   SerializableInventoryListSerializer)
+from inventory.serializers import (
+    SerializableInventoryItemSerializer,
+    SerializableInventoryListSerializer,
+)
 
 
 class SerializableInventoryItemFilter(django_filters.FilterSet):

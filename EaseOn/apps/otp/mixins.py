@@ -14,13 +14,17 @@ import logging
 
 # 3rd party
 import pyotp
+
 # local
 from core import utils
+
 # Django
 from django.conf import settings
 from django.core.validators import validate_email
+
 # own app
 from otp.models import PyOTP
+
 # from django.urls import reverse
 from rest_framework.reverse import reverse
 

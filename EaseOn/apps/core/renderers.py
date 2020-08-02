@@ -4,6 +4,7 @@ import json
 
 import pytz
 from django.conf import settings
+
 # from openpyxl import Workbook
 # from openpyxl.drawing.image import Image
 # from openpyxl.styles import (
@@ -16,8 +17,11 @@ from django.conf import settings
 # )
 # from openpyxl.utils import get_column_letter
 # from openpyxl.writer.excel import save_virtual_workbook
-from rest_framework.renderers import (BaseRenderer, BrowsableAPIRenderer,
-                                      JSONRenderer)
+from rest_framework.renderers import (
+    BaseRenderer,
+    BrowsableAPIRenderer,
+    JSONRenderer,
+)
 from rest_framework.utils import encoders
 
 

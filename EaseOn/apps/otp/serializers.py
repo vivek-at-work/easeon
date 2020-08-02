@@ -12,8 +12,10 @@ from __future__ import unicode_literals
 
 # 3rd party
 import pyotp
+
 # own app
 from otp import mixins
+
 # local
 # DRF
 from rest_framework import serializers

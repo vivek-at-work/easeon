@@ -6,8 +6,10 @@ import re
 import requests
 from django.conf import settings
 from rocketchat_API.APIExceptions.RocketExceptions import (
-    RocketAuthenticationException, RocketConnectionException,
-    RocketMissingParamException)
+    RocketAuthenticationException,
+    RocketConnectionException,
+    RocketMissingParamException,
+)
 
 
 class RocketChat:

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
 from django.db.models import Q
-from inventory.models import (LoanerInventoryItem, LoanerItemPenaltyAmount,
-                              RepairInventoryItem)
+from inventory.models import (
+    LoanerInventoryItem,
+    LoanerItemPenaltyAmount,
+    RepairInventoryItem,
+)
 from lists.models import get_list_choices
 from organizations.models import Organization
 from rest_framework import serializers
