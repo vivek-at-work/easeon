@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from core.viewsets import BaseViewSet
-
 from reporting import models, serializers
 
 

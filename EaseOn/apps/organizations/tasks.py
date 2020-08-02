@@ -2,10 +2,9 @@
 # Create your tasks here
 from __future__ import absolute_import, unicode_literals
 
+from celery import shared_task
 from core.utils import get_organization_model
 from django.apps import apps
-
-from celery import shared_task
 from reporting import LOANER_RECORD_REPORT, ORDER_LINE_REPORT, STATUS_REPORT
 
 

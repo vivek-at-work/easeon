@@ -5,7 +5,6 @@ from customers.models import Customer
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from lists.models import Item
-
 from reporting.db_query import REPORT_SQL_MAPPING
 
 
