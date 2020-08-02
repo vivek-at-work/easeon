@@ -11,15 +11,24 @@ from django.apps import apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from devices.exceptions import DeviceDetailsExceptions
-from devices.validators import validate_restricted_device,validate_identifier,gsx_validate
+from devices.validators import (
+    validate_restricted_device,
+    validate_identifier,
+    gsx_validate,
+)
 
 
 class Device(BaseModel):
-    serial_number = models.CharField(null=True,
-     max_length=20,
-     validators=[validate_identifier,validate_restricted_device])
-    alternate_device_id = models.CharField(null=True, max_length=20,
-    validators=[validate_identifier,validate_restricted_device])
+    serial_number = models.CharField(
+        null=True,
+        max_length=20,
+        validators=[validate_identifier, validate_restricted_device],
+    )
+    alternate_device_id = models.CharField(
+        null=True,
+        max_length=20,
+        validators=[validate_identifier, validate_restricted_device],
+    )
     product_name = models.CharField(null=True, max_length=100)
     configuration = models.CharField(null=True, max_length=100)
 
@@ -48,17 +57,12 @@ class Device(BaseModel):
     def identifier(self, number):
         self._set_device_identifier(number)
 
- 
-
     @property
     def open_tickets(self):
         Ticket = apps.get_model(utils.get_ticket_model())
         return Ticket.objects.filter(
             device__serial_number=self.serial_number
         ).open()
-
-       
-        
 
     def get_parts(self, gsx_username, authtoken, **kwargs):
         payload = {

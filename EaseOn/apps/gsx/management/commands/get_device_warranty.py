@@ -12,6 +12,7 @@ from django.db.migrations.state import ProjectState
 from django.db.utils import OperationalError
 from core.utils import time_by_adding_business_days
 from gsx.core import GSXRequest
+
 USER = get_user_model()
 
 
@@ -26,8 +27,8 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--email', type=str)
-        parser.add_argument('--device', type=str,default='FCGT24E5HFM2')
-    
+        parser.add_argument('--device', type=str, default='FCGT24E5HFM2')
+
     def _get_device_warranty(self, user, device):
         req = GSXRequest(
             'repair',
@@ -38,22 +39,14 @@ class Command(BaseCommand):
         )
         device = {'id': device}
         received_on = time_by_adding_business_days(0).isoformat()
-        response = req.post(unitReceivedDateTime=received_on, 
-        device=device)
+        response = req.post(unitReceivedDateTime=received_on, device=device)
         print(response)
-
-    
-
-               
 
     def handle(self, *args, **options):
         if 'email' in options and options['email'] is not None:
-            user= USER.objects.get(email=options['email'])
-            self._get_device_warranty(user,options['device'])
+            user = USER.objects.get(email=options['email'])
+            self._get_device_warranty(user, options['device'])
         else:
             users = USER.objects.all()
             for user in users:
-                self._get_device_warranty(user,options['device'])
-        
-
-        
+                self._get_device_warranty(user, options['device'])

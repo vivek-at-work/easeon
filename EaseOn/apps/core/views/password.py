@@ -16,6 +16,7 @@ sensitive_post_parameters_m = method_decorator(  # pylint:disable=C0103
     )
 )
 
+
 class PasswordResetView(generics.GenericAPIView):
     """
     Calls Django Auth PasswordResetForm save method.

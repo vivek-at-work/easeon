@@ -31,8 +31,6 @@ from rest_framework.authtoken.models import Token as TokenModel
 from rest_framework.reverse import reverse_lazy
 
 
-
-
 class LogoutView(generics.GenericAPIView):
     """
     Calls Django logout method and delete the Token object

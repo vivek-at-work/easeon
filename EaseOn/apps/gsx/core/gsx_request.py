@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 import time
 from .error_code import UNAUTHORIZED
 from .gsx_exceptions import GSXResourceNotAvailableError
+
 logger = logging.getLogger('easeOn')
 GSX_CERT_FILE_PATH = settings.GSX_CERT_FILE_PATH
 GSX_KEY_FILE_PATH = settings.GSX_KEY_FILE_PATH
@@ -18,6 +19,7 @@ GSX_URL = settings.GSX_URL
 GSX_SOLD_TO = settings.GSX_SOLD_TO
 GSX_SHIP_TO = settings.GSX_SHIP_TO
 GSX_ENV = settings.GSX_ENV
+
 
 def is_json(data):
     try:
@@ -36,9 +38,9 @@ def get_resource_url(service, method):
 
 def get_connection(gsx_user_name, auth_token):
     if path.exists(GSX_CERT_FILE_PATH) and path.exists(GSX_KEY_FILE_PATH):
-            return http.client.HTTPSConnection(
-                GSX_URL, cert_file=GSX_CERT_FILE_PATH, key_file=GSX_KEY_FILE_PATH,
-            )
+        return http.client.HTTPSConnection(
+            GSX_URL, cert_file=GSX_CERT_FILE_PATH, key_file=GSX_KEY_FILE_PATH,
+        )
     else:
         raise GSXResourceNotAvailableError()
 
@@ -53,7 +55,7 @@ def get_headers(auth_token, ship_to):
         'Accept-Language': 'en_US',
     }
     if ship_to:
-        head['X-Apple-ShipTo'] =  ship_to
+        head['X-Apple-ShipTo'] = ship_to
     if auth_token:
         head['X-Apple-Auth-Token'] = auth_token
     return head
@@ -81,14 +83,13 @@ class GSXRequest:
         if method == 'check':
             self.is_connectivity_request = True
 
-
     def _process_errors(self, message):
         error_codes = []
         message = json.loads(message)
         try:
             if 'errors' in message:
-               for error in message['errors']:
-                   error_codes.append(error.get('code'))
+                for error in message['errors']:
+                    error_codes.append(error.get('code'))
             if 'errorId' in message and 'errors' in message:
                 logging.error(
                     'Error Response %s received from GSX for url %s',
@@ -99,44 +100,48 @@ class GSXRequest:
             return message, error_codes, is_unauthorized
         except Exception as e:
             logging.error(
-                    'Could not process %s received from GSX for url %s',
-                    message,
-                    self.url,
-                )
-        
+                'Could not process %s received from GSX for url %s due to',
+                message,
+                self.url,
+                e,
+            )
 
     def handle_token_timeout(self, user=None):
-        logging.info("******************REFRESH GSX TOKEN REQUEST*****************************")
+        logging.info(
+            '******************REFRESH GSX TOKEN REQUEST*****************************'
+        )
         self.can_handle_token_timout = False
         connection = get_connection(self.gsx_user_name, self.auth_token)
-        logging.info("GSX token refresh request received for username %s and token %s",
-                     self.gsx_user_name,self.auth_token)
-        payload_string = json.dumps({'userAppleId': self.gsx_user_name,'authToken': self.auth_token})
+        logging.info(
+            'GSX token refresh request received for username %s and token %s',
+            self.gsx_user_name,
+            self.auth_token,
+        )
+        payload_string = json.dumps(
+            {'userAppleId': self.gsx_user_name, 'authToken': self.auth_token}
+        )
         headers_dict = get_headers(self.auth_token, self.ship_to)
         url = get_resource_url('authenticate', 'token')
         connection.request(
-            'POST',
-            url,
-            body=payload_string,
-            headers=headers_dict,
+            'POST', url, body=payload_string, headers=headers_dict,
         )
         logging.info(
-                'GSX Refresh Token Request %s for endpoint %s with headers %s and data %s',
-                'POST',
-                url,
-                headers_dict,
-                payload_string,
-            )
+            'GSX Refresh Token Request %s for endpoint %s with headers %s and data %s',
+            'POST',
+            url,
+            headers_dict,
+            payload_string,
+        )
         response = connection.getresponse()
         output = response.read()
         result = json.loads(output) if is_json(output) else output
         logging.info(
-                'GSX Refresh Token Response %s for endpoint %s with headers %s and data %s',
-                result,
-                url,
-                headers_dict,
-                payload_string,
-            )
+            'GSX Refresh Token Response %s for endpoint %s with headers %s and data %s',
+            result,
+            url,
+            headers_dict,
+            payload_string,
+        )
         if 'authToken' in result:
             r1 = get_user_model().objects.filter(
                 gsx_user_name=self.gsx_user_name
@@ -181,8 +186,14 @@ class GSXRequest:
             message = json.loads(output) if is_json(output) else output
             return message, None, None
         else:
-            message, error_codes, is_unauthorized = self._process_errors(output)
-        if is_unauthorized and self.can_handle_token_timout and not self.is_connectivity_request:
+            message, error_codes, is_unauthorized = self._process_errors(
+                output
+            )
+        if (
+            is_unauthorized
+            and self.can_handle_token_timout
+            and not self.is_connectivity_request
+        ):
             if self.handle_token_timeout():
                 return self._send_request(method, url, payload_string)
         return message, error_codes, is_unauthorized

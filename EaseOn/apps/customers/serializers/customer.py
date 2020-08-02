@@ -14,11 +14,10 @@ class CustomerSerializer(BaseSerializer):
     customer_type = serializers.ChoiceField(choices=c_types)
     country = serializers.ChoiceField(choices=get_list_choices('COUNTRY'))
 
-
-    def validate(self,data):
+    def validate(self, data):
         if 'view' in self.context:
             action = self.context['view'].action
-            if(action=='create'):
+            if action == 'create':
                 validate_open_tickets(data)
         return data
 

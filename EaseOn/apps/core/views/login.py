@@ -112,6 +112,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         response = None
         if status == 200:
             import json
+
             access_token = json.loads(body).get('access_token')
             if access_token is not None:
                 token = get_access_token_model().objects.get(
@@ -121,8 +122,11 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                 app_authorized.send(sender=self, request=request, token=token)
                 chat_login = {}
                 if settings.ENABLE_CHAT:
-                    chat_login = self.create_chat_login(user.email,
-                    serializer.data.get('password'),user.full_name)
+                    chat_login = self.create_chat_login(
+                        user.email,
+                        serializer.data.get('password'),
+                        user.full_name,
+                    )
                 if user:
                     res = {}
                     res['auth'] = json.loads(body)
@@ -143,7 +147,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
             for k, v in headers.items():
                 response[k] = v
         else:
-            raise NotAuthenticated(detail="Unable To Login", code=status)
+            raise NotAuthenticated(detail='Unable To Login', code=status)
         return response
 
     def refresh_token(self, request):
@@ -175,25 +179,34 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     )
                 else:
                     response = HttpResponse(content=body, status=status)
-        
+
         for k, v in headers.items():
             response[k] = v
         return response
 
-    def create_chat_login(self, email,password,name):
-        username = email.replace("@",'-')
-        if email=="admin@easeon.in":
-            return RocketChat().users_create_token(username="admin").json()
+    def create_chat_login(self, email, password, name):
+        username = email.replace('@', '-')
+        if email == 'admin@easeon.in':
+            return RocketChat().users_create_token(username='admin').json()
         userQuery = RocketChat().users_info(username=username).json()
         if userQuery['success']:
-            RocketChat(username,password).users_create_token(username=username).json()
+            RocketChat(username, password).users_create_token(
+                username=username
+            ).json()
         else:
-            cretion_repsone = RocketChat().users_create(
-                email=email,
-                name= name,
-                password =password,
-                username=username).json()
+            cretion_repsone = (
+                RocketChat()
+                .users_create(
+                    email=email,
+                    name=name,
+                    password=password,
+                    username=username,
+                )
+                .json()
+            )
             print(cretion_repsone)
-        return RocketChat(username,password).users_create_token(username=username).json()
-
-
+        return (
+            RocketChat(username, password)
+            .users_create_token(username=username)
+            .json()
+        )

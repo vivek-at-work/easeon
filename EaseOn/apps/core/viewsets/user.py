@@ -7,7 +7,7 @@ from gsx.core import GSXRequest
 from core.permissions import SuperUserOrReadOnly
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from organizations.models import Organization , OrganizationRights
+from organizations.models import Organization, OrganizationRights
 from organizations.serializers import (
     OrganizationRightsSerializer,
     OrganizationSerializer,
@@ -58,25 +58,32 @@ class UserViewSet(BaseViewSet):
     )
     def rights(self, request, pk=None):
         from lists.models import get_list_choices
+
         user = self.get_object()
-        #GET Organization Based Or Rights
+        # GET Organization Based Or Rights
         right_type = self.request.query_params.get('right_type', None)
         rights = []
         if user.is_superuser or user.is_privileged:
             organizations = Organization.objects.all()
             for organization in organizations:
-                organization_right = OrganizationRights.get_allow_all_object(request,organization,right_type)
+                organization_right = OrganizationRights.get_allow_all_object(
+                    request, organization, right_type
+                )
                 rights.append(organization_right)
         else:
             organizations = user.managed_locations.filter(is_deleted=False)
             for organization in organizations:
-                organization_right = OrganizationRights.get_allow_all_object(request,organization,right_type)
+                organization_right = OrganizationRights.get_allow_all_object(
+                    request, organization, right_type
+                )
                 rights.append(organization_right)
             for location in user.locations.filter(is_deleted=False):
                 location_right = OrganizationRightsSerializer(
                     location, context={'request': request}
                 ).data
-                if right_type is not None and right_type.strip("'") in get_list_choices('REPORT_TYPES'):
+                if right_type is not None and right_type.strip(
+                    "'"
+                ) in get_list_choices('REPORT_TYPES'):
                     location_right[right_type] = False
                 rights.append(location_right)
         return response.Response({'results': rights})
@@ -129,16 +136,12 @@ class UserViewSet(BaseViewSet):
         user = self.get_object()
         user.toggle_activation(True)
         user.save()
-        logging.info(
-            'user {} has been activated '.format(
-                user.email
-            )
-        )
+        logging.info('user {} has been activated '.format(user.email))
         context = {'request': request}
         return response.Response(
             self.serializer_class(user, context=context).data
         )
-    
+
     @decorators.action(methods=['get'], detail=False)
     def me(self, request):
         user = request.user
@@ -146,24 +149,20 @@ class UserViewSet(BaseViewSet):
         return response.Response(
             self.serializer_class(user, context=context).data
         )
-    
+
     @decorators.action(methods=['post'], detail=True)
     def deactivate(self, request, pk=None):
         user = self.get_object()
         user.toggle_activation(False)
         user.save()
-        logging.info(
-            'user {} has been deactivated '.format(
-                user.email
-            )
-        )
+        logging.info('user {} has been deactivated '.format(user.email))
         return response.Response(
             self.serializer_class(user, context={'request': request}).data
         )
 
     @decorators.action(methods=['get'], detail=False)
     def check_gsx_connectivity(self, request):
-        req = GSXRequest('authenticate', 'check',None,None,None)
+        req = GSXRequest('authenticate', 'check', None, None, None)
         return response.Response(req.get(), status=status.HTTP_200_OK)
 
     def _get_gsx_token(self, request):
@@ -311,7 +310,7 @@ class UserViewSet(BaseViewSet):
         roles = get_user_model().USER_TYPE_CHOICES
         roles_list = []
         for x, y in roles:
-            roles_list.append({'value':x,'label':y})
+            roles_list.append({'value': x, 'label': y})
         return response.Response(roles_list, status=status.HTTP_200_OK)
 
     def get_queryset(self):

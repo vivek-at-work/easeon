@@ -5,6 +5,7 @@ from organizations.models import Organization
 from rest_framework import serializers
 from django.db.models import Q
 
+
 class RepairItemListSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = RepairInventoryItem

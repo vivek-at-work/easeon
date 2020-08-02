@@ -24,26 +24,27 @@ class Command(BaseCommand):
     help = 'set gsx auth token for all users'
 
     def add_arguments(self, parser):
-        parser.add_argument('--email', type=str,)
-    
+        parser.add_argument(
+            '--email', type=str,
+        )
+
     def refresh_gsx_token(self, user):
         gsx_user_name = user.gsx_user_name
         gsx_auth_token = user.gsx_auth_token
         gsx_ship_to = user.gsx_ship_to
         refresh_status = user.refresh_gsx_token()
         if refresh_status:
-            print("GSX Login Success for user",gsx_user_name)
+            print('GSX Login Success for user', gsx_user_name)
         else:
-            print(f"GSX Login Filed for user {gsx_user_name} with shipto {gsx_ship_to} and token {gsx_auth_token}")
-                
-
+            print(
+                f'GSX Login Filed for user {gsx_user_name} with shipto {gsx_ship_to} and token {gsx_auth_token}'
+            )
 
     def handle(self, *args, **options):
         if 'email' in options and options['email'] is not None:
-            user= USER.objects.get(email=options['email'])
+            user = USER.objects.get(email=options['email'])
             self.refresh_gsx_token(user)
         else:
             users = USER.objects.all()
             for user in users:
                 self.refresh_gsx_token(user)
-

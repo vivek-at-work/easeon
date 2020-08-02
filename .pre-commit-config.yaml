@@ -29,13 +29,8 @@ repos:
     language: system
     always_run: true
     pass_filenames: false
-  # - id: wily
-  #   name: wily
-  #   entry: wily diff
-  #   verbose: true
-  #   language: python
-  #   additional_dependencies: [wily]
-# - repo: git://github.com/FalconSocial/pre-commit-python-sorter
-#   rev: b57843b0b874df1d16eb0bef00b868792cb245c2
-#   hooks:
-#     - id: python-import-sorter
+
+- repo: git://github.com/FalconSocial/pre-commit-python-sorter
+  rev: b57843b0b874df1d16eb0bef00b868792cb245c2
+  hooks:
+    - id: python-import-sorter

@@ -1,6 +1,6 @@
 server {
     server_name www.easeon.in easeon.in;
-    location = /favicon.ico { access_log off; log_not_found off; }  
+    location = /favicon.ico { access_log off; log_not_found off; }
     location /django_static/ {
         root /home/easeon/production/easeon/EaseOn;
     }
@@ -56,6 +56,6 @@ server {
         proxy_send_timeout 600;
         proxy_read_timeout 600;
         send_timeout 600;
-        
+
    }
 }

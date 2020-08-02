@@ -15,6 +15,7 @@ from tickets import models, serializers
 from core.permissions import HasManagerRightsToUpdateOrDelete
 from django.db.models import Q
 
+
 class UserNameFilter(django_filters.CharFilter):
     empty_value = 'EMPTY'
 
@@ -108,9 +109,14 @@ class TicketViewSet(viewsets.BaseViewSet):
         if self.request.user.is_superuser:
             return models.Ticket.objects.all()
         else:
-            organizations , managed_organizations = self.get_user_organizations()
+            (
+                organizations,
+                managed_organizations,
+            ) = self.get_user_organizations()
             return models.Ticket.objects.filter(
-                Q(organization__in=organizations) | Q(organization__in=managed_organizations))
+                Q(organization__in=organizations)
+                | Q(organization__in=managed_organizations)
+            )
 
     @decorators.action(methods=['GET'], detail=True)
     def pdf(self, request, pk=None):

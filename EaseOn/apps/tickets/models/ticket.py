@@ -187,7 +187,9 @@ class Ticket(BaseModel):
         code = self.organization.code
         index = self.organization.tickets.count() + 1
         suffix = settings.TICKET_SUFFIX
-        reference_number = '{}{}{}{}'.format(code, index,random.randint(0, 99), suffix)
+        reference_number = '{}{}{}{}'.format(
+            code, index, random.randint(0, 99), suffix
+        )
         self.reference_number = reference_number
 
     def refresh_escalation_timestamps(self, closed=False):
