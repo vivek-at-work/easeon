@@ -5,7 +5,8 @@ SUPER_USER = 'SuperUser'
 OPERATOR = 'Technician'
 TOKEN_USER = 'TokenUser'
 AUDITOR = 'Auditor'
-PRIVILEGED  = 'Privileged'
+PRIVILEGED = 'Privileged'
+
 
 class IsSuperUser(permissions.BasePermission):
     """
@@ -31,7 +32,7 @@ class SuperUserOrReadOnly(permissions.BasePermission):
     Allows read access to Operators.
     """
 
-    ALLOWED_ROLES = [SUPER_USER, OPERATOR,PRIVILEGED]
+    ALLOWED_ROLES = [SUPER_USER, OPERATOR, PRIVILEGED]
 
     def has_permission(self, request, view):
         if (
@@ -52,7 +53,7 @@ class IsOperatorOrSuperUser(permissions.BasePermission):
     Allows All access to SuperUsers and Operators .
     """
 
-    ALLOWED_ROLES = [SUPER_USER, OPERATOR, AUDITOR,PRIVILEGED]
+    ALLOWED_ROLES = [SUPER_USER, OPERATOR, AUDITOR, PRIVILEGED]
 
     def has_permission(self, request, view):
         if (
@@ -81,7 +82,7 @@ class IsTokenUserOrSuperUser(permissions.BasePermission):
     Write access to SuperUsers and Operators .
     """
 
-    ALLOWED_ROLES = [SUPER_USER, TOKEN_USER,PRIVILEGED]
+    ALLOWED_ROLES = [SUPER_USER, TOKEN_USER, PRIVILEGED]
 
     def has_permission(self, request, view):
         if (

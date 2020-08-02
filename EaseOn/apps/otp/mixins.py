@@ -86,10 +86,11 @@ class OTPMixin(object):
         response['verify_url'] = 'core/verify-otp/hotp/{}'.format(uid)
         receiving_address = data.get('contact_number', None)
         is_valid_email = False
+        # TODO: Handle Email Check More Gracefully.
         try:
             validate_email(receiving_address)
             is_valid_email = True
-        except Exception as e:
+        except Exception:
             is_valid_email = False
 
         if not is_valid_email:

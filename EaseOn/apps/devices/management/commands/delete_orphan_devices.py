@@ -19,13 +19,9 @@ class Command(BaseCommand):
                 )
             )
             count = results.count()
-            logging.info(
-                f"{count} Orphan device records found."
-            )
+            logging.info(f'{count} Orphan device records found.')
             results.hard_delete()
-            logging.info(
-                f"{count} Orphan device records have been deleted."
-            )
+            logging.info(f'{count} Orphan device records have been deleted.')
 
         except Exception:
-            loggin.error('Could not perform Orphan device records deletion.')
+            logging.error('Could not perform Orphan device records deletion.')

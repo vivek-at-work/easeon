@@ -9,6 +9,7 @@ from inventory.serializers import (
 from core.permissions import IsOperatorOrSuperUser
 from django.db.models import Q
 
+
 class SerializableInventoryItemFilter(django_filters.FilterSet):
     """doc string for OrganizationFilter"""
 
@@ -38,6 +39,11 @@ class SerializableItemViewSet(BaseBulkCreateViewSet):
         if self.request.user.is_superuser or self.request.user.is_privileged:
             return models.SerializableInventoryItem.objects.all()
         else:
-            organizations , managed_organizations = self.get_user_organizations()
+            (
+                organizations,
+                managed_organizations,
+            ) = self.get_user_organizations()
             return models.SerializableInventoryItem.objects.filter(
-               Q(organization__in=organizations) | Q(organization__in=managed_organizations))
+                Q(organization__in=organizations)
+                | Q(organization__in=managed_organizations)
+            )

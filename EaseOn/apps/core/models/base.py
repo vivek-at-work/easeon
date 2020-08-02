@@ -11,8 +11,8 @@ class BaseModel(models.Model):
     """
     Base Model for all django models in EaseOn App
     """
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      editable=False)
+
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
     guid = models.CharField(max_length=40, editable=False)
     is_deleted = models.BooleanField(default=False)
@@ -33,7 +33,7 @@ class BaseModel(models.Model):
     objects = BaseManager()
     all_objects = BaseManager(alive_only=False)
 
-    class Meta():
+    class Meta:
         get_latest_by = 'created_at'
         ordering = ('-updated_at', '-created_at')
         abstract = True
@@ -44,7 +44,6 @@ class BaseModel(models.Model):
             int(current_object_version[1:]) + 1
         )
         self.version = preposed_object_version
-
 
     @property
     def is_alive(self):
@@ -58,8 +57,13 @@ class BaseModel(models.Model):
     def hard_delete(self):
         return super(BaseModel, self).delete()
 
-    def save(self, force_insert=False, force_update=False,
-             using=None,update_fields=None):
+    def save(
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+    ):
         if not self.guid:
             self.guid = hashlib.sha1(
                 str(random.random()).encode('utf-8')

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class GSXResourceNotAvailableError(Exception):
     """Exception raised if gsx cert and key not available.
 
@@ -5,12 +6,13 @@ class GSXResourceNotAvailableError(Exception):
         message -- explanation of the error
     """
 
-    def __init__(self, message="Unable to locate GSX Cert or Key Files"):
+    def __init__(self, message='Unable to locate GSX Cert or Key Files'):
         self.message = message
         super().__init__(self.message)
 
     def __str__(self):
         return f'{self.message}'
+
 
 class GSXUnauthorizdError(Exception):
     """Exception raised if we recieve Unauthorized Response.
@@ -19,7 +21,7 @@ class GSXUnauthorizdError(Exception):
         message -- explanation of the error
     """
 
-    def __init__(self, message="Received Unauthorizd Message from GSX"):
+    def __init__(self, message='Received Unauthorizd Message from GSX'):
         self.message = message
         super().__init__(self.message)
 

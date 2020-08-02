@@ -11,6 +11,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from django.db.models import Q
 
+
 class LoanerItemListSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = LoanerInventoryItem

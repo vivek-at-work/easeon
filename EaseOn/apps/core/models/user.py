@@ -25,6 +25,7 @@ TOKEN_USER = 'TokenUser'
 AUDITOR = 'Auditor'
 PRIVILEGED = 'Privileged'
 
+
 def validate_user_email_domain(value):
     """
     User's email can be from particular
@@ -117,7 +118,7 @@ class User(AbstractBaseUser):
     def is_superuser(self):
         'is a superuser'
         return self.is_admin
-    
+
     @property
     def is_privileged(self):
         return self.role == PRIVILEGED
@@ -270,12 +271,11 @@ class User(AbstractBaseUser):
         )
 
     def change_role(self, role):
-        if role==1:
+        if role == 1:
             self.is_admin = True
         else:
             self.is_admin = False
-        self.user_type=role
-        
+        self.user_type = role
 
     def refresh_gsx_token(self, gsx_token=None, gsx_ship_to=None):
         req = None
@@ -286,7 +286,7 @@ class User(AbstractBaseUser):
                 'token',
                 self.gsx_user_name,
                 gsx_token,
-                self.gsx_ship_to
+                self.gsx_ship_to,
             )
         else:
             req = GSXRequest(
@@ -294,7 +294,7 @@ class User(AbstractBaseUser):
                 'token',
                 self.gsx_user_name,
                 self.gsx_auth_token,
-                self.gsx_ship_to
+                self.gsx_ship_to,
             )
 
         if req:

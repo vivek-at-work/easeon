@@ -5,7 +5,9 @@ from core.utils import time_by_adding_business_days
 from gsx.core import GSXRequest
 from django.contrib.auth import get_user_model
 import re
+
 USER = get_user_model()
+
 
 class NoneSerializer(serializers.Serializer):
     pass
@@ -80,7 +82,6 @@ class BaseGSXSerializer(serializers.Serializer):
             return self.context['request'].user
         else:
             return USER.objects.get(email='kuldeep.rawat@unicornstore.in')
-
 
 
 class DeviceSerializer(BaseGSXSerializer):

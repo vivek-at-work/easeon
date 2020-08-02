@@ -35,12 +35,12 @@ LOGGING = {
     },
     'loggers': {
         '': {
-            'handlers': ['syslog','console'],
+            'handlers': ['syslog', 'console'],
             'level': 'INFO',
             'disabled': False,
         },
         'easeon': {
-            'handlers': ['syslog','console'],
+            'handlers': ['syslog', 'console'],
             'level': 'ERROR',
             'disabled': False,
         },
