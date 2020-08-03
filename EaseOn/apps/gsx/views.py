@@ -20,7 +20,9 @@ class GSXViewSet(viewsets.GenericViewSet):
         'run_diagnosis_suite': serializers.RunDiagnosticsSerializer,
         'diagnostics_status': serializers.DiagnosticsStatusSerializer,
         'customer_report_download': serializers.RunDiagnosticsSerializer,
-        'consignment_validate': serializers.ConsignmentValidateSerializer
+        'consignment_validate': serializers.ConsignmentValidateSerializer,
+        'consignment_order_lookup': serializers.ConsignmentOrderLookupSerializer,
+        'consignment_delivery_lookup': serializers.ConsignmentDeliveryLookupSerializer
     }
 
     def get_serializer_class(self):
@@ -84,6 +86,20 @@ class GSXViewSet(viewsets.GenericViewSet):
         return response.Response(serializer, status=status.HTTP_201_CREATED)
 
     def consignment_validate(self, request):
+        """
+        """
+        serializer = self.get_serializer_class()
+        serializer = self._validate(serializer, request.data)
+        return response.Response(serializer, status=status.HTTP_201_CREATED)
+
+    def consignment_order_lookup(self, request):
+        """
+        """
+        serializer = self.get_serializer_class()
+        serializer = self._validate(serializer, request.data)
+        return response.Response(serializer, status=status.HTTP_201_CREATED)
+
+    def consignment_delivery_lookup(self, request):
         """
         """
         serializer = self.get_serializer_class()

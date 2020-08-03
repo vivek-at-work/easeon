@@ -8,3 +8,8 @@ from .repair_eligibility_serializer import *
 from .run_diagnostic_suit_serializer import *
 from .warranty_serializer import *
 from .consignment_validate import *
+from .consignment_deliver_acknowledge import *
+from .consignment_deliver_lookup import *
+from .consignment_order_lookup import *
+from .consignment_order_shipment import *
+from .consignment_order_submit import *

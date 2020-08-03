@@ -14,6 +14,10 @@ diagnostics_lookup = GSXViewSet.as_view({'post': 'diagnostics_lookup'})
 run_diagnosis_suite = GSXViewSet.as_view({'post': 'run_diagnosis_suite'})
 diagnostics_status = GSXViewSet.as_view({'post': 'diagnostics_status'})
 consignment_validate = GSXViewSet.as_view({'post': 'consignment_validate'})
+consignment_order_lookup = GSXViewSet.as_view(
+    {'post': 'consignment_order_lookup'})
+consignment_delivery_lookup = GSXViewSet.as_view(
+    {'post': 'consignment_delivery_lookup'})
 urlpatterns = [
     url(r'warranty', warranty, name='warranty'),
     url(r'diagnostic_suites', diagnostic_suites, name='diagnostic_suites'),
@@ -24,4 +28,6 @@ urlpatterns = [
     ),
     url(r'diagnostics_status', diagnostics_status, name='diagnostics_status'),
     url(r'consignment_validate', consignment_validate, name='consignment_validate'),
+    url(r'consignment_order_lookup', consignment_order_lookup, name='consignment_order_lookup'),
+    url(r'consignment_delivery_lookup', consignment_delivery_lookup, name='consignment_delivery_lookup'),
 ]
