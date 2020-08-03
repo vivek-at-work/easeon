@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+import re
+
 from rest_framework import serializers
 
 

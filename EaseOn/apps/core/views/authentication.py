@@ -10,9 +10,11 @@ from core.utils import (
     send_mail,
 )
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.auth import login as django_login
-from django.contrib.auth import logout as django_logout
+from django.contrib.auth import (
+    get_user_model,
+    login as django_login,
+    logout as django_logout,
+)
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ValidationError
 from django.utils import encoding, http

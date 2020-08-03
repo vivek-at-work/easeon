@@ -8,8 +8,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from lists.models import get_list_choices
 from rest_framework import serializers
-from tickets import models
-from tickets import serializers as t_serializer
+from tickets import models, serializers as t_serializer
 
 from .device_part_report import DevicePartReportSerializer
 from .gsx_info import GSXInfoSerializer

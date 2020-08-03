@@ -2,8 +2,7 @@
 from core.serializers import BaseMeta, BaseSerializer
 from lists.models import get_list_choices
 from organizations.models import Organization
-from rest_framework import serializers
-from rest_framework import validators as RV
+from rest_framework import serializers, validators as RV
 
 
 class OrganizationSerializer(BaseSerializer):

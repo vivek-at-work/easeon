@@ -45,8 +45,8 @@ class OrganizationRights(BaseModel):
 
     @staticmethod
     def get_allow_all_object(request, organization, right_type):
-        from rest_framework.reverse import reverse
         from lists.models import get_list_choices
+        from rest_framework.reverse import reverse
 
         organization_right = {
             'organization_name': organization.name,

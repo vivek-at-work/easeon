@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny
 class GSXViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     serializers_dict = {
-        'warranty': serializers.DeviceSerializer,
+        'warranty': serializers.WarrantySerializer,
         'diagnostic_suites': serializers.DiagnosticSuitesSerializer,
         'repair_eligibility': serializers.RepairEligibilitySerializer,
         'diagnostics_lookup': serializers.DiagnosticsLookupSerializer,

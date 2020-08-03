@@ -18,9 +18,7 @@ from oauth2_provider.signals import app_authorized
 from oauth2_provider.views.mixins import OAuthLibMixin
 from otp.models import PyOTP
 from otp.serializers import HotpSerializer, VerifyOtpSerializer
-from rest_framework import permissions
-from rest_framework import status as rest_status
-from rest_framework import viewsets
+from rest_framework import permissions, status as rest_status, viewsets
 from rest_framework.authtoken.models import Token as TokenModel
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.response import Response

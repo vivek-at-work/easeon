@@ -1,26 +1,7 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-- otp.serializer
-~~~~~~~~~~~~~~
-
-- This file contains pyotp app serializers
-"""
-
-# future
-from __future__ import unicode_literals
-
-# 3rd party
 import pyotp
-
-# own app
 from otp import mixins
-
-# local
-# DRF
 from rest_framework import serializers
-
-# Django
 
 
 class NoneSerializer(serializers.Serializer):

@@ -1,25 +1,16 @@
 # -*- coding: utf-8 -*-
 from gsx.core import GSXRequest
-from .base_serializer import BaseGSXSerializer
 from rest_framework import serializers
+
+from .base_serializer import BaseGSXSerializer
 from .validators import validate_device_identifier
 
 
 class RepairEligibilitySerializer(BaseGSXSerializer):
     """
-    DeviceSerializer
+    RepairEligibilitySerializer
     """
 
+    service = 'repair'
+    action = 'eligibility'
     identifier = serializers.CharField(validators=[validate_device_identifier])
-
-    def create(self, validated_data):
-        req = GSXRequest(
-            'repair',
-            'eligibility',
-            self.gsx_user_name,
-            self.gsx_auth_token,
-            self.gsx_ship_to,
-        )
-        device = {'id': validated_data['identifier']}
-        response = req.post(device=device)
-        return response
