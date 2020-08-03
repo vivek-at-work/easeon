@@ -15,3 +15,8 @@ class DiagnosticSuitesSerializer(BaseGSXSerializer):
     action = 'suites'
     http_verb = 'GET'
     identifier = serializers.CharField(validators=[validate_device_identifier])
+
+    def get_payload(self, validated_data):
+        payload = {}
+        payload['deviceId'] = validated_data['identifier']
+        return payload
