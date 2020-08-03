@@ -35,7 +35,7 @@ class BaseGSXSerializer(serializers.Serializer):
         if 'identifier' in validated_data:
             payload['device'] = {'id': validated_data['identifier']}
         for key in validated_data.keys():
-            if key != 'id':
+            if key != 'identifier':
                 payload[key] = validated_data[key]
         return payload
 
