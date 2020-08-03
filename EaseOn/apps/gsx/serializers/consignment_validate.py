@@ -10,16 +10,6 @@ class ConsignmentValidateSerializer(BaseGSXSerializer):
     """
     DeviceSerializer
     """
-
+    service = 'consignment'
+    action = 'validate'
     shipTo = serializers.CharField()
-
-    def create(self, validated_data):
-        req = GSXRequest(
-            'consignment',
-            'validate',
-            self.gsx_user_name,
-            self.gsx_auth_token,
-            self.gsx_ship_to,
-        )
-        response = req.post(**validated_data)
-        return response
