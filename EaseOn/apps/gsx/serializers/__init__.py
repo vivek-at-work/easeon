@@ -7,3 +7,4 @@ from .none_serializer import *
 from .repair_eligibility_serializer import *
 from .run_diagnostic_suit_serializer import *
 from .warranty_serializer import *
+from .consignment_validate import *
