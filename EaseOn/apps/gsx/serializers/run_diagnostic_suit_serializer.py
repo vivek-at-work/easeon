@@ -15,3 +15,9 @@ class RunDiagnosticsSerializer(BaseGSXSerializer):
     action = 'initiate-test'
     identifier = serializers.CharField(validators=[validate_device_identifier])
     suiteId = serializers.CharField()
+
+    def get_payload(self, validated_data):
+        payload = {}
+        payload['device'] = {'id': validated_data['identifier']}
+        payload['diagnostics'] = {'suiteId': validated_data['suiteId']}
+        return payload
