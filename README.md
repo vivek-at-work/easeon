@@ -14,12 +14,12 @@ Easeon is a battery loaded CRM for Apple Authorized Service Providers
 10. Payment tracking for a service request
 
 ## Road Map:
-1.Consignment Tracking
-2.Consignment Order Placement
-3.Apple Repair Manual Articles / Updates Display
-4.Tenant Wise Reports for Apple Device Repairs
-5.Containerisation using Docker 
-6.Automated EKS Deployment 
+1. Consignment Tracking
+2. Consignment Order Placement
+3. Apple Repair Manual Articles / Updates Display
+4. Tenant Wise Reports for Apple Device Repairs
+5. Containerisation using Docker 
+6. Automated EKS Deployment 
 
 ## Help Needed For:
 1. i18n and L10n (Multilingual Support) for API Responses
