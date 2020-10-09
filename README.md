@@ -2,16 +2,16 @@
 Easeon is a battery loaded CRM for Apple Authorized Service Providers
 
 ## Capabilities / Features
-1.OTP based authentication.
-2.Life cycle management of a service request a service store.
-3.Support multiple apple store on single instance (multitenant)
-4.Inbuilt support for apple device warranty info.
-5.Inbuilt support for apple device diagnostics.
-6.Support to get apple device service history out of the box.
-7.Capable to manage customer waiting queues at the service centre
-8.Performance matrices for individual tenants 
-9.Out of the box user management
-10.Payment tracking for a service request
+1. OTP based authentication.
+2. Life cycle management of a service request a service store.
+3. Support multiple apple store on single instance (multitenant)
+4. Inbuilt support for apple device warranty info.
+5. Inbuilt support for apple device diagnostics.
+6. Support to get apple device service history out of the box.
+7. Capable to manage customer waiting queues at the service centre
+8. Performance matrices for individual tenants 
+9. Out of the box user management
+10. Payment tracking for a service request
 
 ## Road Map:
 1.Consignment Tracking
