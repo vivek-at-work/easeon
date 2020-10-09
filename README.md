@@ -1,5 +1,6 @@
 # Easeon
-Easeon is a battery loaded CRM for Apple Authorized Service Providers
+Easeon is a battery loaded CRM for Apple Authorized Service Providers that has all the  tools you need to 
+manage your Apple Authorized Service Provider in just one place
 
 ## Capabilities / Features
 1. OTP based authentication.
