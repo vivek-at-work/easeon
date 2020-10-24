@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .superuser import SUPER_USER, IsOperatorOrSuperUser , PRIVILEGED
+from .superuser import SUPER_USER, IsOperatorOrSuperUser, PRIVILEGED
 
 
 class HasManagerRightsToUpdateOrDelete(IsOperatorOrSuperUser):

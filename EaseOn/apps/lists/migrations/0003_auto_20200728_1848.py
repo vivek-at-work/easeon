@@ -13,6 +13,34 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='item',
             name='list_name',
-            field=models.CharField(choices=[('TICKET_STATUS', 'Ticket Status'), ('COVERAGE_TYPE', 'Coverage Type'), ('GSX_SERVICE_TYPE', 'GSX Service Type'), ('REPAIR_TYPE', 'Repair Type'), ('GSX_REPAIR_TYPE', 'GSX Repair Type'), ('CUSTOMER_TYPE', 'Customer Type'), ('UNIT_PART', 'Unit Part'), ('STATES', 'States'), ('COUNTRY', 'COUNTRY'), ('SERIALIZABLE_INVENTORY_ITEM', 'Serializable Inventory Item'), ('LOANER_INVENTORY_PART_NUMBERS', 'Loaner Inventory Part Numbers'), ('LOANER_INVENTORY_PENALTY_REASONS', 'Loaner Inventory Penalty Reasons'), ('CONSIGNMENT_TYPE', 'Consignment Types'), ('REPORT_TYPES', 'Report Types')], default='TICKET_STATUS', max_length=100),
+            field=models.CharField(
+                choices=[
+                    ('TICKET_STATUS', 'Ticket Status'),
+                    ('COVERAGE_TYPE', 'Coverage Type'),
+                    ('GSX_SERVICE_TYPE', 'GSX Service Type'),
+                    ('REPAIR_TYPE', 'Repair Type'),
+                    ('GSX_REPAIR_TYPE', 'GSX Repair Type'),
+                    ('CUSTOMER_TYPE', 'Customer Type'),
+                    ('UNIT_PART', 'Unit Part'),
+                    ('STATES', 'States'),
+                    ('COUNTRY', 'COUNTRY'),
+                    (
+                        'SERIALIZABLE_INVENTORY_ITEM',
+                        'Serializable Inventory Item',
+                    ),
+                    (
+                        'LOANER_INVENTORY_PART_NUMBERS',
+                        'Loaner Inventory Part Numbers',
+                    ),
+                    (
+                        'LOANER_INVENTORY_PENALTY_REASONS',
+                        'Loaner Inventory Penalty Reasons',
+                    ),
+                    ('CONSIGNMENT_TYPE', 'Consignment Types'),
+                    ('REPORT_TYPES', 'Report Types'),
+                ],
+                default='TICKET_STATUS',
+                max_length=100,
+            ),
         ),
     ]

@@ -24,7 +24,10 @@ class OrganizationRightsSerializer(BaseSerializer):
         #     raise serializers.ValidationError(
         #         'Can not create/update membership for a superuser.'
         #     )
-        if not (self.get_user().is_superuser or self.get_user().is_privileged) and value != self.get_user():
+        if (
+            not (self.get_user().is_superuser or self.get_user().is_privileged)
+            and value != self.get_user()
+        ):
             raise serializers.ValidationError(
                 'Can not create/update rights for other users.'
             )
@@ -37,9 +40,8 @@ class OrganizationRightsSerializer(BaseSerializer):
 
     def get_can_toggle_status(self, obj):
         return (
-            (self.get_user().is_superuser or  self.get_user().is_privileged)
-            or (obj.organization.manager == self.get_user())
-        )
+            self.get_user().is_superuser or self.get_user().is_privileged
+        ) or (obj.organization.manager == self.get_user())
 
     def validate(self, data):
         """

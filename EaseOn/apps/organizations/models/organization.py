@@ -9,7 +9,13 @@ from django.db.models import Q, UniqueConstraint
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .rights import OrganizationRights
-from reporting import StatusReport,SMTPReportTarget,LoanerRecordReport,OrderLineReport
+from reporting import (
+    StatusReport,
+    SMTPReportTarget,
+    LoanerRecordReport,
+    OrderLineReport,
+)
+
 
 class Organization(BaseModel):
     """An Organization """
@@ -104,37 +110,6 @@ class Organization(BaseModel):
         return dashboard_data
 
 
-    def create_status_report(self, date_text=time_by_adding_business_days(0).strftime("%Y-%m-%d")):       
-        status_report = StatusReport(file_name=f"{self.code}-{date_text}")
-        if date_text is not None:
-            status_report.filter_by_centre_and_date(self.id,date_text)
-        status_report.create()
-        return status_report , f"Status Report with Customer Data for {self.code}"
-    
-    def create_loaner_record_report(self, date_text=time_by_adding_business_days(0).strftime("%Y-%m-%d")):
-        loaner_record_report = LoanerRecordReport(file_name=f"{self.code}-{date_text}")
-        if date_text is not None:
-            loaner_record_report.filter_by_centre_and_date(self.id,date_text)
-        loaner_record_report.create()
-        return loaner_record_report , f"Loaner Record Report for {self.code}"
-    
-    def create_order_line_report(self, date_text=time_by_adding_business_days(0).strftime("%Y-%m-%d")):
-        loaner_record_report = OrderLineReport(file_name=f"{self.code}-{date_text}")
-        if date_text is not None:
-            loaner_record_report.filter_by_centre_and_date(self.id,date_text)
-        loaner_record_report.create()
-        return loaner_record_report, f"Order Line Report for {self.code}"
-
-    def send_report_by_mail(self,report_type,start_date,end_date,*receivers):
-        if len(receivers)==0:
-            receivers = [self.manager.email]
-        report_target = SMTPReportTarget()
-        report, subject = getattr(self, f'create_{report_type.lower()}')()        
-        report_target.send(subject,report,*receivers)
-
-
-
-
 @receiver(post_save, sender=Organization)
 def onOrganizationSave(sender, instance, *args, **kwargs):
     template = settings.EMAIL_TEMPLATES.get('alert')
@@ -156,8 +131,10 @@ def onOrganizationSave(sender, instance, *args, **kwargs):
             instance.name, instance.code
         )
 
-        summary = """A Organization Details have been updated to {0}.""".format(
-            settings.SITE_HEADER
+        summary = (
+            """A Organization Details have been updated to {0}.""".format(
+                settings.SITE_HEADER
+            )
         )
 
     context = {

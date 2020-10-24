@@ -30,37 +30,42 @@ class OrganizationRights(BaseModel):
     )
     customer_info_download = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
-    
+
     @staticmethod
     def get_rights_type():
-        return ['repair_inventory',
-                'loaner_inventory',
-                'non_serialized_inventory',
-                'tickets',
-                'customer_info_download'
-                'daily_status_report_download_with_customer_info',
-                'daily_status_report_download']
-    
+        return [
+            'repair_inventory',
+            'loaner_inventory',
+            'non_serialized_inventory',
+            'tickets',
+            'customer_info_download'
+            'daily_status_report_download_with_customer_info',
+            'daily_status_report_download',
+        ]
+
     @staticmethod
-    def get_allow_all_object(request,organization, right_type):
+    def get_allow_all_object(request, organization, right_type):
         from rest_framework.reverse import reverse
         from lists.models import get_list_choices
-        organization_right =  {
-                    'organization_name': organization.name,
-                    'organization_code': organization.code,
-                    'organization': reverse(
-                        'organization-detail',
-                        kwargs={'pk': organization.id},
-                        request=request,
-                    ),
-                    'upcoming_holidays': organization.holidays.all().values_list(
-                        'date', flat=True
-                    ),
-                    'is_active': True,
-                }
+
+        organization_right = {
+            'organization_name': organization.name,
+            'organization_code': organization.code,
+            'organization': reverse(
+                'organization-detail',
+                kwargs={'pk': organization.id},
+                request=request,
+            ),
+            'upcoming_holidays': organization.holidays.all().values_list(
+                'date', flat=True
+            ),
+            'is_active': True,
+        }
         for item in OrganizationRights.get_rights_type():
             organization_right[item] = True
-        if right_type and right_type.strip("'") in get_list_choices('REPORT_TYPES'):
+        if right_type and right_type.strip("'") in get_list_choices(
+            'REPORT_TYPES'
+        ):
             organization_right[right_type] = True
         return organization_right
 
@@ -80,10 +85,12 @@ class OrganizationRights(BaseModel):
             sender=self.__class__, membership=self, attributes=['is_active']
         )
 
+
 @receiver(pre_save, sender=OrganizationRights)
 def set_active_if_super_user(sender, instance, *args, **kwargs):
     if not instance.id and instance.created_by.is_superuser:
         instance.is_active = True
+
 
 @receiver(post_save, sender=OrganizationRights)
 def onMembershipSave(sender, instance, *args, **kwargs):

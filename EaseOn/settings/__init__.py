@@ -14,6 +14,7 @@ from .social import *
 from .celery import *
 from .django_extentions import *
 from .chat import *
+
 root = environ.Path(__file__) - 1  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False))  # set default values and casting
 environ.Env.read_env()  # reading .env file
@@ -61,7 +62,8 @@ THIRD_PART_PACKAGES = [
     'rest_framework.authtoken',
     'corsheaders',
     'oauth2_provider',
-    'django_celery_beat'
+    'django_celery_beat',
+    'import_export',
 ]
 
 LOCAL_APPS = [
@@ -77,7 +79,7 @@ LOCAL_APPS = [
     'tokens',
     'gsx',
     'reporting',
-    'rocketchat'
+    'rocketchat',
 ]
 
 
@@ -138,10 +140,10 @@ STATICFILES_DIRS = []
 STATIC_ROOT = os.path.join(BASE_DIR, 'django_static')
 
 
-CORS_ORIGIN_WHITELIST  = [
+CORS_ORIGIN_WHITELIST = [
     'https://easeon.in',
     'http://localhost:3000',
-
+    'https://localhost:3000',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -166,3 +168,4 @@ ENV = env
 TICKET_SUFFIX = 2  # env('TICKET_SUFFIX')
 ACCESS_TOKEN_EXPIRE_SECONDS = 60
 REFRESH_TOKEN_EXPIRE_SECONDS = 3600
+EXEMPTED_DEVICE = ['FCGT24E5HFM2']

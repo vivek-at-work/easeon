@@ -38,9 +38,7 @@ USER = get_user_model()
 
 
 class OTPViewSet(viewsets.GenericViewSet):
-    """OTP Viewset, every OTP http request handles by this class
-
-    """
+    """OTP Viewset, every OTP http request handles by this class"""
 
     queryset = models.PyOTP.objects.all()
     lookup_field = 'uuid'
@@ -73,32 +71,28 @@ class OTPViewSet(viewsets.GenericViewSet):
         return serializer_instance.save()
 
     def generate_hotp(self, request):
-        """
-        """
+        """"""
         serializer = self.get_serializer_class()
         serializer = self._validate(serializer, request.data)
 
         return Response(serializer, status=status.HTTP_201_CREATED)
 
     def generate_totp(self, request):
-        """
-        """
+        """"""
         serializer = self.get_serializer_class()
         serializer = self._validate(serializer, request.data)
 
         return Response(serializer, status=status.HTTP_201_CREATED)
 
     def generate_hotp_provision_uri(self, request):
-        """
-        """
+        """"""
         serializer = self.get_serializer_class()
         serializer = self._validate(serializer, request.data)
 
         return Response(serializer, status=status.HTTP_201_CREATED)
 
     def generate_totp_provision_uri(self, request):
-        """
-        """
+        """"""
         serializer = self.get_serializer_class()
         serializer = self._validate(serializer, request.data)
 

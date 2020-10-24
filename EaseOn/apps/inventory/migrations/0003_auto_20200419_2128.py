@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='repairinventoryitem', options={'ordering': ['-id']},
+            name='repairinventoryitem',
+            options={'ordering': ['-id']},
         ),
     ]

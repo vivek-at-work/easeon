@@ -18,7 +18,7 @@ from rest_framework.authtoken.models import Token as TokenModel
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.exceptions import NotAuthenticated
-from rocketchat.rocketchat import RocketChat
+
 
 from oauth2_provider.models import (
     get_access_token_model,
@@ -33,9 +33,7 @@ USER = get_user_model()
 
 
 class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
-    """OTP Viewset, every OTP http request handles by this class
-
-    """
+    """OTP Viewset, every OTP http request handles by this class"""
 
     server_class = oauth2_settings.OAUTH2_SERVER_CLASS
     validator_class = oauth2_settings.OAUTH2_VALIDATOR_CLASS
@@ -52,7 +50,11 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
             return VerifyOtpSerializer
 
     def _get_user_url(self, user, request):
-        return reverse('user-detail', kwargs={'pk': user.id}, request=request,)
+        return reverse(
+            'user-detail',
+            kwargs={'pk': user.id},
+            request=request,
+        )
 
     def _validate(self, serializer, data):
         """
@@ -66,8 +68,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         return serializer_instance.save()
 
     def get_otp_options(self, request):
-        """
-        """
+        """"""
         serializer = self.get_serializer_class()
         serializer_instance = serializer(data=request.data)
         serializer_instance.is_valid(raise_exception=True)
@@ -75,8 +76,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         return Response(data, status=rest_status.HTTP_201_CREATED)
 
     def generate_otp(self, request):
-        """
-        """
+        """"""
         serializer = self.get_serializer_class()
         serializer = self._validate(serializer, request.data)
         return Response(serializer, status=rest_status.HTTP_201_CREATED)
@@ -89,6 +89,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         :param uuid: OTP instance UUID
         :return: 200_ok OR 400_bad_request
         """
+        user_dirty = False
         otp_type = 'hotp'
         obj = PyOTP.objects.get(uuid=uuid)
         serializer = self.get_serializer_class()
@@ -97,6 +98,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         valid_otp = serializer.verify_otp(
             serializer.data.get('otp'), obj, otp_type
         )
+        password = serializer.validated_data['password']
         FH = rest_status.HTTP_400_BAD_REQUEST
         if not valid_otp:
             logging.warning(
@@ -112,6 +114,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         response = None
         if status == 200:
             import json
+
             access_token = json.loads(body).get('access_token')
             if access_token is not None:
                 token = get_access_token_model().objects.get(
@@ -119,10 +122,11 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                 )
                 user = token.user
                 app_authorized.send(sender=self, request=request, token=token)
-                chat_login = {}
+                chat_token = None
                 if settings.ENABLE_CHAT:
-                    chat_login = self.create_chat_login(user.email,
-                    serializer.data.get('password'),user.full_name)
+                    user_dirty, chat_token = user.do_chat_login(password)
+                if user_dirty:
+                    user.save()
                 if user:
                     res = {}
                     res['auth'] = json.loads(body)
@@ -134,7 +138,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     ] = user.need_to_change_password
                     res['user']['is_superuser'] = user.is_superuser
                     res['user']['role'] = user.role
-                    res['chat_login'] = chat_login
+                    res['chat_auth_token'] = chat_token
                     response = HttpResponse(
                         content=json.dumps(res), status=status
                     )
@@ -175,25 +179,10 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     )
                 else:
                     response = HttpResponse(content=body, status=status)
-        
+
         for k, v in headers.items():
             response[k] = v
         return response
 
-    def create_chat_login(self, email,password,name):
-        username = email.replace("@",'-')
-        if email=="admin@easeon.in":
-            return RocketChat().users_create_token(username="admin").json()
-        userQuery = RocketChat().users_info(username=username).json()
-        if userQuery['success']:
-            RocketChat(username,password).users_create_token(username=username).json()
-        else:
-            cretion_repsone = RocketChat().users_create(
-                email=email,
-                name= name,
-                password =password,
-                username=username).json()
-            print(cretion_repsone)
-        return RocketChat(username,password).users_create_token(username=username).json()
-
-
+    def create_chat_login(self, email, password, name):
+        pass

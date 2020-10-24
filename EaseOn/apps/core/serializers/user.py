@@ -36,11 +36,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'gsx_user_name',
             'can_update',
             'role',
+            'chat_user_id',
         )
 
     def get_can_update(self, obj):
         requesting_user = self.context['request'].user
-        return (requesting_user.is_superuser or requesting_user.is_privileged) and (requesting_user.id != obj.id)
+        return (
+            requesting_user.is_superuser or requesting_user.is_privileged
+        ) and (requesting_user.id != obj.id)
 
 
 class ChangeUserRoleSerializer(serializers.Serializer):

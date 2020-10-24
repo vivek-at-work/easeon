@@ -28,9 +28,7 @@ class NoneSerializer(serializers.Serializer):
 
 
 class TotpSerializer(mixins.OTPMixin, serializers.Serializer):
-    """TOTP serializer
-
-    """
+    """TOTP serializer"""
 
     time = serializers.IntegerField(
         required=True, help_text='OTP Validity-Time (in seconds).'
@@ -47,9 +45,7 @@ class TotpSerializer(mixins.OTPMixin, serializers.Serializer):
 
 
 class HotpSerializer(mixins.OTPMixin, serializers.Serializer):
-    """HOTP serializer
-
-    """
+    """HOTP serializer"""
 
     count = serializers.IntegerField(default=1, help_text='OTP Counter.')
     # email = serializers.EmailField(
@@ -73,9 +69,7 @@ class HotpSerializer(mixins.OTPMixin, serializers.Serializer):
 
 
 class ProvisionUriSerializer(serializers.Serializer):
-    """Serializer for provisioning serializer.
-
-    """
+    """Serializer for provisioning serializer."""
 
     name = serializers.CharField(
         required=True, help_text='name of the account'
@@ -84,9 +78,7 @@ class ProvisionUriSerializer(serializers.Serializer):
 
 
 class TOTPProvisionUriSerializer(TotpSerializer, ProvisionUriSerializer):
-    """Serializer for provisioning serializer + TOTP.
-
-    """
+    """Serializer for provisioning serializer + TOTP."""
 
     def create(self, validated_data):
         """
@@ -101,9 +93,7 @@ class TOTPProvisionUriSerializer(TotpSerializer, ProvisionUriSerializer):
 
 
 class HOTPProvisionUriSerializer(HotpSerializer, ProvisionUriSerializer):
-    """Serializer for provisioning serializer + HOTP.
-
-    """
+    """Serializer for provisioning serializer + HOTP."""
 
     initial_count = serializers.CharField(
         default=0, help_text='starting counter value, defaults to 0'
@@ -122,9 +112,7 @@ class HOTPProvisionUriSerializer(HotpSerializer, ProvisionUriSerializer):
 
 
 class VerifyOtpSerializer(serializers.Serializer):
-    """Serializer used to verify OTP
-
-    """
+    """Serializer used to verify OTP"""
 
     otp = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)

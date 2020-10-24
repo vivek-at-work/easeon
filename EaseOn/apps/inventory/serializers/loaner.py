@@ -11,6 +11,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from django.db.models import Q
 
+
 class LoanerItemListSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = LoanerInventoryItem
@@ -77,7 +78,9 @@ class LoanerItemSerializer(BaseSerializer):
 
     penalty = serializers.JSONField(read_only=True)
 
-    serial_number = serializers.CharField(max_length=255,)
+    serial_number = serializers.CharField(
+        max_length=255,
+    )
     part_number = serializers.ChoiceField(
         choices=get_list_choices('LOANER_INVENTORY_PART_NUMBERS')
     )

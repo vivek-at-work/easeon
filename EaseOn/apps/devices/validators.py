@@ -5,6 +5,8 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from django.apps import apps
+from django.conf import settings
+
 
 def gsx_validate(value, what=None):
     """
@@ -56,36 +58,39 @@ def gsx_validate(value, what=None):
     return (result == what) if what else result
 
 
-
 def validate_identifier(value):
-    
+
     """
     Check that device identifier is valid.
     """
     is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
     is_valid_sn = gsx_validate(value, 'serialNumber')
     if not is_valid_alternate_device_id and not is_valid_sn:
-        raise ValidationError(
-            'Not a valid serial number or IMEI number.'
-        )   
+        raise ValidationError('Not a valid serial number or IMEI number.')
 
- 
+
 def validate_open_tickets(value):
     Ticket = apps.get_model(utils.get_ticket_model())
-    open_tickets = Ticket.objects.filter(
-        Q(device__serial_number=value) | Q(device__alternate_device_id=value)
-    ).open().values_list(
-        'reference_number', flat=True
-    )
-    if open_tickets:
-
-        raise ValidationError(
-            """This Device has pending open tickets.Close them before proceeding for a new one {0}""".format(
-            ','.join(open_tickets)
-        ))
+    if value not in settings.EXEMPTED_DEVICE:
+        open_tickets = (
+            Ticket.objects.filter(
+                Q(device__serial_number=value)
+                | Q(device__alternate_device_id=value)
+            )
+            .open()
+            .values_list('reference_number', flat=True)
+        )
+        if open_tickets:
+            raise ValidationError(
+                """This Device has pending open tickets.Close them before proceeding for a new one {0}""".format(
+                    ','.join(open_tickets)
+                )
+            )
 
 
 def validate_restricted_device(value):
-        if value in restricted_identifiers:
-            raise serializers.ValidationError("Kindly \
-         immediatly contact with administrator before proceed the repair of device.")
+    if value in restricted_identifiers:
+        raise serializers.ValidationError(
+            "Kindly \
+         immediatly contact with administrator before proceed the repair of device."
+        )

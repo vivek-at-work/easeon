@@ -31,8 +31,6 @@ from rest_framework.authtoken.models import Token as TokenModel
 from rest_framework.reverse import reverse_lazy
 
 
-
-
 class LogoutView(generics.GenericAPIView):
     """
     Calls Django logout method and delete the Token object
@@ -124,7 +122,9 @@ class RegistrationView(generics.GenericAPIView):
             )
 
         data = self.serializer_class(user, context={'request': request}).data
-        data['message'] = 'Please Check your email for further instructions.'
+        data[
+            'message'
+        ] = 'Your Registration was successful .Please Check your email for further instructions.'
         return response.Response(data, status=status.HTTP_200_OK)
 
 
@@ -140,9 +140,16 @@ class UserEmailTakenView(generics.GenericAPIView):
     serializer_class = serializers.UserSerializer
 
     def post(self, request, *args, **kwargs):
-        email = request.data.get('email', '')
+        email = request.data.get('email', None)
         data = {'email_available_flag': False, 'valid_email': False}
         valid_email = True
+        if not email:
+            data = {
+                'email_available_flag': False,
+                'message': 'Email to check is not provided.',
+                'valid_email': False,
+            }
+            return response.Response(data, status=status.HTTP_400_BAD_REQUEST)
         try:
             logging.info(
                 'Request received to check if email is taken or not for {}'.format(

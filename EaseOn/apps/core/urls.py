@@ -42,7 +42,11 @@ urlpatterns = [
         verify_otp,
         name='verify-otp',
     ),
-    url(r'^refresh_token', refresh_token, name='refresh_token',),
+    url(
+        r'^refresh_token',
+        refresh_token,
+        name='refresh_token',
+    ),
     url(r'^register/$', RegistrationView.as_view(), name='register'),
     url(r'^logout/$', LogoutView.as_view(), name='rest_logout'),
     url(

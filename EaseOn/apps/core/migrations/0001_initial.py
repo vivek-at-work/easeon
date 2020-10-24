@@ -89,6 +89,8 @@ class Migration(migrations.Migration):
                 ),
                 ('is_admin', models.BooleanField(default=False)),
             ],
-            options={'abstract': False,},
+            options={
+                'abstract': False,
+            },
         ),
     ]

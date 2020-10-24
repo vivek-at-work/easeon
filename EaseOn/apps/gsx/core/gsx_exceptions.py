@@ -12,6 +12,7 @@ class GSXResourceNotAvailableError(Exception):
     def __str__(self):
         return f'{self.message}'
 
+
 class GSXUnauthorizdError(Exception):
     """Exception raised if we recieve Unauthorized Response.
 

@@ -31,6 +31,9 @@ django-celery-beat = "*"
 ipython = "*"
 pymongo = "*"
 rocketchat-api = "*"
+django-import-export = "*"
+websocket-client = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.8"

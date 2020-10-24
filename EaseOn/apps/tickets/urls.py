@@ -33,5 +33,7 @@ ticket_router.register(
     basename='devicepartreport',
 )
 ticket_router.register(
-    r'gsx_info', GSXInfoViewSet, basename='gsxinfo',
+    r'gsx_info',
+    GSXInfoViewSet,
+    basename='gsxinfo',
 )

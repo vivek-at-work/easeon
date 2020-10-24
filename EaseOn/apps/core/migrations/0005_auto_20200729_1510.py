@@ -13,6 +13,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='user_type',
-            field=models.PositiveSmallIntegerField(choices=[(1, 'SuperUser'), (2, 'Technician'), (3, 'TokenUser'), (4, 'Auditor'), (5, 'Privileged')], default=2),
+            field=models.PositiveSmallIntegerField(
+                choices=[
+                    (1, 'SuperUser'),
+                    (2, 'Technician'),
+                    (3, 'TokenUser'),
+                    (4, 'Auditor'),
+                    (5, 'Privileged'),
+                ],
+                default=2,
+            ),
         ),
     ]

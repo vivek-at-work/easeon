@@ -18,7 +18,7 @@ from .gsx_info import GSXInfoSerializer
 
 
 def device_do_not_have_open_tickets(device):
-    if device.open_tickets.count():
+    if not device.is_exempted_device and device.open_tickets.count():
         raise serializers.ValidationError('Device has previous open tickets.')
 
 
@@ -30,6 +30,15 @@ def customer_do_not_have_open_tickets(customer):
 
 
 class TicketListSerializer(BaseSerializer):
+    device_id = serializers.SlugRelatedField(
+        source='device', read_only=True, slug_field='serial_number'
+    )
+    gsx_ship_to = serializers.SlugRelatedField(
+        source='organization',
+        read_only=True,
+        slug_field='gsx_ship_to',
+    )
+
     class Meta(BaseMeta):
         model = models.Ticket
         fields = [
@@ -44,6 +53,8 @@ class TicketListSerializer(BaseSerializer):
             'repair_type',
             'status',
             'coverage_type',
+            'gsx_ship_to',
+            'device_id',
         ]
         c_u_d = serializers.CurrentUserDefault
         extra_kwargs = {

@@ -16,6 +16,7 @@ sensitive_post_parameters_m = method_decorator(  # pylint:disable=C0103
     )
 )
 
+
 class PasswordResetView(generics.GenericAPIView):
     """
     Calls Django Auth PasswordResetForm save method.
@@ -48,6 +49,10 @@ class PasswordResetView(generics.GenericAPIView):
                 'Could not send password reset link for request data {} due to {}'.format(
                     request.data, identifier
                 )
+            )
+            return response.Response(
+                {'detail': 'Could not send password reset link.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
 

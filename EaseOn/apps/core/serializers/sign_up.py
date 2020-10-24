@@ -33,7 +33,7 @@ class SignUpSerializer(serializers.HyperlinkedModelSerializer):
                 data['gsx_auth_token'] = result['authToken']
             else:
                 raise serializers.ValidationError(
-                    'Could Not Validate your GSX Details from GSX.'
+                    'Could Not Validate your GSX Token Details from GSX.'
                 )
         return data
 

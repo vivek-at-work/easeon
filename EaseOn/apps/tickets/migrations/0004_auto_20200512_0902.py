@@ -11,9 +11,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name='delivery', name='comptia_code',),
         migrations.RemoveField(
-            model_name='delivery', name='gsx_reference_number',
+            model_name='delivery',
+            name='comptia_code',
         ),
-        migrations.RemoveField(model_name='delivery', name='gsx_repair_type',),
+        migrations.RemoveField(
+            model_name='delivery',
+            name='gsx_reference_number',
+        ),
+        migrations.RemoveField(
+            model_name='delivery',
+            name='gsx_repair_type',
+        ),
     ]

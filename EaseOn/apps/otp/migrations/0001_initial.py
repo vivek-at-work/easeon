@@ -106,6 +106,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={'verbose_name': 'PyOtp', 'verbose_name_plural': 'PyOtp',},
+            options={
+                'verbose_name': 'PyOtp',
+                'verbose_name_plural': 'PyOtp',
+            },
         ),
     ]

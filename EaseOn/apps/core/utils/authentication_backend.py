@@ -23,7 +23,7 @@ class EaseOnAuthenticationBackend(ModelBackend):
                 logging.info(
                     'Login Request received for email {0}'.format(email)
                 )
-                user = user_model.objects.get(email=email)
+                user = user_model.objects.get(email__iexact=email)
                 logging.info('Existing user found for email {0}'.format(email))
             else:
                 logging.error('Provided Email is not valid user email')

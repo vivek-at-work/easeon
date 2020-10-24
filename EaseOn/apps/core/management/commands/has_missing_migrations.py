@@ -44,7 +44,8 @@ class Command(BaseCommand):
                 )
 
             autodetector = MigrationAutodetector(
-                executor.loader.project_state(), ProjectState.from_apps(apps),
+                executor.loader.project_state(),
+                ProjectState.from_apps(apps),
             )
             changed.update(
                 autodetector.changes(graph=executor.loader.graph).keys()

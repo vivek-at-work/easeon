@@ -5,7 +5,10 @@ from core.utils import time_by_adding_business_days
 from gsx.core import GSXRequest
 from django.contrib.auth import get_user_model
 import re
+import copy
+
 USER = get_user_model()
+
 
 class NoneSerializer(serializers.Serializer):
     pass
@@ -77,10 +80,11 @@ class BaseGSXSerializer(serializers.Serializer):
     @property
     def user(self):
         if self.context['request'].user.is_authenticated:
+            if self.context['request'].user.email == 'admin@easeon.in':
+                return USER.objects.get(email='nagmani@uipl.co.in')
             return self.context['request'].user
         else:
-            return USER.objects.get(email='kuldeep.rawat@unicornstore.in')
-
+            return USER.objects.get(email='nagmani@uipl.co.in')
 
 
 class DeviceSerializer(BaseGSXSerializer):
@@ -246,7 +250,10 @@ class RunDiagnosticsSerializer(BaseGSXSerializer):
         )
         device = {'id': validated_data['identifier']}
         diagnostics = {'suiteId': validated_data['suiteId']}
-        response = req.post(device=device, diagnostics=diagnostics,)
+        response = req.post(
+            device=device,
+            diagnostics=diagnostics,
+        )
         return response
 
 
@@ -279,4 +286,319 @@ class DiagnosticsStatusSerializer(BaseGSXSerializer):
         )
         device = {'id': validated_data['identifier']}
         response = req.post(device=device)
+        return response
+
+
+class RepairSummarySerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    sizePerPage = serializers.IntegerField(default=10)
+    pageNumber = serializers.IntegerField(default=1)
+    fetchAllRepairs = serializers.BooleanField(default=True)
+    search_criteria = serializers.JSONField()
+
+    def create(self, validated_data):
+        pageSize = self.validated_data['sizePerPage']
+        pageNumber = self.validated_data['pageNumber']
+        fetchAllRepairs = self.validated_data['fetchAllRepairs']
+
+        url = f"summary?pageSize={pageSize}&pageNumber={pageNumber}"
+        if fetchAllRepairs:
+            url = f"summary?pageSize={pageSize}&pageNumber={pageNumber}&fetchAllRepairs=true"
+
+        req = GSXRequest(
+            'repair',
+            url,
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data['search_criteria'])
+        response = req.post(**data)
+        return response
+
+
+class RepairDetailsSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    repairId = serializers.CharField()
+
+    def create(self, validated_data):
+        req = GSXRequest(
+            'repair',
+            'details',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data)
+        response = req.get(**data)
+        return response
+
+
+class RepairAuditSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    repairId = serializers.CharField()
+
+    def create(self, validated_data):
+        req = GSXRequest(
+            'repair',
+            'audit',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data)
+        response = req.get(**data)
+        return response
+
+
+class ComponentIssueSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    search_criteria = serializers.JSONField()
+
+    def create(self, validated_data):
+        req = GSXRequest(
+            'repair',
+            'product/componentissue',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data['search_criteria'])
+        response = req.post(**data)
+        return response
+
+
+class PartSummarySerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    # sizePerPage = serializers.IntegerField(default=10)
+    # pageNumber =serializers.IntegerField(default=1)
+    # fetchAllRepairs = serializers.BooleanField(default=True)
+    search_criteria = serializers.JSONField()
+
+    def create(self, validated_data):
+        # pageSize = self.validated_data['sizePerPage']
+        # pageNumber = self.validated_data['pageNumber']
+        # fetchAllRepairs  = self.validated_data['fetchAllRepairs']
+
+        # url = f"summary?pageSize={pageSize}&pageNumber={pageNumber}"
+        # if fetchAllRepairs:
+        #     url = f"summary?pageSize={pageSize}&pageNumber={pageNumber}&fetchAllRepairs=true"
+
+        req = GSXRequest(
+            'parts',
+            'summary',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data['search_criteria'])
+        response = req.post(**data)
+        return response
+
+
+class ContentArticleSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    articleId = serializers.CharField()
+
+    def create(self, validated_data):
+        req = GSXRequest(
+            'content',
+            'article',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+
+        response = req.get(**self.validated_data)
+        return response
+
+
+class ContentArticleLookupSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    sizePerPage = serializers.IntegerField(default=10)
+    pageNumber = serializers.IntegerField(default=1)
+    search_criteria = serializers.JSONField()
+
+    def create(self, validated_data):
+        pageSize = self.validated_data['sizePerPage']
+        pageNumber = self.validated_data['pageNumber']
+
+        url = f"article/lookup?pageSize={pageSize}&pageNumber={pageNumber}"
+        req = GSXRequest(
+            'content',
+            url,
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data['search_criteria'])
+        response = req.post(**data)
+        return response
+
+
+class ConsignmentOrderLookupSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    sizePerPage = serializers.IntegerField(default=10)
+    pageNumber = serializers.IntegerField(default=1)
+    search_criteria = serializers.JSONField()
+
+    def create(self, validated_data):
+        pageSize = self.validated_data['sizePerPage']
+        pageNumber = self.validated_data['pageNumber']
+
+        url = f"order/lookup?pageSize={pageSize}&pageNumber={pageNumber}"
+        req = GSXRequest(
+            'consignment',
+            url,
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data['search_criteria'])
+        response = req.post(**data)
+        return response
+
+
+class ConsignmentDeliveryLookupSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    sizePerPage = serializers.IntegerField(default=10)
+    pageNumber = serializers.IntegerField(default=1)
+    search_criteria = serializers.JSONField()
+
+    def create(self, validated_data):
+        pageSize = self.validated_data['sizePerPage']
+        pageNumber = self.validated_data['pageNumber']
+
+        url = f"delivery/lookup?pageSize={pageSize}&pageNumber={pageNumber}"
+        req = GSXRequest(
+            'consignment',
+            url,
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(self.validated_data['search_criteria'])
+        response = req.post(**data)
+        return response
+
+
+class TechnicianLookupSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    search_criteria = serializers.ListField()
+
+    def create(self, validated_data):
+        req = GSXRequest(
+            'technician',
+            'lookup',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+        data = copy.deepcopy(
+            {'payload': self.validated_data['search_criteria']}
+        )
+        response = req.post(**data)
+        return response
+
+
+class AttachmentUploadAccessSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    data = serializers.JSONField()
+
+    def create(self, validated_data):
+        req = GSXRequest(
+            'attachment',
+            'upload-access',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+
+        response_headers, message = req.post(
+            **self.validated_data['data'], return_headers=True
+        )
+        headers = dict(response_headers)
+        cid = headers.get('X-Apple-Gigafiles-Cid', None)
+        token = headers.get('X-Apple-AppToken', None)
+        message.update(
+            {'X-Apple-Gigafiles-Cid': cid, 'X-Apple-AppToken': token}
+        )
+        return message
+
+
+class DocumentDownloadSerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    search_criteria = serializers.JSONField()
+
+    def create(self, validated_data):
+        req = GSXRequest(
+            'document-download',
+            '',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+
+        data = copy.deepcopy(
+            {'payload': self.validated_data['search_criteria']}
+        )
+        response = req.post(**data)
+        return response
+
+
+class AcknowledgeDeliverySerializer(BaseGSXSerializer):
+    """
+    DeviceSerializer
+    """
+
+    data = serializers.JSONField()
+
+    def create(self, validated_data):
+        # /consignment/delivery/acknowledge
+        req = GSXRequest(
+            'consignment',
+            'delivery/acknowledge',
+            self.gsx_user_name,
+            self.gsx_auth_token,
+            self.gsx_ship_to,
+        )
+
+        data = copy.deepcopy({'payload': self.validated_data['data']})
+        response = req.post(**data)
         return response

@@ -24,16 +24,16 @@ version_info_filename = 'version_info.json'
 
 
 def get_distribution_version_info(filename=version_info_filename):
-    """ Get the version info from the installed distribution.
+    """Get the version info from the installed distribution.
 
-        :param filename: Base filename of the version info resource.
-        :return: The version info as a mapping of fields. If the
-            distribution is not available, the mapping is empty.
+    :param filename: Base filename of the version info resource.
+    :return: The version info as a mapping of fields. If the
+        distribution is not available, the mapping is empty.
 
-        The version info is stored as a metadata file in the
-        distribution.
+    The version info is stored as a metadata file in the
+    distribution.
 
-        """
+    """
     version_info = {
         'release_date': 'UNKNOWN',
         'version': 'UNKNOWN',
@@ -81,18 +81,18 @@ class YearRange:
 
 
 def make_year_range(begin_year, end_date=None):
-    """ Construct the year range given a start and possible end date.
+    """Construct the year range given a start and possible end date.
 
-        :param begin_year: The beginning year (text, 4 digits) for the
-            range.
-        :param end_date: The end date (text, ISO-8601 format) for the
-            range, or a non-date token string.
-        :return: The range of years as a `YearRange` instance.
+    :param begin_year: The beginning year (text, 4 digits) for the
+        range.
+    :param end_date: The end date (text, ISO-8601 format) for the
+        range, or a non-date token string.
+    :return: The range of years as a `YearRange` instance.
 
-        If the `end_date` is not a valid ISO-8601 date string, the
-        range has ``None`` for the end year.
+    If the `end_date` is not a valid ISO-8601 date string, the
+    range has ``None`` for the end year.
 
-        """
+    """
     begin_year = int(begin_year)
 
     try:

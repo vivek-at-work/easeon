@@ -76,7 +76,11 @@ def send_mail(subject, message, *receivers, **kwargs):
 
 
 def send_otp(number, otp):
-    return TwoFactorIn.send_otp(number, otp)
+    return TwoFactorIn.send(number, otp)
+
+
+def send_token_to_customer(number, otp):
+    return TwoFactorIn.send(number, otp, 'TOKEN_OTP')
 
 
 def get_random_string(min_char=8, max_char=12):

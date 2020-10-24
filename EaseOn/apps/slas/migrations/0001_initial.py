@@ -66,7 +66,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={'verbose_name': 'SLA', 'verbose_name_plural': 'SLAs',},
+            options={
+                'verbose_name': 'SLA',
+                'verbose_name_plural': 'SLAs',
+            },
         ),
         migrations.CreateModel(
             name='Term',
@@ -113,6 +116,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={'verbose_name': 'Term', 'verbose_name_plural': 'Terms',},
+            options={
+                'verbose_name': 'Term',
+                'verbose_name_plural': 'Terms',
+            },
         ),
     ]

@@ -26,6 +26,6 @@ class CustomPasswordResetForm(PasswordResetForm):
         email = self.cleaned_data['email']
         super(CustomPasswordResetForm, self).get_users(email)
         for user in get_user_model().objects.filter(
-            email=email, is_active=True
+            email__iexact=email, is_active=True
         ):
             user.send_reset_password_link()

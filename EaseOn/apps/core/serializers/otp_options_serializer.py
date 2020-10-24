@@ -18,18 +18,20 @@ class OTPOptionsSerializer(serializers.Serializer):
 
     def _authenticate(self, email, password):
         return authenticate(
-                self.context.get('request'),
-                **{'email': email, 'password': password}
-            )
+            self.context.get('request'),
+            **{'email': email, 'password': password}
+        )
 
     def validate(self, attrs):
         failed_login_msz = 'Could not Validate User with provided credentials.'
         email = attrs.get('email')
         password = attrs.get('password')
         if email and password:
-            user_by_email = get_user_model().objects.filter(
-                email__iexact=email, is_active=True
-            ).exists()
+            user_by_email = (
+                get_user_model()
+                .objects.filter(email__iexact=email, is_active=True)
+                .exists()
+            )
             if not user_by_email:
                 raise exceptions.ValidationError("User does not exists.")
             else:
@@ -42,7 +44,6 @@ class OTPOptionsSerializer(serializers.Serializer):
         else:
             msg = 'Insufficient Login information provided.'
             raise exceptions.ValidationError(msg)
-
 
     def to_representation(self, data):
         user = data['user']

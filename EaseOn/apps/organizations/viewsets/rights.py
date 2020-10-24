@@ -102,7 +102,8 @@ class MembershipFilter(django_filters.FilterSet):
         field_name='user__username', lookup_expr='icontains'
     )
     organizations = django_filters.ModelMultipleChoiceFilter(
-        field_name='organization_id', queryset=Organization.objects.all(),
+        field_name='organization_id',
+        queryset=Organization.objects.all(),
     )
 
     class Meta(object):

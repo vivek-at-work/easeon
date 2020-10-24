@@ -49,6 +49,11 @@ class RepairItemViewSet(BaseBulkCreateViewSet):
         if self.request.user.is_superuser or self.request.user.is_privileged:
             return models.RepairInventoryItem.objects.all()
         else:
-            organizations , managed_organizations = self.get_user_organizations()
+            (
+                organizations,
+                managed_organizations,
+            ) = self.get_user_organizations()
             return models.RepairInventoryItem.objects.filter(
-               Q(organization__in=organizations) | Q(organization__in=managed_organizations))
+                Q(organization__in=organizations)
+                | Q(organization__in=managed_organizations)
+            )

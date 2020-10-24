@@ -16,42 +16,42 @@ from lockfile.pidlockfile import PIDLockFile
 
 
 class TimeoutPIDLockFile(PIDLockFile, object):
-    """ Lockfile with default timeout, implemented as a Unix PID file.
+    """Lockfile with default timeout, implemented as a Unix PID file.
 
-        This uses the ``PIDLockFile`` implementation, with the
-        following changes:
+    This uses the ``PIDLockFile`` implementation, with the
+    following changes:
 
-        * The `acquire_timeout` parameter to the initialiser will be
-          used as the default `timeout` parameter for the `acquire`
-          method.
+    * The `acquire_timeout` parameter to the initialiser will be
+      used as the default `timeout` parameter for the `acquire`
+      method.
 
-        """
+    """
 
     def __init__(self, path, acquire_timeout=None, *args, **kwargs):
-        """ Set up the parameters of a TimeoutPIDLockFile.
+        """Set up the parameters of a TimeoutPIDLockFile.
 
-            :param path: Filesystem path to the PID file.
-            :param acquire_timeout: Value to use by default for the
-                `acquire` call.
-            :return: ``None``.
+        :param path: Filesystem path to the PID file.
+        :param acquire_timeout: Value to use by default for the
+            `acquire` call.
+        :return: ``None``.
 
-            """
+        """
         self.acquire_timeout = acquire_timeout
         super(TimeoutPIDLockFile, self).__init__(path, *args, **kwargs)
 
     def acquire(self, timeout=None, *args, **kwargs):
-        """ Acquire the lock.
+        """Acquire the lock.
 
-            :param timeout: Specifies the timeout; see below for valid
-                values.
-            :return: ``None``.
+        :param timeout: Specifies the timeout; see below for valid
+            values.
+        :return: ``None``.
 
-            The `timeout` defaults to the value set during
-            initialisation with the `acquire_timeout` parameter. It is
-            passed to `PIDLockFile.acquire`; see that method for
-            details.
+        The `timeout` defaults to the value set during
+        initialisation with the `acquire_timeout` parameter. It is
+        passed to `PIDLockFile.acquire`; see that method for
+        details.
 
-            """
+        """
         if timeout is None:
             timeout = self.acquire_timeout
         super(TimeoutPIDLockFile, self).acquire(timeout, *args, **kwargs)

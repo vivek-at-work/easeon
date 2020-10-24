@@ -38,9 +38,7 @@ class OTPMixin(object):
     provision_uri = False
 
     def _get_random_base32_string(self):
-        """Generate Random Base32 string
-
-        """
+        """Generate Random Base32 string"""
         return pyotp.random_base32()
 
     def _insert_into_db(
@@ -68,9 +66,7 @@ class OTPMixin(object):
         return PyOTP.objects.create(**fields)
 
     def _generate_hotp(self, count, provision_uri=False, data={}):
-        """Generates counter-based OTPs
-
-        """
+        """Generates counter-based OTPs"""
         self.provision_uri = provision_uri
         base32string = self._get_random_base32_string()
         hotp = pyotp.HOTP(base32string)
@@ -113,9 +109,7 @@ class OTPMixin(object):
         return response
 
     def _generate_totp(self, interval, provision_uri=False, data={}):
-        """Generates time-based OTPs
-
-        """
+        """Generates time-based OTPs"""
         self.provision_uri = provision_uri
         base32string = self._get_random_base32_string()
         totp = pyotp.TOTP(base32string, interval=interval)

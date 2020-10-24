@@ -25,7 +25,7 @@ from django.utils.translation import ugettext_lazy as _
 class PyOTP(models.Model):
     """pyotp model
 
-        Here we will store secret of every generated otp. So that on verification of OTP we know which secret to use
+    Here we will store secret of every generated otp. So that on verification of OTP we know which secret to use
     """
 
     # Attributes

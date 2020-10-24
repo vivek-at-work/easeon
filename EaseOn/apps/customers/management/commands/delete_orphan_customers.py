@@ -8,6 +8,7 @@ from tickets.models import Ticket
 
 class Command(BaseCommand):
     help = 'Delete All Cutomer Records those not have a ticket'
+
     def handle(self, *args, **kwargs):
         try:
             results = Customer.all_objects.exclude(

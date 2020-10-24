@@ -15,7 +15,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import encoding, http, timezone
 from otp.mixins import OTPMixin
-
+from rocketchat import ChatMixin
 from .signals import attributes_changed
 from .user_manager import UserManager
 
@@ -24,6 +24,7 @@ OPERATOR = 'Technician'
 TOKEN_USER = 'TokenUser'
 AUDITOR = 'Auditor'
 PRIVILEGED = 'Privileged'
+
 
 def validate_user_email_domain(value):
     """
@@ -44,7 +45,7 @@ def validate_user_email_domain(value):
         )
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, ChatMixin):
     '''A User'''
 
     USER_TYPE_CHOICES = (
@@ -65,6 +66,7 @@ class User(AbstractBaseUser):
     username = models.CharField(blank=False, max_length=200, unique=True)
     contact_number = models.CharField(blank=False, max_length=50)
     address = models.CharField(blank=False, max_length=200)
+
     pin_code = models.CharField(max_length=8)
     city = models.CharField(max_length=16)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -77,6 +79,7 @@ class User(AbstractBaseUser):
     next_password_change_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
     gsx_technician_id = models.CharField(max_length=100)
+    chat_user_id = models.CharField(null=True, blank=False, max_length=50)
     gsx_user_name = models.CharField(max_length=100)
     gsx_auth_token = models.CharField(max_length=100)
     gsx_ship_to = models.CharField(max_length=100, default='0001026647')
@@ -117,7 +120,7 @@ class User(AbstractBaseUser):
     def is_superuser(self):
         'is a superuser'
         return self.is_admin
-    
+
     @property
     def is_privileged(self):
         return self.role == PRIVILEGED
@@ -251,11 +254,12 @@ class User(AbstractBaseUser):
     def get_full_name(self):
         return self.full_name
 
-    def increment_password_change_time(self, offset=settings.PASSWORD_AGE):
-        '''
+    def sync_password_changes(self, password, offset=settings.PASSWORD_AGE):
+        """
         Change Current User Password
-        '''
+        """
         n_time = utils.time_by_adding_business_days(offset)
+        self.update_chat_user_info(password)
         self.next_password_change_at = n_time
         logging.info(
             'user {} next password change time set to {}'.format(
@@ -270,12 +274,11 @@ class User(AbstractBaseUser):
         )
 
     def change_role(self, role):
-        if role==1:
+        if role == 1:
             self.is_admin = True
         else:
             self.is_admin = False
-        self.user_type=role
-        
+        self.user_type = role
 
     def refresh_gsx_token(self, gsx_token=None, gsx_ship_to=None):
         req = None
@@ -286,7 +289,7 @@ class User(AbstractBaseUser):
                 'token',
                 self.gsx_user_name,
                 gsx_token,
-                self.gsx_ship_to
+                self.gsx_ship_to,
             )
         else:
             req = GSXRequest(
@@ -294,7 +297,7 @@ class User(AbstractBaseUser):
                 'token',
                 self.gsx_user_name,
                 self.gsx_auth_token,
-                self.gsx_ship_to
+                self.gsx_ship_to,
             )
 
         if req:

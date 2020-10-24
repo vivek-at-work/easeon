@@ -1,4 +1,15 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from .import_resources import (
+    LoanerInventoryItemAdmin,
+    RepairInventoryItemAdmin,
+    SerializableInventoryItemAdmin,
+)
+from inventory.models import (
+    LoanerInventoryItem,
+    RepairInventoryItem,
+    SerializableInventoryItem,
+)
+from core.admin import register
 
-# Register your models here.
+register(LoanerInventoryItem, LoanerInventoryItemAdmin)
+register(RepairInventoryItem, RepairInventoryItemAdmin)
+register(SerializableInventoryItem, SerializableInventoryItemAdmin)

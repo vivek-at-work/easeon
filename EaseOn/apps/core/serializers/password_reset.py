@@ -74,6 +74,8 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
     def save(self):
         result = self.set_password_form.save()
-        self.user.increment_password_change_time()
+        self.user.sync_password_changes(
+            self.validated_data.get('new_password2', "")
+        )
         self.user.save()
         return result

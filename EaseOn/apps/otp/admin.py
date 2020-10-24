@@ -22,8 +22,7 @@ from otp import models
 
 
 class PyOTPAdmin(admin.ModelAdmin):
-    """
-    """
+    """"""
 
     list_display = (
         'id',

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from core.models import BaseModel
-from django.db import models
+from core.utils import send_token_to_customer
+from django.db import models, connection
 from organizations.models import Organization
+from django.contrib.auth import get_user_model
+from websocket import create_connection
 
 
 class Token(BaseModel):
@@ -18,12 +21,29 @@ class Token(BaseModel):
     token_number = models.CharField(max_length=100)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    city = models.CharField(max_length=50, blank=True, null=True,)
-    country = models.CharField(max_length=50, blank=True, null=True,)
-    state = models.CharField(max_length=50, blank=True, null=True,)
-    address_line_1 = models.CharField(max_length=60)
-    address_line_2 = models.CharField(blank=True, null=True, max_length=40)
-    street = models.CharField(blank=True, null=True, max_length=60)
     email = models.EmailField(blank=True, null=True)
+    invited_by = models.ForeignKey(
+        get_user_model(),
+        null=True,
+        related_name='received_tokens',
+        on_delete=models.DO_NOTHING,
+    )
+    counter_number = models.IntegerField(null=True)
     contact_number = models.CharField(blank=True, null=True, max_length=50)
-    pin_code = models.CharField(max_length=50, blank=True, null=True,)
+    invite_sent_on = models.DateTimeField(null=True)
+    is_present = models.BooleanField(default=False)
+
+    def send_token_number_by_sms(self):
+        send_token_to_customer(
+            self.contact_number, str(self.token_number).rjust(4, "0")
+        )
+
+    def can_invite(self, user):
+        return (self.invited_by is None) or (self.invited_by == user)
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table)
+            )
