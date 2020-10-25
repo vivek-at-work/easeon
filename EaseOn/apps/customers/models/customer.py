@@ -17,6 +17,7 @@ class Customer(BaseModel):
     street = models.CharField(max_length=60)
     email = models.EmailField()
     contact_number = models.CharField(max_length=50)
+    alternate_contact_number = models.CharField(max_length=50, blank=True, null=True)
     last_visit_on = models.DateTimeField(null=True)
     customer_type = models.CharField(max_length=50)
     pin_code = models.CharField(max_length=50)

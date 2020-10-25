@@ -36,6 +36,7 @@ class CustomerSerializer(BaseSerializer):
             "street",
             "email",
             "contact_number",
+            "alternate_contact_number",
             "last_visit_on",
             "pin_code",
             "token_number",
