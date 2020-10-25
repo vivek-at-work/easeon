@@ -6,6 +6,8 @@ verify_ssl = true
 [dev-packages]
 pre-commit = "*"
 pylint = "*"
+flake8 = "*"
+autopep8 = "*"
 
 [packages]
 django-environ = "*"

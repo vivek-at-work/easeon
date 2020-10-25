@@ -11,17 +11,17 @@ from customers.urls import customer_router
 from devices.urls import devices_router
 from django.conf import settings
 from django.conf.urls import include, url
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from inventory.urls import inventory_router
 from lists.urls import lists_router
 from organizations.urls import organizations_router
+from reporting.urls import report_router
 from rest_framework.documentation import include_docs_urls
+from rest_framework_swagger.views import get_swagger_view
 from slas.urls import sla_router
 from tickets.urls import ticket_router
 from tokens.urls import token_router
-from reporting.urls import report_router
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from rest_framework_swagger.views import get_swagger_view
 
 # from reports.urls import scheduler_router
 
@@ -40,11 +40,7 @@ schema_view = get_swagger_view(title=settings.SITE_HEADER)
 
 
 urlpatterns = [
-    url(r'{}/admin/'.format(API_GATEWAY), BASE_SITE.urls),
-    url(
-        r'backend/auth/'.format(API_GATEWAY),
-        include('django.contrib.auth.urls'),
-    ),
+    url(r'{0}/admin/'.format(API_GATEWAY), BASE_SITE.urls),
     url(
         r'{0}/{1}authentication/'.format(
             API_GATEWAY, settings.CURRENT_API_URL
