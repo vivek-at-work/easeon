@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 from core import utils
 from devices.restricted_devices import restricted_identifiers

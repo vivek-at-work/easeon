@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class GSXResourceNotAvailableError(Exception):
     """Exception raised if gsx cert and key not available.
 

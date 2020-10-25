@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .rocketchat import RocketChat
 from django.conf import settings
 

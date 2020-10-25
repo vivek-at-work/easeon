@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Create your tasks here
 from __future__ import absolute_import, unicode_literals
 from core.utils import get_organization_model

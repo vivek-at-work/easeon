@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .db_query import REPORT_SQL_MAPPING, DELIVERY_REPORT
 from .base_report import Report, validate_date
 

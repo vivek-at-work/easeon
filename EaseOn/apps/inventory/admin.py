@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .import_resources import (
     LoanerInventoryItemAdmin,
     RepairInventoryItemAdmin,
