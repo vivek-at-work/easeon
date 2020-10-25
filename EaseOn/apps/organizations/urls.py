@@ -8,9 +8,9 @@ from organizations.viewsets import (
 
 organizations_router = DefaultRouter()
 organizations_router.register(
-    r'organizations', OrganizationViewSet, basename='organization'
+    r"organizations", OrganizationViewSet, basename="organization"
 )
 organizations_router.register(
-    r'rights', MembershipViewSet, basename='organizationrights'
+    r"rights", MembershipViewSet, basename="organizationrights"
 )
-organizations_router.register(r'holidays', HolidayViewSet, basename='holiday')
+organizations_router.register(r"holidays", HolidayViewSet, basename="holiday")

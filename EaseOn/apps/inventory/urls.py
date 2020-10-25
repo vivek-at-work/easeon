@@ -8,24 +8,20 @@ from inventory.viewsets import (
 from rest_framework import routers
 
 inventory_router = routers.DefaultRouter()
-base = 'inventory'
+base = "inventory"
 inventory_router.register(
-    r'{0}/loaners'.format(base),
-    LoanerItemViewSet,
-    basename='loanerinventoryitem',
+    r"{0}/loaners".format(base), LoanerItemViewSet, basename="loanerinventoryitem"
 )
 inventory_router.register(
-    r'{0}/repairs'.format(base),
-    RepairItemViewSet,
-    basename='repairinventoryitem',
+    r"{0}/repairs".format(base), RepairItemViewSet, basename="repairinventoryitem"
 )
 inventory_router.register(
-    r'{0}/serializables'.format(base),
+    r"{0}/serializables".format(base),
     SerializableItemViewSet,
-    basename='serializableinventoryitem',
+    basename="serializableinventoryitem",
 )
 inventory_router.register(
-    r'{0}/penalty'.format(base),
+    r"{0}/penalty".format(base),
     PenaltyAmountViewSet,
-    basename='loaneritempenaltyamount',
+    basename="loaneritempenaltyamount",
 )

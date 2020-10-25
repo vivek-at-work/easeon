@@ -12,4 +12,4 @@ class RepairInventoryItemField(serializers.Field):
         if isinstance(data, int):
             return RepairInventoryItem.objects.get(pk=data)
         else:
-            return RepairInventoryItem.objects.get(pk=int(data['id']))
+            return RepairInventoryItem.objects.get(pk=int(data["id"]))

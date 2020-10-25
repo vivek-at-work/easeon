@@ -12,7 +12,7 @@ class ListItemFilter(django_filters.FilterSet):
     """doc string for OrganizationFilter"""
 
     list_name = django_filters.MultipleChoiceFilter(choices=LIST_NAME_CHOICES)
-    value = django_filters.CharFilter(lookup_expr='icontains')
+    value = django_filters.CharFilter(lookup_expr="icontains")
 
     class Meta(object):
         model = Item
@@ -27,13 +27,13 @@ class ListItemFilter(django_filters.FilterSet):
 class ItemViewSet(BaseBulkCreateViewSet):
     serializer_class = ItemModelSerializer
     permission_classes = (IsOperatorOrSuperUser,)
-    search_fields = ('list_name',)
+    search_fields = ("list_name",)
     filter_class = ListItemFilter
     queryset = Item.objects.all()
 
-    @decorators.action(methods=['GET'], detail=False)
+    @decorators.action(methods=["GET"], detail=False)
     def list_types(self, request, pk=None):
         output = []
         for x, y in LIST_NAME_CHOICES:
-            output.append({'key': x, 'display_text': y})
+            output.append({"key": x, "display_text": y})
         return response.Response(output)

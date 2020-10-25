@@ -6,14 +6,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0005_auto_20200729_1510'),
-    ]
+    dependencies = [("core", "0005_auto_20200729_1510")]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='chat_user_id',
+            model_name="user",
+            name="chat_user_id",
             field=models.CharField(max_length=50, null=True),
-        ),
+        )
     ]

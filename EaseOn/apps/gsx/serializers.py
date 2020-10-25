@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from rest_framework import serializers
-from core.utils import time_by_adding_business_days
-from gsx.core import GSXRequest
-from django.contrib.auth import get_user_model
-import re
+
 import copy
+import re
+
+from core.utils import time_by_adding_business_days
+from django.contrib.auth import get_user_model
+from gsx.core import GSXRequest
+from rest_framework import serializers
 
 USER = get_user_model()
 
@@ -41,20 +43,18 @@ def gsx_validate(value, what=None):
     result = None
 
     if not isinstance(value, str):
-        raise ValueError(
-            '%s is not valid input (%s != string)' % (value, type(value))
-        )
+        raise ValueError("%s is not valid input (%s != string)" % (value, type(value)))
 
     rex = {
-        'partNumber': r'^([A-Z]{1,4})?\d{1,3}\-?(\d{1,5}|[A-Z]{1,2})(/[A-Z])?$',
-        'serialNumber': r'^[A-Z0-9]{11,12}$',
-        'eeeCode': r'^[A-Z0-9]{3,4}$',
-        'returnOrder': r'^7\d{9}$',
-        'repairNumber': r'^\d{12}$',
-        'dispatchId': r'^[A-Z]+\d{9,15}$',
-        'alternateDeviceId': r'^\d{15}$',
-        'diagnosticEventNumber': r'^\d{23}$',
-        'productName': r'^i?Mac',
+        "partNumber": r"^([A-Z]{1,4})?\d{1,3}\-?(\d{1,5}|[A-Z]{1,2})(/[A-Z])?$",
+        "serialNumber": r"^[A-Z0-9]{11,12}$",
+        "eeeCode": r"^[A-Z0-9]{3,4}$",
+        "returnOrder": r"^7\d{9}$",
+        "repairNumber": r"^\d{12}$",
+        "dispatchId": r"^[A-Z]+\d{9,15}$",
+        "alternateDeviceId": r"^\d{15}$",
+        "diagnosticEventNumber": r"^\d{23}$",
+        "productName": r"^i?Mac",
     }
 
     for k, v in rex.items():
@@ -79,12 +79,12 @@ class BaseGSXSerializer(serializers.Serializer):
 
     @property
     def user(self):
-        if self.context['request'].user.is_authenticated:
-            if self.context['request'].user.email == 'admin@easeon.in':
-                return USER.objects.get(email='nagmani@uipl.co.in')
-            return self.context['request'].user
+        if self.context["request"].user.is_authenticated:
+            if self.context["request"].user.email == "admin@easeon.in":
+                return USER.objects.get(email="nagmani@uipl.co.in")
+            return self.context["request"].user
         else:
-            return USER.objects.get(email='nagmani@uipl.co.in')
+            return USER.objects.get(email="nagmani@uipl.co.in")
 
 
 class DeviceSerializer(BaseGSXSerializer):
@@ -98,11 +98,11 @@ class DeviceSerializer(BaseGSXSerializer):
         """
         Check that device identifier is valid.
         """
-        is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-        is_valid_sn = gsx_validate(value, 'serialNumber')
+        is_valid_alternate_device_id = gsx_validate(value, "alternateDeviceId")
+        is_valid_sn = gsx_validate(value, "serialNumber")
         if not is_valid_alternate_device_id and not is_valid_sn:
             raise serializers.ValidationError(
-                'Not a valid serial number or IMEI number.'
+                "Not a valid serial number or IMEI number."
             )
         return value
 
@@ -113,13 +113,13 @@ class DeviceSerializer(BaseGSXSerializer):
         :return: pyotp object
         """
         req = GSXRequest(
-            'repair',
-            'product/details?activationDetails=true',
+            "repair",
+            "product/details?activationDetails=true",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        device = {'id': validated_data['identifier']}
+        device = {"id": validated_data["identifier"]}
         received_on = time_by_adding_business_days(0).isoformat()
         response = req.post(unitReceivedDateTime=received_on, device=device)
         return response
@@ -136,23 +136,23 @@ class DiagnosticSuitesSerializer(BaseGSXSerializer):
         """
         Check that device identifier is valid.
         """
-        is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-        is_valid_sn = gsx_validate(value, 'serialNumber')
+        is_valid_alternate_device_id = gsx_validate(value, "alternateDeviceId")
+        is_valid_sn = gsx_validate(value, "serialNumber")
         if not is_valid_alternate_device_id and not is_valid_sn:
             raise serializers.ValidationError(
-                'Not a valid serial number or IMEI number.'
+                "Not a valid serial number or IMEI number."
             )
         return value
 
     def create(self, validated_data):
         req = GSXRequest(
-            'diagnostics',
-            'suites',
+            "diagnostics",
+            "suites",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        response = req.get(deviceId=validated_data['identifier'])
+        response = req.get(deviceId=validated_data["identifier"])
         return response
 
 
@@ -167,23 +167,23 @@ class RepairEligibilitySerializer(BaseGSXSerializer):
         """
         Check that device identifier is valid.
         """
-        is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-        is_valid_sn = gsx_validate(value, 'serialNumber')
+        is_valid_alternate_device_id = gsx_validate(value, "alternateDeviceId")
+        is_valid_sn = gsx_validate(value, "serialNumber")
         if not is_valid_alternate_device_id and not is_valid_sn:
             raise serializers.ValidationError(
-                'Not a valid serial number or IMEI number.'
+                "Not a valid serial number or IMEI number."
             )
         return value
 
     def create(self, validated_data):
         req = GSXRequest(
-            'repair',
-            'eligibility',
+            "repair",
+            "eligibility",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        device = {'id': validated_data['identifier']}
+        device = {"id": validated_data["identifier"]}
         response = req.post(device=device)
         return response
 
@@ -199,23 +199,23 @@ class DiagnosticsLookupSerializer(BaseGSXSerializer):
         """
         Check that device identifier is valid.
         """
-        is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-        is_valid_sn = gsx_validate(value, 'serialNumber')
+        is_valid_alternate_device_id = gsx_validate(value, "alternateDeviceId")
+        is_valid_sn = gsx_validate(value, "serialNumber")
         if not is_valid_alternate_device_id and not is_valid_sn:
             raise serializers.ValidationError(
-                'Not a valid serial number or IMEI number.'
+                "Not a valid serial number or IMEI number."
             )
         return value
 
     def create(self, validated_data):
         req = GSXRequest(
-            'diagnostics',
-            'lookup',
+            "diagnostics",
+            "lookup",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        device = {'id': validated_data['identifier']}
+        device = {"id": validated_data["identifier"]}
         response = req.post(device=device)
         return response
 
@@ -232,28 +232,25 @@ class RunDiagnosticsSerializer(BaseGSXSerializer):
         """
         Check that device identifier is valid.
         """
-        is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-        is_valid_sn = gsx_validate(value, 'serialNumber')
+        is_valid_alternate_device_id = gsx_validate(value, "alternateDeviceId")
+        is_valid_sn = gsx_validate(value, "serialNumber")
         if not is_valid_alternate_device_id and not is_valid_sn:
             raise serializers.ValidationError(
-                'Not a valid serial number or IMEI number.'
+                "Not a valid serial number or IMEI number."
             )
         return value
 
     def create(self, validated_data):
         req = GSXRequest(
-            'diagnostics',
-            'initiate-test',
+            "diagnostics",
+            "initiate-test",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        device = {'id': validated_data['identifier']}
-        diagnostics = {'suiteId': validated_data['suiteId']}
-        response = req.post(
-            device=device,
-            diagnostics=diagnostics,
-        )
+        device = {"id": validated_data["identifier"]}
+        diagnostics = {"suiteId": validated_data["suiteId"]}
+        response = req.post(device=device, diagnostics=diagnostics)
         return response
 
 
@@ -268,23 +265,23 @@ class DiagnosticsStatusSerializer(BaseGSXSerializer):
         """
         Check that device identifier is valid.
         """
-        is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-        is_valid_sn = gsx_validate(value, 'serialNumber')
+        is_valid_alternate_device_id = gsx_validate(value, "alternateDeviceId")
+        is_valid_sn = gsx_validate(value, "serialNumber")
         if not is_valid_alternate_device_id and not is_valid_sn:
             raise serializers.ValidationError(
-                'Not a valid serial number or IMEI number.'
+                "Not a valid serial number or IMEI number."
             )
         return value
 
     def create(self, validated_data):
         req = GSXRequest(
-            'diagnostics',
-            'status',
+            "diagnostics",
+            "status",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        device = {'id': validated_data['identifier']}
+        device = {"id": validated_data["identifier"]}
         response = req.post(device=device)
         return response
 
@@ -300,22 +297,18 @@ class RepairSummarySerializer(BaseGSXSerializer):
     search_criteria = serializers.JSONField()
 
     def create(self, validated_data):
-        pageSize = self.validated_data['sizePerPage']
-        pageNumber = self.validated_data['pageNumber']
-        fetchAllRepairs = self.validated_data['fetchAllRepairs']
+        pageSize = self.validated_data["sizePerPage"]
+        pageNumber = self.validated_data["pageNumber"]
+        fetchAllRepairs = self.validated_data["fetchAllRepairs"]
 
         url = f"summary?pageSize={pageSize}&pageNumber={pageNumber}"
         if fetchAllRepairs:
             url = f"summary?pageSize={pageSize}&pageNumber={pageNumber}&fetchAllRepairs=true"
 
         req = GSXRequest(
-            'repair',
-            url,
-            self.gsx_user_name,
-            self.gsx_auth_token,
-            self.gsx_ship_to,
+            "repair", url, self.gsx_user_name, self.gsx_auth_token, self.gsx_ship_to
         )
-        data = copy.deepcopy(self.validated_data['search_criteria'])
+        data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         return response
 
@@ -329,8 +322,8 @@ class RepairDetailsSerializer(BaseGSXSerializer):
 
     def create(self, validated_data):
         req = GSXRequest(
-            'repair',
-            'details',
+            "repair",
+            "details",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
@@ -349,11 +342,7 @@ class RepairAuditSerializer(BaseGSXSerializer):
 
     def create(self, validated_data):
         req = GSXRequest(
-            'repair',
-            'audit',
-            self.gsx_user_name,
-            self.gsx_auth_token,
-            self.gsx_ship_to,
+            "repair", "audit", self.gsx_user_name, self.gsx_auth_token, self.gsx_ship_to
         )
         data = copy.deepcopy(self.validated_data)
         response = req.get(**data)
@@ -369,13 +358,13 @@ class ComponentIssueSerializer(BaseGSXSerializer):
 
     def create(self, validated_data):
         req = GSXRequest(
-            'repair',
-            'product/componentissue',
+            "repair",
+            "product/componentissue",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        data = copy.deepcopy(self.validated_data['search_criteria'])
+        data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         return response
 
@@ -400,13 +389,13 @@ class PartSummarySerializer(BaseGSXSerializer):
         #     url = f"summary?pageSize={pageSize}&pageNumber={pageNumber}&fetchAllRepairs=true"
 
         req = GSXRequest(
-            'parts',
-            'summary',
+            "parts",
+            "summary",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        data = copy.deepcopy(self.validated_data['search_criteria'])
+        data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         return response
 
@@ -420,8 +409,8 @@ class ContentArticleSerializer(BaseGSXSerializer):
 
     def create(self, validated_data):
         req = GSXRequest(
-            'content',
-            'article',
+            "content",
+            "article",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
@@ -441,18 +430,14 @@ class ContentArticleLookupSerializer(BaseGSXSerializer):
     search_criteria = serializers.JSONField()
 
     def create(self, validated_data):
-        pageSize = self.validated_data['sizePerPage']
-        pageNumber = self.validated_data['pageNumber']
+        pageSize = self.validated_data["sizePerPage"]
+        pageNumber = self.validated_data["pageNumber"]
 
         url = f"article/lookup?pageSize={pageSize}&pageNumber={pageNumber}"
         req = GSXRequest(
-            'content',
-            url,
-            self.gsx_user_name,
-            self.gsx_auth_token,
-            self.gsx_ship_to,
+            "content", url, self.gsx_user_name, self.gsx_auth_token, self.gsx_ship_to
         )
-        data = copy.deepcopy(self.validated_data['search_criteria'])
+        data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         return response
 
@@ -467,18 +452,18 @@ class ConsignmentOrderLookupSerializer(BaseGSXSerializer):
     search_criteria = serializers.JSONField()
 
     def create(self, validated_data):
-        pageSize = self.validated_data['sizePerPage']
-        pageNumber = self.validated_data['pageNumber']
+        pageSize = self.validated_data["sizePerPage"]
+        pageNumber = self.validated_data["pageNumber"]
 
         url = f"order/lookup?pageSize={pageSize}&pageNumber={pageNumber}"
         req = GSXRequest(
-            'consignment',
+            "consignment",
             url,
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        data = copy.deepcopy(self.validated_data['search_criteria'])
+        data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         return response
 
@@ -493,18 +478,18 @@ class ConsignmentDeliveryLookupSerializer(BaseGSXSerializer):
     search_criteria = serializers.JSONField()
 
     def create(self, validated_data):
-        pageSize = self.validated_data['sizePerPage']
-        pageNumber = self.validated_data['pageNumber']
+        pageSize = self.validated_data["sizePerPage"]
+        pageNumber = self.validated_data["pageNumber"]
 
         url = f"delivery/lookup?pageSize={pageSize}&pageNumber={pageNumber}"
         req = GSXRequest(
-            'consignment',
+            "consignment",
             url,
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        data = copy.deepcopy(self.validated_data['search_criteria'])
+        data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         return response
 
@@ -518,15 +503,13 @@ class TechnicianLookupSerializer(BaseGSXSerializer):
 
     def create(self, validated_data):
         req = GSXRequest(
-            'technician',
-            'lookup',
+            "technician",
+            "lookup",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        data = copy.deepcopy(
-            {'payload': self.validated_data['search_criteria']}
-        )
+        data = copy.deepcopy({"payload": self.validated_data["search_criteria"]})
         response = req.post(**data)
         return response
 
@@ -540,22 +523,20 @@ class AttachmentUploadAccessSerializer(BaseGSXSerializer):
 
     def create(self, validated_data):
         req = GSXRequest(
-            'attachment',
-            'upload-access',
+            "attachment",
+            "upload-access",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
 
         response_headers, message = req.post(
-            **self.validated_data['data'], return_headers=True
+            **self.validated_data["data"], return_headers=True
         )
         headers = dict(response_headers)
-        cid = headers.get('X-Apple-Gigafiles-Cid', None)
-        token = headers.get('X-Apple-AppToken', None)
-        message.update(
-            {'X-Apple-Gigafiles-Cid': cid, 'X-Apple-AppToken': token}
-        )
+        cid = headers.get("X-Apple-Gigafiles-Cid", None)
+        token = headers.get("X-Apple-AppToken", None)
+        message.update({"X-Apple-Gigafiles-Cid": cid, "X-Apple-AppToken": token})
         return message
 
 
@@ -568,16 +549,14 @@ class DocumentDownloadSerializer(BaseGSXSerializer):
 
     def create(self, validated_data):
         req = GSXRequest(
-            'document-download',
-            '',
+            "document-download",
+            "",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
 
-        data = copy.deepcopy(
-            {'payload': self.validated_data['search_criteria']}
-        )
+        data = copy.deepcopy({"payload": self.validated_data["search_criteria"]})
         response = req.post(**data)
         return response
 
@@ -592,13 +571,13 @@ class AcknowledgeDeliverySerializer(BaseGSXSerializer):
     def create(self, validated_data):
         # /consignment/delivery/acknowledge
         req = GSXRequest(
-            'consignment',
-            'delivery/acknowledge',
+            "consignment",
+            "delivery/acknowledge",
             self.gsx_user_name,
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
 
-        data = copy.deepcopy({'payload': self.validated_data['data']})
+        data = copy.deepcopy({"payload": self.validated_data["data"]})
         response = req.post(**data)
         return response

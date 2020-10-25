@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from core.models import BaseModel
 from core.utils import send_token_to_customer
-from django.db import models, connection
-from organizations.models import Organization
 from django.contrib.auth import get_user_model
+from django.db import connection, models
+from organizations.models import Organization
 from websocket import create_connection
 
 
@@ -12,7 +12,7 @@ class Token(BaseModel):
 
     organization = models.ForeignKey(
         Organization,
-        related_name='tokens',
+        related_name="tokens",
         editable=False,
         null=True,
         on_delete=models.DO_NOTHING,
@@ -25,7 +25,7 @@ class Token(BaseModel):
     invited_by = models.ForeignKey(
         get_user_model(),
         null=True,
-        related_name='received_tokens',
+        related_name="received_tokens",
         on_delete=models.DO_NOTHING,
     )
     counter_number = models.IntegerField(null=True)
@@ -44,6 +44,4 @@ class Token(BaseModel):
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:
-            cursor.execute(
-                'TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table)
-            )
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))

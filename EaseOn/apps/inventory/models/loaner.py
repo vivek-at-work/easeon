@@ -30,9 +30,7 @@ class LoanerItemPenaltyAmount(BaseModel):
 
 class LoanerInventoryItem(InventoryItem):
     organization = models.ForeignKey(
-        Organization,
-        related_name='loaner_inventory_items',
-        on_delete=models.CASCADE,
+        Organization, related_name="loaner_inventory_items", on_delete=models.CASCADE
     )
     objects = LoanerInventoryManager()
     all_objects = LoanerInventoryManager(alive_only=False)
@@ -44,7 +42,7 @@ class LoanerInventoryItem(InventoryItem):
         for item in LoanerItemPenaltyAmount.objects.filter(
             part_number=self.part_number
         ):
-            results.append({'reason': item.reason, 'cost': item.cost})
+            results.append({"reason": item.reason, "cost": item.cost})
         return results
 
         # if self.part_number == 'HN661-01867':

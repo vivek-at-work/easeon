@@ -19,8 +19,8 @@ import pkg_resources
 __metaclass__ = type
 
 
-distribution_name = 'python-daemon'
-version_info_filename = 'version_info.json'
+distribution_name = "python-daemon"
+version_info_filename = "version_info.json"
 
 
 def get_distribution_version_info(filename=version_info_filename):
@@ -35,9 +35,9 @@ def get_distribution_version_info(filename=version_info_filename):
 
     """
     version_info = {
-        'release_date': 'UNKNOWN',
-        'version': 'UNKNOWN',
-        'maintainer': 'UNKNOWN',
+        "release_date": "UNKNOWN",
+        "version": "UNKNOWN",
+        "maintainer": "UNKNOWN",
     }
 
     try:
@@ -55,12 +55,12 @@ def get_distribution_version_info(filename=version_info_filename):
 
 version_info = get_distribution_version_info()
 
-version_installed = version_info['version']
+version_installed = version_info["version"]
 
 
-author_name = 'Ben Finney'
-author_email = 'ben+python@benfinney.id.au'
-author = '{name} <{email}>'.format(name=author_name, email=author_email)
+author_name = "Ben Finney"
+author_email = "ben+python@benfinney.id.au"
+author = "{name} <{email}>".format(name=author_name, email=author_email)
 
 
 class YearRange:
@@ -71,10 +71,10 @@ class YearRange:
         self.end = end
 
     def __unicode__(self):
-        text = '{range.begin:04d}'.format(range=self)
+        text = "{range.begin:04d}".format(range=self)
         if self.end is not None:
             if self.end > self.begin:
-                text = '{range.begin:04d}–{range.end:04d}'.format(range=self)
+                text = "{range.begin:04d}–{range.end:04d}".format(range=self)
         return text
 
     __str__ = __unicode__
@@ -96,7 +96,7 @@ def make_year_range(begin_year, end_date=None):
     begin_year = int(begin_year)
 
     try:
-        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
     except (TypeError, ValueError):
         # Specified end_date value is not a valid date.
         end_year = None
@@ -108,15 +108,15 @@ def make_year_range(begin_year, end_date=None):
     return year_range
 
 
-copyright_year_begin = '2001'
-build_date = version_info['release_date']
+copyright_year_begin = "2001"
+build_date = version_info["release_date"]
 copyright_year_range = make_year_range(copyright_year_begin, build_date)
 
-copyright = 'Copyright © {year_range} {author} and others'.format(
+copyright = "Copyright © {year_range} {author} and others".format(
     year_range=copyright_year_range, author=author
 )
-license = 'Apache-2'
-url = 'https://pagure.io/python-daemon/'
+license = "Apache-2"
+url = "https://pagure.io/python-daemon/"
 
 
 # Copyright © 2008–2019 Ben Finney <ben+python@benfinney.id.au>

@@ -4,24 +4,7 @@ import json
 
 import pytz
 from django.conf import settings
-
-# from openpyxl import Workbook
-# from openpyxl.drawing.image import Image
-# from openpyxl.styles import (
-#     Alignment,
-#     Border,
-#     Font,
-#     NamedStyle,
-#     PatternFill,
-#     Side,
-# )
-# from openpyxl.utils import get_column_letter
-# from openpyxl.writer.excel import save_virtual_workbook
-from rest_framework.renderers import (
-    BaseRenderer,
-    BrowsableAPIRenderer,
-    JSONRenderer,
-)
+from rest_framework.renderers import BaseRenderer, BrowsableAPIRenderer, JSONRenderer
 from rest_framework.utils import encoders
 
 
@@ -31,14 +14,14 @@ class XLSXFileMixin(object):
     passed back to the user when the spreadsheet is downloaded.
     """
 
-    filename = 'export.xlsx'
+    filename = "export.xlsx"
 
     def finalize_response(self, request, response, *args, **kwargs):
         response = super(XLSXFileMixin, self).finalize_response(
             request, response, *args, **kwargs
         )
-        if response.accepted_renderer.format == 'xlsx':
-            response['content-disposition'] = 'attachment; filename={}'.format(
+        if response.accepted_renderer.format == "xlsx":
+            response["content-disposition"] = "attachment; filename={}".format(
                 self.filename
             )
         return response
@@ -47,10 +30,8 @@ class XLSXFileMixin(object):
 class BrowsableAPIRenderer(BrowsableAPIRenderer):
     def get_context(self, data, accepted_media_type, renderer_context):
         parent = super(BrowsableAPIRenderer, self)
-        context = parent.get_context(
-            data, accepted_media_type, renderer_context
-        )
-        context['SITE_HEADER'] = settings.SITE_HEADER
+        context = parent.get_context(data, accepted_media_type, renderer_context)
+        context["SITE_HEADER"] = settings.SITE_HEADER
         return context
 
 
@@ -64,10 +45,8 @@ class JSONEncoder(encoders.JSONEncoder):
 class JSONRenderer(JSONRenderer):
     def get_context(self, data, accepted_media_type, renderer_context):
         parent = super(BrowsableAPIRenderer, self)
-        context = parent.get_context(
-            data, accepted_media_type, renderer_context
-        )
-        context['SITE_HEADER'] = settings.SITE_HEADER
+        context = parent.get_context(data, accepted_media_type, renderer_context)
+        context["SITE_HEADER"] = settings.SITE_HEADER
         return context
 
 

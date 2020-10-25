@@ -11,7 +11,7 @@ class Delivery(BaseModel):
     """A Service Order"""
 
     ticket = models.OneToOneField(
-        Ticket, related_name='delivery', on_delete=models.CASCADE
+        Ticket, related_name="delivery", on_delete=models.CASCADE
     )
     actual_service_cost = models.FloatField(default=0.0)
     actual_hardware_cost = models.FloatField(default=0.0)
@@ -26,7 +26,7 @@ class Delivery(BaseModel):
     # comptia_code = models.CharField(max_length=50)
     outward_condition = models.CharField(max_length=1000)
     reference_number = models.CharField(max_length=50, unique=True)
-    customer_signature = models.ImageField(upload_to='signatures', null=True)
+    customer_signature = models.ImageField(upload_to="signatures", null=True)
 
     def __unicode__(self):
         return self.reference_number

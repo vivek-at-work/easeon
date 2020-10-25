@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class EaseOnAdminSite(admin.AdminSite):
     site_title = _(settings.SITE_HEADER)
-    site_header = _(settings.SITE_HEADER + ' Administration')
+    site_header = _(settings.SITE_HEADER + " Administration")
     index_title = _(settings.SITE_HEADER)
 
 
@@ -20,19 +20,19 @@ class EaseOnAdminSiteConfig(admin.apps.AdminConfig):
 
 class BaseAdmin(admin.ModelAdmin):
     exclude = (
-        'created_by',
-        'version',
-        'last_modified_by',
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'is_deleted',
+        "created_by",
+        "version",
+        "last_modified_by",
+        "created_at",
+        "updated_at",
+        "deleted_at",
+        "is_deleted",
     )
 
     def save_model(self, request, obj, form, change):
-        if getattr(obj, 'created_by', None) is None:
+        if getattr(obj, "created_by", None) is None:
             obj.created_by = request.user
-        if getattr(obj, 'created_at', None) is None:
+        if getattr(obj, "created_at", None) is None:
             obj.created_at = datetime.now()
         obj.save()
 

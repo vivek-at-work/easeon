@@ -11,7 +11,7 @@ class GSXInfo(BaseModel):
     """A Service Order"""
 
     ticket = models.ForeignKey(
-        Ticket, related_name='gsx_informations', on_delete=models.CASCADE
+        Ticket, related_name="gsx_informations", on_delete=models.CASCADE
     )
     gsx_reference_number = models.CharField(max_length=30)
     gsx_repair_type = models.CharField(max_length=50)

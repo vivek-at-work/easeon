@@ -6,22 +6,20 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0002_user_gsx_ship_to'),
-    ]
+    dependencies = [("core", "0002_user_gsx_ship_to")]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='user_type',
+            model_name="user",
+            name="user_type",
             field=models.PositiveSmallIntegerField(
                 choices=[
-                    (1, 'SuperUser'),
-                    (2, 'Operator'),
-                    (3, 'TokenUser'),
-                    (4, 'Auditor'),
+                    (1, "SuperUser"),
+                    (2, "Operator"),
+                    (3, "TokenUser"),
+                    (4, "Auditor"),
                 ],
                 default=2,
             ),
-        ),
+        )
     ]

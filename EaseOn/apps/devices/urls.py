@@ -3,4 +3,4 @@ from core.router import DefaultRouter
 from devices.viewsets import DeviceViewSet
 
 devices_router = DefaultRouter()
-devices_router.register(r'devices', DeviceViewSet, basename='device')
+devices_router.register(r"devices", DeviceViewSet, basename="device")

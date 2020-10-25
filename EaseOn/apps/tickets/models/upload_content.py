@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-UPLOAD_TYPES = (('Ticket', 'Ticket'), ('Delivery', 'Delivery'))
+UPLOAD_TYPES = (("Ticket", "Ticket"), ("Delivery", "Delivery"))
 
 
 class UploadContent(BaseModel):

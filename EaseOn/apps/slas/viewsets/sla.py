@@ -8,8 +8,8 @@ from slas import models, serializers
 class SLAFilter(django_filters.FilterSet):
     """doc string for OrganizationFilter"""
 
-    sla_type = django_filters.CharFilter(lookup_expr='icontains')
-    name = django_filters.CharFilter(lookup_expr='icontains')
+    sla_type = django_filters.CharFilter(lookup_expr="icontains")
+    name = django_filters.CharFilter(lookup_expr="icontains")
 
     class Meta(object):
         model = models.SLA

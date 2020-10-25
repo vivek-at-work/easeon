@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from core import utils
 from core.models import BaseModel
+from django.apps import apps
 from django.db import models
 from django.utils import timezone
-from django.apps import apps
 
 
 class Customer(BaseModel):
@@ -24,11 +24,11 @@ class Customer(BaseModel):
 
     @property
     def full_name(self):
-        return '{0} {1}'.format(self.first_name, self.last_name)
+        return "{0} {1}".format(self.first_name, self.last_name)
 
     @property
     def communication_address(self):
-        return '{0} {1} {2} {3} {4} {5} {6}'.format(
+        return "{0} {1} {2} {3} {4} {5} {6}".format(
             self.address_line_1,
             self.address_line_2,
             self.street,
@@ -42,18 +42,15 @@ class Customer(BaseModel):
     def open_tickets(self):
         Ticket = apps.get_model(utils.get_ticket_model())
         return Ticket.objects.filter(
-            customer__email=self.email,
-            customer__contact_number=self.contact_number,
+            customer__email=self.email, customer__contact_number=self.contact_number
         ).open()
 
     @property
     def user_messages(self):
-        open_tickets = self.open_tickets.values_list(
-            'reference_number', flat=True
-        )
+        open_tickets = self.open_tickets.values_list("reference_number", flat=True)
         if open_tickets:
             return """This Customer has pending open tickets.Close them beforeproceeding for a new one {0}""".format(
-                ','.join(open_tickets)
+                ",".join(open_tickets)
             )
 
     @property
@@ -61,4 +58,4 @@ class Customer(BaseModel):
         return timezone.localtime() - self.last_visit_on
 
     def __str__(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+        return "{} {}".format(self.first_name, self.last_name)

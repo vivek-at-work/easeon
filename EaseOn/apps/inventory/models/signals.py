@@ -9,6 +9,5 @@ from .serializable_inventory_stats import SerializableInventoryStats
 @receiver(pre_save, sender=SerializableInventoryItem)
 def assign_available_quantity(sender, instance, *args, **kwargs):
     stat, created = SerializableInventoryStats.objects.get_or_create(
-        organization=instance.organization,
-        description=instance.description,
+        organization=instance.organization, description=instance.description
     )

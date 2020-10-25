@@ -6,7 +6,7 @@ from tickets import models
 
 class DevicePartReportSerializer(BaseSerializer):
     ticket = serializers.HyperlinkedRelatedField(
-        queryset=models.Ticket.objects.all(), view_name='ticket-detail'
+        queryset=models.Ticket.objects.all(), view_name="ticket-detail"
     )
 
     class Meta(BaseMeta):

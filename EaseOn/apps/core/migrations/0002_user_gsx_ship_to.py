@@ -6,14 +6,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0001_initial'),
-    ]
+    dependencies = [("core", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='gsx_ship_to',
-            field=models.CharField(default='0001026647', max_length=100),
-        ),
+            model_name="user",
+            name="gsx_ship_to",
+            field=models.CharField(default="0001026647", max_length=100),
+        )
     ]

@@ -9,12 +9,12 @@ from django.utils.http import urlsafe_base64_encode
 
 
 class CustomPasswordResetForm(PasswordResetForm):
-    email_template = settings.EMAIL_TEMPLATES.get('action', None)
+    email_template = settings.EMAIL_TEMPLATES.get("action", None)
 
     def save(
         self,
         domain_override=None,
-        subject_template_name='registration/password_reset_subject.txt',
+        subject_template_name="registration/password_reset_subject.txt",
         email_template_name=email_template,
         use_https=False,
         token_generator=default_token_generator,
@@ -23,7 +23,7 @@ class CustomPasswordResetForm(PasswordResetForm):
         html_email_template_name=None,
         extra_email_context=None,
     ):
-        email = self.cleaned_data['email']
+        email = self.cleaned_data["email"]
         super(CustomPasswordResetForm, self).get_users(email)
         for user in get_user_model().objects.filter(
             email__iexact=email, is_active=True

@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-TWITTER_HANDLE = 'easeOn'
+TWITTER_HANDLE = "easeOn"

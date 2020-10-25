@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from core import viewsets
+from core.permissions import HasManagerRightsToUpdateOrDelete
 from django.utils import timezone
 from rest_framework import decorators, response
 from tickets import models, serializers
-from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class LoanerRecordViewSet(viewsets.BaseViewSet):
@@ -11,26 +11,22 @@ class LoanerRecordViewSet(viewsets.BaseViewSet):
     serializer_class = serializers.LoanerRecordSerializer
     permission_classes = [HasManagerRightsToUpdateOrDelete]
 
-    @decorators.action(methods=['post', 'GET'], detail=True)
+    @decorators.action(methods=["post", "GET"], detail=True)
     def mark_return(self, request, pk=None):
-        'search applicable loaner items.'
+        "search applicable loaner items."
         record = self.get_object()
         record.returned_on = timezone.now()
         record.is_lost = False
         record.save()
-        serializer = self.serializer_class(
-            record, context={'request': request}
-        )
+        serializer = self.serializer_class(record, context={"request": request})
         return response.Response(serializer.data)
 
-    @decorators.action(methods=['post', 'GET'], detail=True)
+    @decorators.action(methods=["post", "GET"], detail=True)
     def mark_lost(self, request, pk=None):
-        'search applicable loaner items.'
+        "search applicable loaner items."
         record = self.get_object()
         record.returned_on = None
         record.is_lost = True
         record.save()
-        serializer = self.serializer_class(
-            record, context={'request': request}
-        )
+        serializer = self.serializer_class(record, context={"request": request})
         return response.Response(serializer.data)

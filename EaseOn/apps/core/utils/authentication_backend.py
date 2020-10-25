@@ -4,7 +4,7 @@ import logging
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
-logger = logging.getLogger('easeOn')
+logger = logging.getLogger("easeOn")
 
 
 class EaseOnAuthenticationBackend(ModelBackend):
@@ -16,28 +16,22 @@ class EaseOnAuthenticationBackend(ModelBackend):
     def authenticate(self, request, **kwargs):
         try:
             user_model = get_user_model()
-            email = kwargs.get('email')
+            email = kwargs.get("email")
             if not email:
-                email = kwargs.get('username')
+                email = kwargs.get("username")
             if email:
-                logging.info(
-                    'Login Request received for email {0}'.format(email)
-                )
+                logging.info("Login Request received for email {0}".format(email))
                 user = user_model.objects.get(email__iexact=email)
-                logging.info('Existing user found for email {0}'.format(email))
+                logging.info("Existing user found for email {0}".format(email))
             else:
-                logging.error('Provided Email is not valid user email')
+                logging.error("Provided Email is not valid user email")
                 return None
         except user_model.DoesNotExist:
-            logging.error(
-                'Existing user not found for email {0}'.format(email)
-            )
+            logging.error("Existing user not found for email {0}".format(email))
             return None
         else:
-            password = kwargs['password']
+            password = kwargs["password"]
             if user.check_password(password):
-                logging.info(
-                    'Password check succeeded for email {0}'.format(email)
-                )
+                logging.info("Password check succeeded for email {0}".format(email))
                 return user
-            logging.error('Password check failed for email {0}'.format(email))
+            logging.error("Password check failed for email {0}".format(email))

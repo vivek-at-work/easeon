@@ -25,7 +25,7 @@ from tokens.urls import token_router
 
 # from reports.urls import scheduler_router
 
-API_GATEWAY = settings.ENV('API_GATEWAY')
+API_GATEWAY = settings.ENV("API_GATEWAY")
 ROUTER.extend(core_router)
 ROUTER.extend(customer_router)
 ROUTER.extend(devices_router)
@@ -40,38 +40,31 @@ schema_view = get_swagger_view(title=settings.SITE_HEADER)
 
 
 urlpatterns = [
-    url(r'{0}/admin/'.format(API_GATEWAY), BASE_SITE.urls),
+    url(r"{0}/admin/".format(API_GATEWAY), BASE_SITE.urls),
     url(
-        r'{0}/{1}authentication/'.format(
-            API_GATEWAY, settings.CURRENT_API_URL
-        ),
-        include(('core.urls', 'core'), namespace='core'),
+        r"{0}/{1}authentication/".format(API_GATEWAY, settings.CURRENT_API_URL),
+        include(("core.urls", "core"), namespace="core"),
     ),
     url(
-        r'{0}/{1}gsx/'.format(API_GATEWAY, settings.CURRENT_API_URL),
-        include(('gsx.urls', 'gsx'), namespace='gsx'),
+        r"{0}/{1}gsx/".format(API_GATEWAY, settings.CURRENT_API_URL),
+        include(("gsx.urls", "gsx"), namespace="gsx"),
     ),
     path(
-        'backend/request_account_approval_from_admin/<str:uid>/<str:token>/',
+        "backend/request_account_approval_from_admin/<str:uid>/<str:token>/",
         verify_email_and_request_account_approval_from_admin,
-        name='request_account_approval_from_admin',
+        name="request_account_approval_from_admin",
     ),
     path(
-        'backend/approval_from_admin/<str:uid>/<str:token>/',
+        "backend/approval_from_admin/<str:uid>/<str:token>/",
         account_approval_from_admin_done,
-        name='account_approval_from_admin_done',
+        name="account_approval_from_admin_done",
+    ),
+    url(r"{0}/{1}".format(API_GATEWAY, settings.CURRENT_API_URL), include(ROUTER.urls)),
+    url(
+        r"backend/api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),
     url(
-        r'{0}/{1}'.format(API_GATEWAY, settings.CURRENT_API_URL),
-        include(ROUTER.urls),
-    ),
-    url(
-        r'backend/api-auth/',
-        include('rest_framework.urls', namespace='rest_framework'),
-    ),
-    url(
-        r'backend/oauth/',
-        include('oauth2_provider.urls', namespace='oauth2_provider'),
+        r"backend/oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")
     ),
 ]
 

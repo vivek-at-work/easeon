@@ -14,9 +14,9 @@ class BooleanToTextField(fields.BooleanField):
 
     def to_representation(self, value):
         if value in self.TRUE_VALUES:
-            return 'yes'
+            return "yes"
         elif value in self.FALSE_VALUES:
-            return 'no'
+            return "no"
         if value in self.NULL_VALUES and self.allow_null:
             return None
         return bool(value)

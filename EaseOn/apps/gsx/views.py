@@ -3,24 +3,25 @@
 from __future__ import unicode_literals
 
 import logging
-from gsx import serializers
-from rest_framework import permissions, status, viewsets, response
+
 from core.permissions import IsOperatorOrSuperUser
+from gsx import serializers
+from rest_framework import permissions, response, status, viewsets
 from rest_framework.permissions import AllowAny
 
 
 class GSXViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     serializers_dict = {
-        'warranty': serializers.DeviceSerializer,
-        'diagnostic_suites': serializers.DiagnosticSuitesSerializer,
-        'repair_eligibility': serializers.RepairEligibilitySerializer,
-        'diagnostics_lookup': serializers.DiagnosticsLookupSerializer,
-        'run_diagnosis_suite': serializers.RunDiagnosticsSerializer,
-        'diagnostics_status': serializers.DiagnosticsStatusSerializer,
-        'repair_summary': serializers.RepairSummarySerializer,
-        'repair_details': serializers.RepairDetailsSerializer,
-        'repair_audit': serializers.RepairAuditSerializer,
+        "warranty": serializers.DeviceSerializer,
+        "diagnostic_suites": serializers.DiagnosticSuitesSerializer,
+        "repair_eligibility": serializers.RepairEligibilitySerializer,
+        "diagnostics_lookup": serializers.DiagnosticsLookupSerializer,
+        "run_diagnosis_suite": serializers.RunDiagnosticsSerializer,
+        "diagnostics_status": serializers.DiagnosticsStatusSerializer,
+        "repair_summary": serializers.RepairSummarySerializer,
+        "repair_details": serializers.RepairDetailsSerializer,
+        "repair_audit": serializers.RepairAuditSerializer,
         "part_summary": serializers.PartSummarySerializer,
         "repair_product_componentissue": serializers.ComponentIssueSerializer,
         "content_article_lookup": serializers.ContentArticleLookupSerializer,
@@ -34,9 +35,7 @@ class GSXViewSet(viewsets.GenericViewSet):
     }
 
     def get_serializer_class(self):
-        return self.serializers_dict.get(
-            self.action, serializers.NoneSerializer
-        )
+        return self.serializers_dict.get(self.action, serializers.NoneSerializer)
 
     def _validate(self, serializer, data):
         """
@@ -45,9 +44,7 @@ class GSXViewSet(viewsets.GenericViewSet):
         :return: serializer instance.
         """
 
-        serializer_instance = serializer(
-            data=data, context={'request': self.request}
-        )
+        serializer_instance = serializer(data=data, context={"request": self.request})
         serializer_instance.is_valid(raise_exception=True)
         return serializer_instance.save()
 

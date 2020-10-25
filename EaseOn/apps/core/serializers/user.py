@@ -19,31 +19,31 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = USER_MODEL
         fields = (
-            'id',
-            'url',
-            'email',
-            'first_name',
-            'city',
-            'pin_code',
-            'last_name',
-            'full_name',
-            'date_joined',
-            'contact_number',
-            'is_active',
-            'is_superuser',
-            'gsx_technician_id',
-            'gsx_ship_to',
-            'gsx_user_name',
-            'can_update',
-            'role',
-            'chat_user_id',
+            "id",
+            "url",
+            "email",
+            "first_name",
+            "city",
+            "pin_code",
+            "last_name",
+            "full_name",
+            "date_joined",
+            "contact_number",
+            "is_active",
+            "is_superuser",
+            "gsx_technician_id",
+            "gsx_ship_to",
+            "gsx_user_name",
+            "can_update",
+            "role",
+            "chat_user_id",
         )
 
     def get_can_update(self, obj):
-        requesting_user = self.context['request'].user
-        return (
-            requesting_user.is_superuser or requesting_user.is_privileged
-        ) and (requesting_user.id != obj.id)
+        requesting_user = self.context["request"].user
+        return (requesting_user.is_superuser or requesting_user.is_privileged) and (
+            requesting_user.id != obj.id
+        )
 
 
 class ChangeUserRoleSerializer(serializers.Serializer):

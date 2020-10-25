@@ -6,21 +6,10 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('tickets', '0003_gsxinfo'),
-    ]
+    dependencies = [("tickets", "0003_gsxinfo")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='delivery',
-            name='comptia_code',
-        ),
-        migrations.RemoveField(
-            model_name='delivery',
-            name='gsx_reference_number',
-        ),
-        migrations.RemoveField(
-            model_name='delivery',
-            name='gsx_repair_type',
-        ),
+        migrations.RemoveField(model_name="delivery", name="comptia_code"),
+        migrations.RemoveField(model_name="delivery", name="gsx_reference_number"),
+        migrations.RemoveField(model_name="delivery", name="gsx_repair_type"),
     ]

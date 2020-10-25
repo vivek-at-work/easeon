@@ -12,21 +12,21 @@ class HolidaySerializer(BaseSerializer):
         Check that if record already exists..
         """
         count = Holiday.objects.filter(
-            organization=data['organization'], date=data['date']
+            organization=data["organization"], date=data["date"]
         ).count()
         if count:
-            raise serializers.ValidationError('Holiday Details Already Exists')
+            raise serializers.ValidationError("Holiday Details Already Exists")
         return data
 
     class Meta(BaseMeta):
         model = Holiday
         fields = (
-            'url',
-            'created_by',
-            'id',
-            'created_at',
-            'is_deleted',
-            'date',
-            'description',
-            'organization',
+            "url",
+            "created_by",
+            "id",
+            "created_at",
+            "is_deleted",
+            "date",
+            "description",
+            "organization",
         )

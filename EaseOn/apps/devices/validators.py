@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import re
+
 from core import utils
 from devices.restricted_devices import restricted_identifiers
-from django.db.models import Q
-from django.core.exceptions import ValidationError
-from rest_framework import serializers
 from django.apps import apps
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.db.models import Q
+from rest_framework import serializers
 
 
 def gsx_validate(value, what=None):
@@ -36,20 +37,18 @@ def gsx_validate(value, what=None):
     result = None
 
     if not isinstance(value, str):
-        raise ValueError(
-            '%s is not valid input (%s != string)' % (value, type(value))
-        )
+        raise ValueError("%s is not valid input (%s != string)" % (value, type(value)))
 
     rex = {
-        'partNumber': r'^([A-Z]{1,4})?\d{1,3}\-?(\d{1,5}|[A-Z]{1,2})(/[A-Z])?$',
-        'serialNumber': r'^[A-Z0-9]{11,12}$',
-        'eeeCode': r'^[A-Z0-9]{3,4}$',
-        'returnOrder': r'^7\d{9}$',
-        'repairNumber': r'^\d{12}$',
-        'dispatchId': r'^[A-Z]+\d{9,15}$',
-        'alternateDeviceId': r'^\d{15}$',
-        'diagnosticEventNumber': r'^\d{23}$',
-        'productName': r'^i?Mac',
+        "partNumber": r"^([A-Z]{1,4})?\d{1,3}\-?(\d{1,5}|[A-Z]{1,2})(/[A-Z])?$",
+        "serialNumber": r"^[A-Z0-9]{11,12}$",
+        "eeeCode": r"^[A-Z0-9]{3,4}$",
+        "returnOrder": r"^7\d{9}$",
+        "repairNumber": r"^\d{12}$",
+        "dispatchId": r"^[A-Z]+\d{9,15}$",
+        "alternateDeviceId": r"^\d{15}$",
+        "diagnosticEventNumber": r"^\d{23}$",
+        "productName": r"^i?Mac",
     }
 
     for k, v in rex.items():
@@ -64,10 +63,10 @@ def validate_identifier(value):
     """
     Check that device identifier is valid.
     """
-    is_valid_alternate_device_id = gsx_validate(value, 'alternateDeviceId')
-    is_valid_sn = gsx_validate(value, 'serialNumber')
+    is_valid_alternate_device_id = gsx_validate(value, "alternateDeviceId")
+    is_valid_sn = gsx_validate(value, "serialNumber")
     if not is_valid_alternate_device_id and not is_valid_sn:
-        raise ValidationError('Not a valid serial number or IMEI number.')
+        raise ValidationError("Not a valid serial number or IMEI number.")
 
 
 def validate_open_tickets(value):
@@ -75,16 +74,15 @@ def validate_open_tickets(value):
     if value not in settings.EXEMPTED_DEVICE:
         open_tickets = (
             Ticket.objects.filter(
-                Q(device__serial_number=value)
-                | Q(device__alternate_device_id=value)
+                Q(device__serial_number=value) | Q(device__alternate_device_id=value)
             )
             .open()
-            .values_list('reference_number', flat=True)
+            .values_list("reference_number", flat=True)
         )
         if open_tickets:
             raise ValidationError(
                 """This Device has pending open tickets.Close them before proceeding for a new one {0}""".format(
-                    ','.join(open_tickets)
+                    ",".join(open_tickets)
                 )
             )
 

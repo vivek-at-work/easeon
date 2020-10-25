@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Serializer for Service Provider Membership Models"""
-from core.serializers import BaseSerializer
 from core.models import OPERATOR
+from core.serializers import BaseSerializer
 from organizations.models import OrganizationRights
 from rest_framework import serializers
 
@@ -9,10 +9,10 @@ from rest_framework import serializers
 class OrganizationRightsSerializer(BaseSerializer):
     is_active = serializers.ReadOnlyField()
     organization_code = serializers.SlugRelatedField(
-        read_only=True, slug_field='code', source='organization'
+        read_only=True, slug_field="code", source="organization"
     )
     organization_name = serializers.SlugRelatedField(
-        read_only=True, slug_field='name', source='organization'
+        read_only=True, slug_field="name", source="organization"
     )
     can_toggle_status = serializers.SerializerMethodField()
 
@@ -29,38 +29,36 @@ class OrganizationRightsSerializer(BaseSerializer):
             and value != self.get_user()
         ):
             raise serializers.ValidationError(
-                'Can not create/update rights for other users.'
+                "Can not create/update rights for other users."
             )
         if value.role != OPERATOR:
             raise serializers.ValidationError(
-                'Can not create/update rights for user who is not an Operator.'
+                "Can not create/update rights for user who is not an Operator."
             )
 
         return value
 
     def get_can_toggle_status(self, obj):
-        return (
-            self.get_user().is_superuser or self.get_user().is_privileged
-        ) or (obj.organization.manager == self.get_user())
+        return (self.get_user().is_superuser or self.get_user().is_privileged) or (
+            obj.organization.manager == self.get_user()
+        )
 
     def validate(self, data):
         """
         Check that start is before finish.
         """
-        if data['organization'] in data['user'].managed_locations.all():
+        if data["organization"] in data["user"].managed_locations.all():
             raise serializers.ValidationError(
                 """
         Can not  assign rights for the user {} as user is assigned as manager
         for organization {}
         """.format(
-                    data['user'], data['organization']
+                    data["user"], data["organization"]
                 )
             )
         if not self.instance:
             if (
-                data['user']
-                .locations.filter(organization=data['organization'])
-                .count()
+                data["user"].locations.filter(organization=data["organization"]).count()
                 > 0
             ):
                 raise serializers.ValidationError(
@@ -68,7 +66,7 @@ class OrganizationRightsSerializer(BaseSerializer):
             Can not assign rights for the user {} as user has already been added
             for organization {}
             """.format(
-                        data['user'], data['organization']
+                        data["user"], data["organization"]
                     )
                 )
 
@@ -79,26 +77,26 @@ class OrganizationRightsSerializer(BaseSerializer):
         #     raise serializers.ValidationError(
         #         "Provide some rights to the user for this membership.")
 
-        if data['user'].is_superuser:
-            data['is_active'] = True
+        if data["user"].is_superuser:
+            data["is_active"] = True
         return data
 
     class Meta(object):
         model = OrganizationRights
-        extra_kwargs = {'user': {'default': serializers.CurrentUserDefault()}}
+        extra_kwargs = {"user": {"default": serializers.CurrentUserDefault()}}
         fields = [
-            'url',
-            'user',
-            'organization',
-            'tickets',
-            'repair_inventory',
-            'loaner_inventory',
-            'non_serialized_inventory',
-            'daily_status_report_download',
-            'daily_status_report_download_with_customer_info',
-            'customer_info_download',
-            'is_active',
-            'organization_code',
-            'can_toggle_status',
-            'organization_name',
+            "url",
+            "user",
+            "organization",
+            "tickets",
+            "repair_inventory",
+            "loaner_inventory",
+            "non_serialized_inventory",
+            "daily_status_report_download",
+            "daily_status_report_download_with_customer_info",
+            "customer_info_download",
+            "is_active",
+            "organization_code",
+            "can_toggle_status",
+            "organization_name",
         ]

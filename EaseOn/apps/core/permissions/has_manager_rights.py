@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .superuser import SUPER_USER, IsOperatorOrSuperUser, PRIVILEGED
+from .superuser import PRIVILEGED, SUPER_USER, IsOperatorOrSuperUser
 
 
 class HasManagerRightsToUpdateOrDelete(IsOperatorOrSuperUser):
@@ -12,12 +12,12 @@ class HasManagerRightsToUpdateOrDelete(IsOperatorOrSuperUser):
             return True
 
         if (
-            view.action in ['destroy', 'update']
+            view.action in ["destroy", "update"]
             and request.user
             and request.user.is_authenticated
         ):
-            if hasattr(obj, 'organization') and obj.organization is not None:
+            if hasattr(obj, "organization") and obj.organization is not None:
                 return request.user == obj.organization.manager
-            elif hasattr(obj, 'ticket') and obj.ticket is not None:
+            elif hasattr(obj, "ticket") and obj.ticket is not None:
                 return request.user == obj.ticket.organization.manager
         return True

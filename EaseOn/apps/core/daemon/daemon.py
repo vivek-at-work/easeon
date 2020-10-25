@@ -237,7 +237,7 @@ class DaemonContext:
     def __init__(
         self,
         chroot_directory=None,
-        working_directory='/',
+        working_directory="/",
         umask=0,
         uid=None,
         gid=None,
@@ -438,7 +438,7 @@ class DaemonContext:
 
         """
         exception = SystemExit(
-            'Terminating on signal {signal_number!r}'.format(
+            "Terminating on signal {signal_number!r}".format(
                 signal_number=signal_number
             )
         )
@@ -467,7 +467,7 @@ class DaemonContext:
         files_preserve.extend(
             item
             for item in {self.stdin, self.stdout, self.stderr}
-            if hasattr(item, 'fileno')
+            if hasattr(item, "fileno")
         )
 
         exclude_descriptors = set()
@@ -521,9 +521,7 @@ class DaemonContext:
         return signal_handler_map
 
 
-def get_stream_file_descriptors(
-    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr
-):
+def get_stream_file_descriptors(stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr):
     """Get the set of file descriptors for the process streams.
 
     :stdin: The input stream for the process (default:
@@ -564,7 +562,7 @@ def _get_file_descriptor(obj):
     either case, return ``None``.
     """
     file_descriptor = None
-    if hasattr(obj, 'fileno'):
+    if hasattr(obj, "fileno"):
         try:
             file_descriptor = obj.fileno()
         except ValueError:
@@ -585,7 +583,7 @@ def change_working_directory(directory):
         os.chdir(directory)
     except Exception as exc:
         error = DaemonOSEnvironmentError(
-            'Unable to change working directory ({exc})'.format(exc=exc)
+            "Unable to change working directory ({exc})".format(exc=exc)
         )
         raise error
 
@@ -606,7 +604,7 @@ def change_root_directory(directory):
         os.chroot(directory)
     except Exception as exc:
         error = DaemonOSEnvironmentError(
-            'Unable to change root directory ({exc})'.format(exc=exc)
+            "Unable to change root directory ({exc})".format(exc=exc)
         )
         raise error
 
@@ -622,7 +620,7 @@ def change_file_creation_mask(mask):
         os.umask(mask)
     except Exception as exc:
         error = DaemonOSEnvironmentError(
-            'Unable to change file creation mask ({exc})'.format(exc=exc)
+            "Unable to change file creation mask ({exc})".format(exc=exc)
         )
         raise error
 
@@ -671,7 +669,7 @@ def change_process_owner(uid, gid, initgroups=False):
         os.setuid(uid)
     except Exception as exc:
         error = DaemonOSEnvironmentError(
-            'Unable to change process owner ({exc})'.format(exc=exc)
+            "Unable to change process owner ({exc})".format(exc=exc)
         )
         raise error
 
@@ -693,8 +691,8 @@ def prevent_core_dump():
         resource.getrlimit(core_resource)
     except ValueError as exc:
         error = DaemonOSEnvironmentError(
-            'System does not support RLIMIT_CORE resource limit'
-            ' ({exc})'.format(exc=exc)
+            "System does not support RLIMIT_CORE resource limit"
+            " ({exc})".format(exc=exc)
         )
         raise error
 
@@ -732,15 +730,15 @@ def detach_process_context():
                 os._exit(0)
         except OSError as exc:
             error = DaemonProcessDetachError(
-                '{message}: [{exc.errno:d}] {exc.strerror}'.format(
+                "{message}: [{exc.errno:d}] {exc.strerror}".format(
                     message=error_message, exc=exc
                 )
             )
             raise error
 
-    fork_then_exit_parent(error_message='Failed first fork')
+    fork_then_exit_parent(error_message="Failed first fork")
     os.setsid()
-    fork_then_exit_parent(error_message='Failed second fork')
+    fork_then_exit_parent(error_message="Failed second fork")
 
 
 def is_process_started_by_init():
@@ -854,9 +852,7 @@ def close_file_descriptor_if_open(fd):
             pass
         else:
             error = DaemonOSEnvironmentError(
-                'Failed to close file descriptor {fd:d} ({exc})'.format(
-                    fd=fd, exc=exc
-                )
+                "Failed to close file descriptor {fd:d} ({exc})".format(fd=fd, exc=exc)
             )
             raise error
 
@@ -905,9 +901,7 @@ def _get_candidate_file_descriptors(exclude):
     return candidates
 
 
-FileDescriptorRange = collections.namedtuple(
-    'FileDescriptorRange', ['low', 'high']
-)
+FileDescriptorRange = collections.namedtuple("FileDescriptorRange", ["low", "high"])
 
 
 def _get_candidate_file_descriptor_ranges(exclude):
@@ -935,9 +929,7 @@ def _get_candidate_file_descriptor_ranges(exclude):
             ranges.append(candidate_range)
 
     this_range = (
-        FileDescriptorRange(
-            low=min(candidates_list), high=(min(candidates_list) + 1)
-        )
+        FileDescriptorRange(low=min(candidates_list), high=(min(candidates_list) + 1))
         if candidates_list
         else FileDescriptorRange(low=0, high=0)
     )
@@ -1020,10 +1012,10 @@ def make_default_signal_map():
 
     """
     name_map = {
-        'SIGTSTP': None,
-        'SIGTTIN': None,
-        'SIGTTOU': None,
-        'SIGTERM': 'terminate',
+        "SIGTSTP": None,
+        "SIGTTIN": None,
+        "SIGTTOU": None,
+        "SIGTERM": "terminate",
     }
     signal_map = dict(
         (getattr(signal, name), target)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
+from django.db.models import Q
 from inventory.models import (
     LoanerInventoryItem,
     LoanerItemPenaltyAmount,
@@ -9,26 +10,25 @@ from lists.models import get_list_choices
 from organizations.models import Organization
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from django.db.models import Q
 
 
 class LoanerItemListSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = LoanerInventoryItem
         read_only_fields = [
-            'id',
-            'url',
-            'created_by',
-            'created_at',
-            'is_deleted',
-            'guid',
-            'updated_at',
-            'deleted_at',
-            'version',
-            'last_visit_on',
-            'last_modified_by',
-            'consumed',
-            'blocked',
+            "id",
+            "url",
+            "created_by",
+            "created_at",
+            "is_deleted",
+            "guid",
+            "updated_at",
+            "deleted_at",
+            "version",
+            "last_visit_on",
+            "last_modified_by",
+            "consumed",
+            "blocked",
         ]
 
 
@@ -38,7 +38,7 @@ class LoanerItemSerializer(BaseSerializer):
         if not self.instance:
             if LoanerInventoryItem.objects.all().filter(**d).exists():
                 raise serializers.ValidationError(
-                    '{0} Already been used with previous existing Loaner Inventory Item .'.format(
+                    "{0} Already been used with previous existing Loaner Inventory Item .".format(
                         key
                     )
                 )
@@ -50,39 +50,33 @@ class LoanerItemSerializer(BaseSerializer):
                 .exists()
             ):
                 raise serializers.ValidationError(
-                    '{0} Already been used with previous existing Loaner Inventory Item.'.format(
+                    "{0} Already been used with previous existing Loaner Inventory Item.".format(
                         key
                     )
                 )
         if RepairInventoryItem.objects.all().filter(**d).exists():
             raise serializers.ValidationError(
-                '{0} Already been used with previous existing Repair Inventory Item .'.format(
+                "{0} Already been used with previous existing Repair Inventory Item .".format(
                     key
                 )
             )
 
     def validate_serial_number(self, value):
-        self.validate_uniques('serial_number', value)
+        self.validate_uniques("serial_number", value)
         return value
 
     def validate_part_number(self, value):
-        if not LoanerItemPenaltyAmount.objects.filter(
-            part_number=value
-        ).exists():
+        if not LoanerItemPenaltyAmount.objects.filter(part_number=value).exists():
             raise serializers.ValidationError(
-                'No Penalty Details exists for this part number {} .'.format(
-                    value
-                )
+                "No Penalty Details exists for this part number {} .".format(value)
             )
         return value
 
     penalty = serializers.JSONField(read_only=True)
 
-    serial_number = serializers.CharField(
-        max_length=255,
-    )
+    serial_number = serializers.CharField(max_length=255)
     part_number = serializers.ChoiceField(
-        choices=get_list_choices('LOANER_INVENTORY_PART_NUMBERS')
+        choices=get_list_choices("LOANER_INVENTORY_PART_NUMBERS")
     )
 
     def __init__(self, *args, **kwargs):
@@ -99,48 +93,48 @@ class LoanerItemSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = LoanerInventoryItem
         read_only_fields = [
-            'id',
-            'url',
-            'created_by',
-            'created_at',
-            'is_deleted',
-            'guid',
-            'updated_at',
-            'deleted_at',
-            'version',
-            'last_visit_on',
-            'last_modified_by',
-            'consumed',
-            'blocked',
+            "id",
+            "url",
+            "created_by",
+            "created_at",
+            "is_deleted",
+            "guid",
+            "updated_at",
+            "deleted_at",
+            "version",
+            "last_visit_on",
+            "last_modified_by",
+            "consumed",
+            "blocked",
         ]
 
 
 class PenaltyAmountSerializer(BaseSerializer):
     part_number = serializers.ChoiceField(
-        choices=get_list_choices('LOANER_INVENTORY_PART_NUMBERS')
+        choices=get_list_choices("LOANER_INVENTORY_PART_NUMBERS")
     )
     reason = serializers.ChoiceField(
-        choices=get_list_choices('LOANER_INVENTORY_PENALTY_REASONS')
+        choices=get_list_choices("LOANER_INVENTORY_PENALTY_REASONS")
     )
 
     class Meta(BaseMeta):
         model = LoanerItemPenaltyAmount
         read_only_fields = [
-            'id',
-            'url',
-            'created_by',
-            'created_at',
-            'is_deleted',
-            'guid',
-            'updated_at',
-            'deleted_at',
-            'version',
-            'last_modified_by',
+            "id",
+            "url",
+            "created_by",
+            "created_at",
+            "is_deleted",
+            "guid",
+            "updated_at",
+            "deleted_at",
+            "version",
+            "last_modified_by",
         ]
         validators = [
             UniqueTogetherValidator(
                 queryset=LoanerItemPenaltyAmount.objects.all(),
-                message='Already Found Matching Penalty Entry.',
-                fields=['part_number', 'reason'],
+                message="Already Found Matching Penalty Entry.",
+                fields=["part_number", "reason"],
             )
         ]

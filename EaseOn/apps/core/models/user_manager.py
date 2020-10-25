@@ -3,7 +3,7 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    'User Manager Class used to create user from command line.'
+    "User Manager Class used to create user from command line."
 
     def create_user(
         self,
@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
         Creates and saves a User with the given arguments.
         """
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
 
         user = self.model(
             email=self.normalize_email(email),
@@ -68,7 +68,7 @@ class UserManager(BaseUserManager):
         Creates and saves a superuser with the given arguments.
         """
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
         user = self.model(
             email=self.normalize_email(email),
             username=username,
@@ -98,4 +98,4 @@ class UserManager(BaseUserManager):
         return self.get_queryset().exclude(is_admin=True)
 
     def all_superusers_email(self):
-        return self.all_superusers().values_list('email', flat=True)
+        return self.all_superusers().values_list("email", flat=True)

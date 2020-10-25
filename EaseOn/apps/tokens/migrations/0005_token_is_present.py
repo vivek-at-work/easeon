@@ -6,14 +6,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('tokens', '0004_token_invite_sent_on'),
-    ]
+    dependencies = [("tokens", "0004_token_invite_sent_on")]
 
     operations = [
         migrations.AddField(
-            model_name='token',
-            name='is_present',
+            model_name="token",
+            name="is_present",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

@@ -13,29 +13,27 @@ class OrderLine(BaseModel):
     """A OrderLine"""
 
     ticket = models.ForeignKey(
-        Ticket, related_name='order_lines', on_delete=models.CASCADE
+        Ticket, related_name="order_lines", on_delete=models.CASCADE
     )
     kbb_serial_number = models.CharField(max_length=100)
     quantity = models.IntegerField(default=1)
     amount = models.FloatField(default=0.0)
     inventory_item = models.ForeignKey(
-        RepairInventoryItem,
-        related_name='order_line',
-        on_delete=models.DO_NOTHING,
+        RepairInventoryItem, related_name="order_line", on_delete=models.DO_NOTHING
     )
 
     class Meta:
-        verbose_name = 'Replacement Spare'
-        verbose_name_plural = 'Replacement Spares'
+        verbose_name = "Replacement Spare"
+        verbose_name_plural = "Replacement Spares"
 
     def get_readonly_fields(self, request, obj=None):
         if obj:
-            return ['inventory_item']
+            return ["inventory_item"]
         else:
             return []
 
     def __str__(self):
-        return '{0}'.format(self.kgb_serial_number)
+        return "{0}".format(self.kgb_serial_number)
 
 
 @receiver(post_save, sender=OrderLine)
@@ -61,20 +59,18 @@ class SerializableOrderLine(BaseModel):
     """A OrderLine"""
 
     ticket = models.ForeignKey(
-        Ticket,
-        related_name='serializable_order_lines',
-        on_delete=models.CASCADE,
+        Ticket, related_name="serializable_order_lines", on_delete=models.CASCADE
     )
     description = models.CharField(max_length=100)
     quantity = models.IntegerField(default=1)
     amount = models.FloatField(default=0.0)
 
     class Meta:
-        verbose_name = 'Serializable Replacement Spare'
-        verbose_name_plural = 'Serializable Replacement Spares'
+        verbose_name = "Serializable Replacement Spare"
+        verbose_name_plural = "Serializable Replacement Spares"
 
     def __str__(self):
-        return '{0}'.format(self.description)
+        return "{0}".format(self.description)
 
 
 @receiver(post_save, sender=SerializableOrderLine)
@@ -84,9 +80,7 @@ def reduce_inventory_item(sender, instance, created, **kwargs):
         quantity = instance.quantity
         organization = instance.ticket.organization
         entries = SerializableInventoryItem.objects.filter(
-            description=description,
-            organization=organization,
-            available_quantity__gt=0,
+            description=description, organization=organization, available_quantity__gt=0
         )
         consumed = 0
         for e in entries:

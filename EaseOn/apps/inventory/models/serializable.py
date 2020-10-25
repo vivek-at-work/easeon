@@ -9,7 +9,7 @@ from organizations.models import Organization
 class SerializableInventoryItem(BaseModel):
     organization = models.ForeignKey(
         Organization,
-        related_name='serializable_inventory_items',
+        related_name="serializable_inventory_items",
         on_delete=models.CASCADE,
     )
     description = models.CharField(max_length=100)

@@ -6,15 +6,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('tickets', '0001_initial'),
-    ]
+    dependencies = [("tickets", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='delivery',
-            name='comptia_code',
-            field=models.CharField(default='NA', max_length=50),
+            model_name="delivery",
+            name="comptia_code",
+            field=models.CharField(default="NA", max_length=50),
             preserve_default=False,
-        ),
+        )
     ]

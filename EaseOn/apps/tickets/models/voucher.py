@@ -28,7 +28,7 @@ class Voucher(BaseModel):
     note = models.CharField(blank=True, max_length=2400)
     is_cancelled = models.BooleanField(default=False)
     ticket = models.ForeignKey(
-        Ticket, related_name='vouchers', on_delete=models.CASCADE
+        Ticket, related_name="vouchers", on_delete=models.CASCADE
     )
 
     @property
@@ -39,18 +39,18 @@ class Voucher(BaseModel):
     def actual_payment_modes(self):
         mode = []
         if self.cash:
-            mode.append('Cash')
+            mode.append("Cash")
         if self.cheque:
-            mode.append('Cheque')
+            mode.append("Cheque")
         if self.online_payment:
-            mode.append('Online Payment')
+            mode.append("Online Payment")
         if self.cc:
-            mode.append('Credit Card')
+            mode.append("Credit Card")
         return mode
 
     class Meta:
-        verbose_name = 'Voucher'
-        verbose_name_plural = 'Vouchers'
+        verbose_name = "Voucher"
+        verbose_name_plural = "Vouchers"
 
     def __unicode__(self):
         return str(self.reference_number)
@@ -60,7 +60,7 @@ class Voucher(BaseModel):
 def set_reference_number_for_voucher(sender, instance, *args, **kwargs):
     if not instance.reference_number:
         suffix = instance.ticket.vouchers.count() + 1
-        reference_number = '{0}-{1}-{2}'.format(
+        reference_number = "{0}-{1}-{2}".format(
             instance.ticket.organization.code, instance.ticket.id, suffix
         )
         instance.reference_number = reference_number
@@ -68,8 +68,8 @@ def set_reference_number_for_voucher(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=Voucher)
 def send_mail_to_subscribers(sender, instance, created, **kwargs):
-    template = settings.EMAIL_TEMPLATES.get('alert')
-    summary = 'Please find the voucher details on ticket {0} as bellow'.format(
+    template = settings.EMAIL_TEMPLATES.get("alert")
+    summary = "Please find the voucher details on ticket {0} as bellow".format(
         instance.ticket
     )
     details = """Towards = {0}
@@ -80,27 +80,23 @@ def send_mail_to_subscribers(sender, instance, created, **kwargs):
 
     """.format(
         instance.towards,
-        ','.join(instance.actual_payment_modes),
+        ",".join(instance.actual_payment_modes),
         instance.total_amount,
         instance.note,
-        'Yes' if instance.is_cancelled else 'NO',
+        "Yes" if instance.is_cancelled else "NO",
     )
     if created:
-        subject = 'New Voucher on Ticket {} from {} '.format(
+        subject = "New Voucher on Ticket {} from {} ".format(
             instance.ticket, instance.created_by
         )
     else:
-        subject = 'Existing Voucher on Ticket {}  updated from {} '.format(
+        subject = "Existing Voucher on Ticket {}  updated from {} ".format(
             instance.ticket, instance.last_modified_by
         )
-    context = {
-        'receiver_short_name': 'All',
-        'summary': summary,
-        'detail': details,
-    }
+    context = {"receiver_short_name": "All", "summary": summary, "detail": details}
     utils.send_mail(
         subject,
         template,
-        list(instance.ticket.subscribers.values_list('email', flat=True)),
+        list(instance.ticket.subscribers.values_list("email", flat=True)),
         **context
     )

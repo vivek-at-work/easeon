@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from core import viewsets
+from core.permissions import HasManagerRightsToUpdateOrDelete
 from django.db import transaction
 from rest_framework import decorators, response, status
 from tickets import models, serializers
-from core.permissions import HasManagerRightsToUpdateOrDelete
 
 
 class OrderLineViewSet(viewsets.BaseBulkCreateViewSet):
@@ -22,9 +22,7 @@ class OrderLineViewSet(viewsets.BaseBulkCreateViewSet):
                 record.delete()
                 record.inventory_item.consumed = False
                 record.inventory_item.save()
-                serializer = self.serializer_class(
-                    record, context={'request': request}
-                )
+                serializer = self.serializer_class(record, context={"request": request})
                 return response.Response(serializer.data)
         except Exception:
             pass
@@ -40,9 +38,7 @@ class SerializableOrderLineViewSet(viewsets.BaseViewSet):
             record = self.get_object()
             with transaction.atomic():
                 record.delete()
-                serializer = self.serializer_class(
-                    record, context={'request': request}
-                )
+                serializer = self.serializer_class(record, context={"request": request})
                 return response.Response(serializer.data)
         except Exception:
             pass

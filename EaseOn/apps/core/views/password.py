@@ -6,13 +6,13 @@ from core.serializers import (
     PasswordResetConfirmSerializer,
     PasswordResetSerializer,
 )
-from rest_framework import generics, permissions, response, status
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
+from rest_framework import generics, permissions, response, status
 
 sensitive_post_parameters_m = method_decorator(  # pylint:disable=C0103
     sensitive_post_parameters(
-        'password', 'old_password', 'new_password1', 'new_password2'
+        "password", "old_password", "new_password1", "new_password2"
     )
 )
 
@@ -34,24 +34,22 @@ class PasswordResetView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             logging.info(
-                'Sent password reset link for request data {}'.format(
-                    request.data
-                )
+                "Sent password reset link for request data {}".format(request.data)
             )
             return response.Response(
                 {
-                    'detail': 'Password reset e-mail has been sent to your mail box please follow the same.'
+                    "detail": "Password reset e-mail has been sent to your mail box please follow the same."
                 },
                 status=status.HTTP_200_OK,
             )
         except Exception as identifier:
             logging.error(
-                'Could not send password reset link for request data {} due to {}'.format(
+                "Could not send password reset link for request data {} due to {}".format(
                     request.data, identifier
                 )
             )
             return response.Response(
-                {'detail': 'Could not send password reset link.'},
+                {"detail": "Could not send password reset link."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
@@ -79,14 +77,14 @@ class PasswordResetConfirmView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             logging.info(
-                'password reset done for request data {} '.format(request.data)
+                "password reset done for request data {} ".format(request.data)
             )
             return response.Response(
-                {'detail': 'Password has been reset with the new password.'}
+                {"detail": "Password has been reset with the new password."}
             )
         except Exception as identifier:
             logging.error(
-                'password reset failed for request data {} due to {} '.format(
+                "password reset failed for request data {} due to {} ".format(
                     request.data, identifier
                 )
             )
@@ -114,21 +112,19 @@ class PasswordChangeView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             logging.info(
-                'Password change successfull for request data {} for user {} '.format(
+                "Password change successfull for request data {} for user {} ".format(
                     request.data, request.user
                 )
             )
-            return response.Response(
-                {'detail': 'New password has been updated.'}
-            )
+            return response.Response({"detail": "New password has been updated."})
         except Exception as identifier:
             logging.error(
-                'password change failed for request data {} for user {} due to {} '.format(
+                "password change failed for request data {} for user {} due to {} ".format(
                     request.data, request.user, identifier
                 )
             )
             return response.Response(
-                {'detail': 'Password change failed.'},
+                {"detail": "Password change failed."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

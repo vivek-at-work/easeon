@@ -39,8 +39,7 @@ __metaclass__ = type
 
 
 warnings.warn(
-    'The ‘runner’ module is not a supported API for this library.',
-    DeprecationWarning,
+    "The ‘runner’ module is not a supported API for this library.", DeprecationWarning
 )
 
 
@@ -83,7 +82,7 @@ class DaemonRunner:
 
     """
 
-    start_message = 'started with pid {pid:d}'
+    start_message = "started with pid {pid:d}"
 
     def __init__(self, app):
         """Set up the parameters of a new runner.
@@ -115,9 +114,7 @@ class DaemonRunner:
 
         self.pidfile = None
         if app.pidfile_path is not None:
-            self.pidfile = make_pidlockfile(
-                app.pidfile_path, app.pidfile_timeout
-            )
+            self.pidfile = make_pidlockfile(app.pidfile_path, app.pidfile_timeout)
         self.daemon_context.pidfile = self.pidfile
 
     def _open_streams_from_app_stream_paths(self, app):
@@ -130,9 +127,9 @@ class DaemonRunner:
         types, from each of the corresponding filesystem paths
         from the `app`.
         """
-        self.daemon_context.stdin = open(app.stdin_path, 'rt')
-        self.daemon_context.stdout = open(app.stdout_path, 'w+t')
-        self.daemon_context.stderr = open(app.stderr_path, 'w+t', buffering=0)
+        self.daemon_context.stdin = open(app.stdin_path, "rt")
+        self.daemon_context.stdout = open(app.stdout_path, "w+t")
+        self.daemon_context.stderr = open(app.stderr_path, "w+t", buffering=0)
 
     def _usage_exit(self, argv):
         """Emit a usage message, then exit.
@@ -144,8 +141,8 @@ class DaemonRunner:
         """
         progname = os.path.basename(argv[0])
         usage_exit_code = 2
-        action_usage = '|'.join(self.action_funcs.keys())
-        message = 'usage: {progname} {usage}'.format(
+        action_usage = "|".join(self.action_funcs.keys())
+        message = "usage: {progname} {usage}".format(
             progname=progname, usage=action_usage
         )
         emit_message(message)
@@ -192,9 +189,7 @@ class DaemonRunner:
             self.daemon_context.open()
         except lockfile.AlreadyLocked:
             error = DaemonRunnerStartFailureError(
-                'PID file {pidfile.path!r} already locked'.format(
-                    pidfile=self.pidfile
-                )
+                "PID file {pidfile.path!r} already locked".format(pidfile=self.pidfile)
             )
             raise error
 
@@ -217,7 +212,7 @@ class DaemonRunner:
             os.kill(pid, signal.SIGTERM)
         except OSError as exc:
             error = DaemonRunnerStopFailureError(
-                'Failed to terminate {pid:d}: {exc}'.format(pid=pid, exc=exc)
+                "Failed to terminate {pid:d}: {exc}".format(pid=pid, exc=exc)
             )
             raise error
 
@@ -231,9 +226,7 @@ class DaemonRunner:
         """
         if not self.pidfile.is_locked():
             error = DaemonRunnerStopFailureError(
-                'PID file {pidfile.path!r} not locked'.format(
-                    pidfile=self.pidfile
-                )
+                "PID file {pidfile.path!r} not locked".format(pidfile=self.pidfile)
             )
             raise error
 
@@ -247,7 +240,7 @@ class DaemonRunner:
         self._stop()
         self._start()
 
-    action_funcs = {'start': _start, 'stop': _stop, 'restart': _restart}
+    action_funcs = {"start": _start, "stop": _stop, "restart": _restart}
 
     def _get_action_func(self):
         """Get the function for the specified action.
@@ -265,7 +258,7 @@ class DaemonRunner:
             func = self.action_funcs[self.action]
         except KeyError:
             error = DaemonRunnerInvalidActionError(
-                'Unknown action: {action!r}'.format(action=self.action)
+                "Unknown action: {action!r}".format(action=self.action)
             )
             raise error
         return func
@@ -287,17 +280,17 @@ def emit_message(message, stream=None):
     """ Emit a message to the specified stream (default `sys.stderr`). """
     if stream is None:
         stream = sys.stderr
-    stream.write('{message}\n'.format(message=message))
+    stream.write("{message}\n".format(message=message))
     stream.flush()
 
 
 def make_pidlockfile(path, acquire_timeout):
     """ Make a PIDLockFile instance with the given filesystem path. """
     if not isinstance(path, basestring):
-        error = ValueError('Not a filesystem path: {path!r}'.format(path=path))
+        error = ValueError("Not a filesystem path: {path!r}".format(path=path))
         raise error
     if not os.path.isabs(path):
-        error = ValueError('Not an absolute path: {path!r}'.format(path=path))
+        error = ValueError("Not an absolute path: {path!r}".format(path=path))
         raise error
     lockfile = pidfile.TimeoutPIDLockFile(path, acquire_timeout)
 

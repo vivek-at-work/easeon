@@ -13,7 +13,7 @@ class BaseManager(models.Manager):
     use_for_related_fields = True
 
     def __init__(self, *args, **kwargs):
-        alive_only = kwargs.pop('alive_only', None)
+        alive_only = kwargs.pop("alive_only", None)
         super(BaseManager, self).__init__(*args, **kwargs)
         self.alive_only = alive_only
 

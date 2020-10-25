@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 from inventory.models import (
     LoanerInventoryItem,
     RepairInventoryItem,
     SerializableInventoryItem,
 )
-from import_export.admin import ImportExportModelAdmin
-from import_export import resources
 
 
 class LoanerInventoryItemResource(resources.ModelResource):

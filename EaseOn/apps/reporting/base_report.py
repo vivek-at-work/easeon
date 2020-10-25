@@ -2,11 +2,12 @@
 """
 Base Report
 """
+import datetime
 import os
 import uuid
-import datetime
-from django.db import connection
+
 from django.conf import settings
+from django.db import connection
 
 
 def validate_date(date_text):
@@ -29,14 +30,14 @@ class SMTPReportTarget(BaseReportTarget):
     def send(self, subject, report, *receivers):
         from core.utils import send_mail
 
-        template = settings.EMAIL_TEMPLATES.get('alert', None)
+        template = settings.EMAIL_TEMPLATES.get("alert", None)
         summary = """Please find attached report."""
-        details = 'Please Delete this mail if you received it by mistake.'
+        details = "Please Delete this mail if you received it by mistake."
         context = {
-            'receiver_short_name': "All",
-            'summary': summary,
-            'detail': details,
-            'files': [report.target_path],
+            "receiver_short_name": "All",
+            "summary": summary,
+            "detail": details,
+            "files": [report.target_path],
         }
         send_mail(subject, template, *receivers, **context)
 
@@ -50,5 +51,5 @@ class Report:
     def create(self):
         db_cursor = connection.cursor()
         query = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(self.db_query)
-        with open(self.file_name, 'w') as f_output:
+        with open(self.file_name, "w") as f_output:
             db_cursor.copy_expert(query, f_output)

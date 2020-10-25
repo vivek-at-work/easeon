@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('devices', '0001_initial'),
-    ]
+    dependencies = [("devices", "0001_initial")]
 
     operations = [
         migrations.AlterField(
-            model_name='device',
-            name='alternate_device_id',
+            model_name="device",
+            name="alternate_device_id",
             field=models.CharField(
                 max_length=20,
                 null=True,
@@ -25,8 +23,8 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name='device',
-            name='serial_number',
+            model_name="device",
+            name="serial_number",
             field=models.CharField(
                 max_length=20,
                 null=True,

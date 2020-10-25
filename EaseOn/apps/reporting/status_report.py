@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from .db_query import REPORT_SQL_MAPPING, STATUS_REPORT
 from .base_report import Report, validate_date
+from .db_query import REPORT_SQL_MAPPING, STATUS_REPORT
 
 
 class StatusReport(Report):
@@ -11,10 +11,8 @@ class StatusReport(Report):
 
     def filter_by_centre(self, centre):
         if centre:
-            self.db_query = (
-                "{} where tickets_ticket.organization_id = {}".format(
-                    REPORT_SQL_MAPPING[self.type], str(centre)
-                )
+            self.db_query = "{} where tickets_ticket.organization_id = {}".format(
+                REPORT_SQL_MAPPING[self.type], str(centre)
             )
 
     def filter_by_date(self, date):
@@ -30,10 +28,10 @@ class StatusReport(Report):
             and validate_date(start_date)
             and validate_date(end_date)
         ):
-            db_query = self.filter_by_centre(centre)
+            self.filter_by_centre(centre)
             self.db_query = (
                 self.db_query
-                + " AND tickets_ticket.created_at >= CAST('{1}' AS DATE) AND tickets_ticket.created_at < (CAST('{2}' AS DATE) + CAST('1 day' AS INTERVAL))".format(
-                    REPORT_SQL_MAPPING[self.type], start_date, end_date
+                + " AND tickets_ticket.created_at >= CAST('{}' AS DATE) AND tickets_ticket.created_at < (CAST('{}' AS DATE) + CAST('1 day' AS INTERVAL))".format(
+                    start_date, end_date
                 )
             )

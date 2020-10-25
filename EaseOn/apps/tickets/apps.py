@@ -16,7 +16,7 @@ from django.apps import AppConfig
 
 
 class TicketsConfig(AppConfig):
-    name = 'tickets'
+    name = "tickets"
     # def ready(self):
     #     import os
     #     if os.environ.get('RUN_MAIN'):

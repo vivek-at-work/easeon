@@ -6,33 +6,19 @@
 
 - This file contains API's for otp
 """
-
-# future
 from __future__ import unicode_literals
 
 import logging
 
 from core.serializers import UserSerializer
-
-# Django
 from django.contrib.auth import get_user_model
-
-# own app
-from otp import models, serializers
-
-# rest-framework
-from rest_framework import permissions, status, viewsets
-from rest_framework.authtoken.models import Token as TokenModel
-from rest_framework.response import Response
-
 from oauth2_provider.models import AccessToken, Application
 from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.views.mixins import OAuthLibMixin
-
-# 3rd party
-
-
-# local
+from otp import models, serializers
+from rest_framework import permissions, status, viewsets
+from rest_framework.authtoken.models import Token as TokenModel
+from rest_framework.response import Response
 
 USER = get_user_model()
 
@@ -41,21 +27,21 @@ class OTPViewSet(viewsets.GenericViewSet):
     """OTP Viewset, every OTP http request handles by this class"""
 
     queryset = models.PyOTP.objects.all()
-    lookup_field = 'uuid'
+    lookup_field = "uuid"
     token_model = TokenModel
     permission_classes = (permissions.AllowAny,)
     otp_type = None
 
     def get_serializer_class(self):
-        if self.action == 'generate_hotp':
+        if self.action == "generate_hotp":
             return serializers.HotpSerializer
-        elif self.action == 'generate_totp':
+        elif self.action == "generate_totp":
             return serializers.TotpSerializer
-        elif self.action == 'generate_hotp_provision_uri':
+        elif self.action == "generate_hotp_provision_uri":
             return serializers.HOTPProvisionUriSerializer
-        elif self.action == 'generate_totp_provision_uri':
+        elif self.action == "generate_totp_provision_uri":
             return serializers.TOTPProvisionUriSerializer
-        elif self.action == 'verify_otp':
+        elif self.action == "verify_otp":
             return serializers.VerifyOtpSerializer
         return serializers.NoneSerializer
 
@@ -113,18 +99,12 @@ class OTPViewSet(viewsets.GenericViewSet):
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        valid_otp = serializer.verify_otp(
-            serializer.data.get('otp'), obj, otp_type
-        )
+        valid_otp = serializer.verify_otp(serializer.data.get("otp"), obj, otp_type)
         if not valid_otp:
-            logging.warning(
-                'OTP validation failed for user {}'.format(request.user)
-            )
+            logging.warning("OTP validation failed for user {}".format(request.user))
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        logging.info(
-            'OTP validation succeeded for user {}'.format(request.user)
-        )
+        logging.info("OTP validation succeeded for user {}".format(request.user))
 
-        user = USER.objects.get(email=serializer.data.get('email'))
-        response = UserSerializer(user, context={'request': request}).data
+        user = USER.objects.get(email=serializer.data.get("email"))
+        response = UserSerializer(user, context={"request": request}).data
         return Response(data=response, status=status.HTTP_200_OK)

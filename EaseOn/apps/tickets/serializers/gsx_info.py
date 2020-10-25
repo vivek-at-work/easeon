@@ -6,14 +6,9 @@ from tickets import models
 
 class GSXInfoSerializer(BaseSerializer):
     ticket = serializers.HyperlinkedRelatedField(
-        queryset=models.Ticket.objects.all(), view_name='ticket-detail'
+        queryset=models.Ticket.objects.all(), view_name="ticket-detail"
     )
 
     class Meta(BaseMeta):
         model = models.GSXInfo
-        read_only_fields = [
-            'url',
-            'created_by',
-            'created_at',
-            'is_deleted',
-        ]
+        read_only_fields = ["url", "created_by", "created_at", "is_deleted"]

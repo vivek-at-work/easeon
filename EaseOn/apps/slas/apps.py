@@ -5,4 +5,4 @@ from django.apps import AppConfig
 
 
 class SLAConfig(AppConfig):
-    name = 'slas'
+    name = "slas"

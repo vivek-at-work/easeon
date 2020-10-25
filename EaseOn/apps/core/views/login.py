@@ -5,21 +5,9 @@ from __future__ import unicode_literals
 import logging
 
 from core.serializers import OTPOptionsSerializer
+from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
-from django.conf import settings
-from otp.models import PyOTP
-
-from otp.serializers import HotpSerializer, VerifyOtpSerializer
-from rest_framework import permissions
-from rest_framework import status as rest_status
-from rest_framework import viewsets
-from rest_framework.authtoken.models import Token as TokenModel
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
-from rest_framework.exceptions import NotAuthenticated
-
-
 from oauth2_provider.models import (
     get_access_token_model,
     get_application_model,
@@ -28,6 +16,15 @@ from oauth2_provider.models import (
 from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.signals import app_authorized
 from oauth2_provider.views.mixins import OAuthLibMixin
+from otp.models import PyOTP
+from otp.serializers import HotpSerializer, VerifyOtpSerializer
+from rest_framework import permissions
+from rest_framework import status as rest_status
+from rest_framework import viewsets
+from rest_framework.authtoken.models import Token as TokenModel
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 USER = get_user_model()
 
@@ -38,23 +35,19 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
     server_class = oauth2_settings.OAUTH2_SERVER_CLASS
     validator_class = oauth2_settings.OAUTH2_VALIDATOR_CLASS
     oauthlib_backend_class = oauth2_settings.OAUTH2_BACKEND_CLASS
-    lookup_field = 'email'
+    lookup_field = "email"
     permission_classes = (permissions.AllowAny,)
 
     def get_serializer_class(self):
-        if self.action == 'get_otp_options':
+        if self.action == "get_otp_options":
             return OTPOptionsSerializer
-        elif self.action == 'generate_otp':
+        elif self.action == "generate_otp":
             return HotpSerializer
-        elif self.action == 'verify_otp':
+        elif self.action == "verify_otp":
             return VerifyOtpSerializer
 
     def _get_user_url(self, user, request):
-        return reverse(
-            'user-detail',
-            kwargs={'pk': user.id},
-            request=request,
-        )
+        return reverse("user-detail", kwargs={"pk": user.id}, request=request)
 
     def _validate(self, serializer, data):
         """
@@ -90,24 +83,18 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         :return: 200_ok OR 400_bad_request
         """
         user_dirty = False
-        otp_type = 'hotp'
+        otp_type = "hotp"
         obj = PyOTP.objects.get(uuid=uuid)
         serializer = self.get_serializer_class()
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        valid_otp = serializer.verify_otp(
-            serializer.data.get('otp'), obj, otp_type
-        )
-        password = serializer.validated_data['password']
+        valid_otp = serializer.verify_otp(serializer.data.get("otp"), obj, otp_type)
+        password = serializer.validated_data["password"]
         FH = rest_status.HTTP_400_BAD_REQUEST
         if not valid_otp:
-            logging.warning(
-                'OTP validation failed for user {}'.format(request.user)
-            )
+            logging.warning("OTP validation failed for user {}".format(request.user))
             return Response(status=FH)
-        logging.info(
-            'OTP validation succeeded for user {}'.format(request.user)
-        )
+        logging.info("OTP validation succeeded for user {}".format(request.user))
 
         url, headers, body, status = self.create_token_response(request)
         user = None
@@ -115,11 +102,9 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         if status == 200:
             import json
 
-            access_token = json.loads(body).get('access_token')
+            access_token = json.loads(body).get("access_token")
             if access_token is not None:
-                token = get_access_token_model().objects.get(
-                    token=access_token
-                )
+                token = get_access_token_model().objects.get(token=access_token)
                 user = token.user
                 app_authorized.send(sender=self, request=request, token=token)
                 chat_token = None
@@ -129,19 +114,17 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     user.save()
                 if user:
                     res = {}
-                    res['auth'] = json.loads(body)
-                    res['user'] = {}
-                    res['user']['full_name'] = user.full_name
-                    res['user']['url'] = self._get_user_url(user, request)
-                    res['user'][
-                        'need_to_change_password'
+                    res["auth"] = json.loads(body)
+                    res["user"] = {}
+                    res["user"]["full_name"] = user.full_name
+                    res["user"]["url"] = self._get_user_url(user, request)
+                    res["user"][
+                        "need_to_change_password"
                     ] = user.need_to_change_password
-                    res['user']['is_superuser'] = user.is_superuser
-                    res['user']['role'] = user.role
-                    res['chat_auth_token'] = chat_token
-                    response = HttpResponse(
-                        content=json.dumps(res), status=status
-                    )
+                    res["user"]["is_superuser"] = user.is_superuser
+                    res["user"]["role"] = user.role
+                    res["chat_auth_token"] = chat_token
+                    response = HttpResponse(content=json.dumps(res), status=status)
                 else:
                     response = HttpResponse(content=body, status=status)
             for k, v in headers.items():
@@ -157,26 +140,22 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         if status == 200:
             import json
 
-            access_token = json.loads(body).get('access_token')
+            access_token = json.loads(body).get("access_token")
             if access_token is not None:
-                token = get_access_token_model().objects.get(
-                    token=access_token
-                )
+                token = get_access_token_model().objects.get(token=access_token)
                 user = token.user
                 app_authorized.send(sender=self, request=request, token=token)
                 if user:
                     res = {}
-                    res['auth'] = json.loads(body)
-                    res['user'] = {}
-                    res['user']['full_name'] = user.full_name
-                    res['user']['url'] = self._get_user_url(user, request)
-                    res['user'][
-                        'need_to_change_password'
+                    res["auth"] = json.loads(body)
+                    res["user"] = {}
+                    res["user"]["full_name"] = user.full_name
+                    res["user"]["url"] = self._get_user_url(user, request)
+                    res["user"][
+                        "need_to_change_password"
                     ] = user.need_to_change_password
-                    res['user']['is_superuser'] = user.is_superuser
-                    response = HttpResponse(
-                        content=json.dumps(res), status=status
-                    )
+                    res["user"]["is_superuser"] = user.is_superuser
+                    response = HttpResponse(content=json.dumps(res), status=status)
                 else:
                     response = HttpResponse(content=body, status=status)
 

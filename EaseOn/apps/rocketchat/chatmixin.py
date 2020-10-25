@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from .rocketchat import RocketChat
 from django.conf import settings
+
+from .rocketchat import RocketChat
 
 
 class ChatMixin(object):
@@ -8,14 +9,12 @@ class ChatMixin(object):
     def chat_user_name(self):
         if self.email.split("@")[0] == settings.CHAT_SERVICE_ADMIN:
             return self.email.split("@")[0]
-        username = self.email.replace("@", '-')
+        username = self.email.replace("@", "-")
         return username
 
     def is_chat_registration_done(self, password):
-        userQuery = (
-            RocketChat().users_info(username=self.chat_user_name).json()
-        )
-        if userQuery['success']:
+        userQuery = RocketChat().users_info(username=self.chat_user_name).json()
+        if userQuery["success"]:
             return True
         else:
             return self.register_user(password)
@@ -23,11 +22,9 @@ class ChatMixin(object):
     def do_chat_login(self, password):
         if self.is_chat_registration_done(password):
             response = (
-                RocketChat()
-                .users_create_token(username=self.chat_user_name)
-                .json()
+                RocketChat().users_create_token(username=self.chat_user_name).json()
             )
-            if response['success']:
+            if response["success"]:
                 chat_user_id = response["data"]["userId"]
                 authToken = response["data"]["authToken"]
                 if self.chat_user_id is None:

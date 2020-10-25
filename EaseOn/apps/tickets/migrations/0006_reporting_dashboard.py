@@ -5,7 +5,7 @@ from django.db import migrations
 
 SQL_DROP = """DROP VIEW public.easeon_ticket_reports"""
 SQL_CREATE = """CREATE OR REPLACE VIEW public.easeon_ticket_reports AS
- SELECT 
+ SELECT
     tickets_ticket.id,
     tickets_ticket.created_at,
     tickets_ticket.updated_at,
@@ -31,18 +31,16 @@ SQL_CREATE = """CREATE OR REPLACE VIEW public.easeon_ticket_reports AS
     tickets_ticket.device_id,
     tickets_ticket.last_modified_by_id,
     organizations_organization.code
-    FROM tickets_ticket 
-    Left JOIN organizations_organization ON tickets_ticket.organization_id = organizations_organization.id 
+    FROM tickets_ticket
+    Left JOIN organizations_organization ON tickets_ticket.organization_id = organizations_organization.id
     Left JOIN core_user A ON A.id = tickets_ticket.created_by_id
-    Left join core_user B ON B.id = tickets_ticket.currently_assigned_to_id 
-    Left join core_user C ON C.id = tickets_ticket.closed_by_id 
+    Left join core_user B ON B.id = tickets_ticket.currently_assigned_to_id
+    Left join core_user C ON C.id = tickets_ticket.closed_by_id
     WHERE tickets_ticket.is_deleted = False"""
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('tickets', '0005_auto_20200513_0841'),
-    ]
+    dependencies = [("tickets", "0005_auto_20200513_0841")]
 
     operations = [migrations.RunSQL(SQL_CREATE, SQL_DROP)]

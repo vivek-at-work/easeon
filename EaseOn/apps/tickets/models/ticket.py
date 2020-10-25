@@ -2,9 +2,9 @@
 """
 Ticket Models
 """
-from datetime import date, datetime, time
 import random
-from gsx.core import GSXRequest, format_customer, format_device
+from datetime import date, datetime, time
+
 from core.models import BaseManager, BaseModel, BaseQuerySet, User
 from core.utils import get_random_string, time_by_adding_business_days
 from customers.models import Customer
@@ -15,13 +15,14 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
+from gsx.core import GSXRequest, format_customer, format_device
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
 from slas.models import SLA
 
 from .upload_content import UploadContent
 
-CLOSE_STATUS_VALUES = ['Delivered', 'Hold', 'DECLINED']
+CLOSE_STATUS_VALUES = ["Delivered", "Hold", "DECLINED"]
 
 
 class TicketManager(BaseManager):
@@ -43,10 +44,8 @@ class TicketQuerySet(BaseQuerySet):
 
     def due_between(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(
-            dt.date(), datetime.max.time(), dt.tzinfo
-        )
-        end_time = kwargs.get('end_time', mid_night_tomorrow)
+        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
+        end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.filter(
             closed_on__isnull=True,
             is_deleted=False,
@@ -55,33 +54,27 @@ class TicketQuerySet(BaseQuerySet):
 
     def closed_between(self, **kwargs):
         dt = timezone.now()
-        mid_night_today = datetime.combine(
-            dt.date(), datetime.min.time(), dt.tzinfo
-        )
-        mid_night_tomorrow = datetime.combine(
-            dt.date(), datetime.max.time(), dt.tzinfo
-        )
-        start_time = kwargs.get('start_time', mid_night_today)
-        end_time = kwargs.get('end_time', mid_night_tomorrow)
+        mid_night_today = datetime.combine(dt.date(), datetime.min.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
+        start_time = kwargs.get("start_time", mid_night_today)
+        end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.filter(closed_on__range=[start_time, end_time])
 
 
 class Ticket(BaseModel):
     organization = models.ForeignKey(
-        Organization, related_name='tickets', on_delete=models.DO_NOTHING
+        Organization, related_name="tickets", on_delete=models.DO_NOTHING
     )
     device = models.OneToOneField(
-        Device, related_name='ticket', on_delete=models.DO_NOTHING
+        Device, related_name="ticket", on_delete=models.DO_NOTHING
     )
     customer = models.OneToOneField(
-        Customer, related_name='ticket', on_delete=models.DO_NOTHING
+        Customer, related_name="ticket", on_delete=models.DO_NOTHING
     )
-    password = models.CharField(max_length=100, default='NA', null=True)
-    initial_operating_system = models.CharField(
-        max_length=100, default='NA', null=True
-    )
+    password = models.CharField(max_length=100, default="NA", null=True)
+    initial_operating_system = models.CharField(max_length=100, default="NA", null=True)
     currently_assigned_to = models.ForeignKey(
-        User, related_name='assigned_tickets', on_delete=models.DO_NOTHING
+        User, related_name="assigned_tickets", on_delete=models.DO_NOTHING
     )
     status = models.CharField(max_length=100)
     coverage_type = models.CharField(max_length=100)
@@ -91,49 +84,44 @@ class Ticket(BaseModel):
     device_condition = models.CharField(max_length=500)
     expected_service_cost = models.FloatField(default=0.0)
     expected_hardware_cost = models.FloatField(default=0.0)
-    accessories = models.CharField(default='NA', max_length=500)
-    required_upgrades = models.TextField(default='NA', max_length=500)
+    accessories = models.CharField(default="NA", max_length=500)
+    required_upgrades = models.TextField(default="NA", max_length=500)
     expected_delivery_time = models.DateTimeField()
     is_backup_required = models.BooleanField(default=False)
     reference_number = models.CharField(max_length=50, unique=True)
     is_standby_device_required = models.BooleanField(default=False)
     subscribers = models.ManyToManyField(
-        User, related_name='subscribed_tickets', blank=True
+        User, related_name="subscribed_tickets", blank=True
     )
     first_escalation_after = models.DateTimeField()
     second_escalation_after = models.DateTimeField()
     final_escalation_after = models.DateTimeField()
     closed_on = models.DateTimeField(null=True)
     closed_by = models.ForeignKey(
-        User,
-        null=True,
-        related_name='closed_tickets',
-        on_delete=models.DO_NOTHING,
+        User, null=True, related_name="closed_tickets", on_delete=models.DO_NOTHING
     )
     orderlines = models.ManyToManyField(
         RepairInventoryItem,
-        through='OrderLine',
-        through_fields=('ticket', 'inventory_item'),
+        through="OrderLine",
+        through_fields=("ticket", "inventory_item"),
     )
     loaner_devices = models.ManyToManyField(
         LoanerInventoryItem,
-        through='LoanerRecord',
-        through_fields=('ticket', 'inventory_item'),
+        through="LoanerRecord",
+        through_fields=("ticket", "inventory_item"),
     )
 
     sla = models.ForeignKey(
-        SLA, null=False, related_name='tickets', on_delete=models.DO_NOTHING
+        SLA, null=False, related_name="tickets", on_delete=models.DO_NOTHING
     )
-    uploaded_contents = GenericRelation(
-        UploadContent, related_query_name='tickets'
-    )
+    uploaded_contents = GenericRelation(UploadContent, related_query_name="tickets")
     objects = TicketManager()
     all_objects = TicketManager(alive_only=False)
 
     class Meta:
-        'Ticket Model Meta'
-        verbose_name = 'Ticket'
-        verbose_name_plural = 'Tickets'
+        "Ticket Model Meta"
+        verbose_name = "Ticket"
+        verbose_name_plural = "Tickets"
 
     @property
     def expected_time_to_delivery(self):
@@ -187,9 +175,7 @@ class Ticket(BaseModel):
         code = self.organization.code
         index = self.organization.tickets.count() + 1
         suffix = settings.TICKET_SUFFIX
-        reference_number = '{}{}{}{}'.format(
-            code, index, random.randint(0, 99), suffix
-        )
+        reference_number = "{}{}{}{}".format(code, index, random.randint(0, 99), suffix)
         self.reference_number = reference_number
 
     def refresh_escalation_timestamps(self, closed=False):

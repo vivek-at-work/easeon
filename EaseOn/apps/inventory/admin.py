@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-from .import_resources import (
-    LoanerInventoryItemAdmin,
-    RepairInventoryItemAdmin,
-    SerializableInventoryItemAdmin,
-)
+from core.admin import register
 from inventory.models import (
     LoanerInventoryItem,
     RepairInventoryItem,
     SerializableInventoryItem,
 )
-from core.admin import register
+
+from .import_resources import (
+    LoanerInventoryItemAdmin,
+    RepairInventoryItemAdmin,
+    SerializableInventoryItemAdmin,
+)
 
 register(LoanerInventoryItem, LoanerInventoryItemAdmin)
 register(RepairInventoryItem, RepairInventoryItemAdmin)

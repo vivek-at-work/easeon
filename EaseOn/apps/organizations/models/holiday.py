@@ -12,7 +12,7 @@ from .signals import membership_attributes_changed
 
 class Holiday(BaseModel):
     organization = models.ForeignKey(
-        'Organization', on_delete=models.DO_NOTHING, related_name='holidays'
+        "Organization", on_delete=models.DO_NOTHING, related_name="holidays"
     )
     date = models.DateField()
     description = models.CharField(max_length=200)
@@ -20,31 +20,27 @@ class Holiday(BaseModel):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=['organization', 'date'],
+                fields=["organization", "date"],
                 condition=Q(is_deleted=False),
-                name='organization_holiday_unique_is_deleted',
+                name="organization_holiday_unique_is_deleted",
             )
         ]
 
 
 @receiver(post_save, sender=Holiday)
 def send_holiday_notifications(sender, instance, *args, **kwargs):
-    template = settings.EMAIL_TEMPLATES.get('alert', None)
-    subject = 'New Holiday Details Updated on {} '.format(settings.SITE_HEADER)
+    template = settings.EMAIL_TEMPLATES.get("alert", None)
+    subject = "New Holiday Details Updated on {} ".format(settings.SITE_HEADER)
     summary = """A Non working day {0} have been mentioned for {1} """.format(
         instance.date, instance.organization
     )
-    details = (
-        'This Date will not be allowed as expected delivery date here after'
-    )
+    details = "This Date will not be allowed as expected delivery date here after"
     action_name = instance.date
 
     context = {
-        'receiver_short_name': instance.organization.manager.get_short_name(),
-        'summary': summary,
-        'detail': details.format(),
-        'action_name': action_name,
+        "receiver_short_name": instance.organization.manager.get_short_name(),
+        "summary": summary,
+        "detail": details.format(),
+        "action_name": action_name,
     }
-    utils.send_mail(
-        subject, template, instance.organization.manager.email, **context
-    )
+    utils.send_mail(subject, template, instance.organization.manager.email, **context)

@@ -15,31 +15,31 @@ class PasswordChangeSerializer(serializers.Serializer):
 
     def __init__(self, *args, **kwargs):
         self.old_password_field_enabled = getattr(
-            settings, 'OLD_PASSWORD_FIELD_ENABLED', True
+            settings, "OLD_PASSWORD_FIELD_ENABLED", True
         )
         self.logout_on_password_change = getattr(
-            settings, 'LOGOUT_ON_PASSWORD_CHANGE', True
+            settings, "LOGOUT_ON_PASSWORD_CHANGE", True
         )
         super(PasswordChangeSerializer, self).__init__(*args, **kwargs)
 
         if not self.old_password_field_enabled:
-            self.fields.pop('old_password')
+            self.fields.pop("old_password")
 
-        self.request = self.context.get('request')
-        self.user = getattr(self.request, 'user', None)
+        self.request = self.context.get("request")
+        self.user = getattr(self.request, "user", None)
 
     def validate_old_password(self, value):
         if not self.user.check_password(value):
-            raise serializers.ValidationError('Old password did not match.')
+            raise serializers.ValidationError("Old password did not match.")
         return value
 
     def validate(self, attrs):
         self.set_password_form = self.set_password_form_class(
             user=self.user, data=attrs
         )
-        if attrs['new_password1'] != attrs['new_password2']:
-            raise serializers.ValidationError('New Password Do not match.')
-        validate_password(attrs['new_password1'])
+        if attrs["new_password1"] != attrs["new_password2"]:
+            raise serializers.ValidationError("New Password Do not match.")
+        validate_password(attrs["new_password1"])
         if not self.set_password_form.is_valid():
             raise serializers.ValidationError(self.set_password_form.errors)
         return attrs
@@ -47,9 +47,7 @@ class PasswordChangeSerializer(serializers.Serializer):
     def save(self):
 
         self.set_password_form.save()
-        self.user.sync_password_changes(
-            self.validated_data.get('new_password2', "")
-        )
+        self.user.sync_password_changes(self.validated_data.get("new_password2", ""))
         self.user.save()
         if not self.logout_on_password_change:
             update_session_auth_hash(self.request, self.user)

@@ -7,7 +7,7 @@ from slas.models import SLA, Term
 class TermSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = Term
-        fields = ('url', 'statement', 'sla', 'heading')
+        fields = ("url", "statement", "sla", "heading")
 
 
 class SLASerializer(BaseSerializer):
@@ -15,4 +15,4 @@ class SLASerializer(BaseSerializer):
 
     class Meta(BaseMeta):
         model = SLA
-        fields = ('url', 'sla_type', 'name', 'is_default', 'terms')
+        fields = ("url", "sla_type", "name", "is_default", "terms")

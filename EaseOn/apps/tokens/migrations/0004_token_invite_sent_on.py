@@ -6,14 +6,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('tokens', '0003_auto_20200922_1248'),
-    ]
+    dependencies = [("tokens", "0003_auto_20200922_1248")]
 
     operations = [
         migrations.AddField(
-            model_name='token',
-            name='invite_sent_on',
+            model_name="token",
+            name="invite_sent_on",
             field=models.DateTimeField(null=True),
-        ),
+        )
     ]

@@ -14,12 +14,12 @@ class Feedback(BaseModel):
     parameter = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
     ticket = models.ForeignKey(
-        Ticket, related_name='feedbacks', on_delete=models.CASCADE
+        Ticket, related_name="feedbacks", on_delete=models.CASCADE
     )
 
     class Meta:
-        verbose_name = 'Customer Feedback'
-        verbose_name_plural = 'Customer Feedbacks'
+        verbose_name = "Customer Feedback"
+        verbose_name_plural = "Customer Feedbacks"
 
     def __unicode__(self):
         return self.value

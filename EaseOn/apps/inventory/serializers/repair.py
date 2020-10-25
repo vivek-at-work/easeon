@@ -1,28 +1,28 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
+from django.db.models import Q
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
 from rest_framework import serializers
-from django.db.models import Q
 
 
 class RepairItemListSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = RepairInventoryItem
         read_only_fields = [
-            'id',
-            'url',
-            'created_by',
-            'created_at',
-            'is_deleted',
-            'guid',
-            'updated_at',
-            'deleted_at',
-            'version',
-            'last_visit_on',
-            'last_modified_by',
-            'consumed',
-            'blocked',
+            "id",
+            "url",
+            "created_by",
+            "created_at",
+            "is_deleted",
+            "guid",
+            "updated_at",
+            "deleted_at",
+            "version",
+            "last_visit_on",
+            "last_modified_by",
+            "consumed",
+            "blocked",
         ]
 
 
@@ -32,7 +32,7 @@ class RepairItemSerializer(BaseSerializer):
         if not self.instance:
             if RepairInventoryItem.objects.all().filter(**d).exists():
                 raise serializers.ValidationError(
-                    '{0} Already been used with previous existing Repair Inventory Item .'.format(
+                    "{0} Already been used with previous existing Repair Inventory Item .".format(
                         key
                     )
                 )
@@ -44,23 +44,23 @@ class RepairItemSerializer(BaseSerializer):
                 .exists()
             ):
                 raise serializers.ValidationError(
-                    '{0} Already been used with previous existing Repair Inventory Item.'.format(
+                    "{0} Already been used with previous existing Repair Inventory Item.".format(
                         key
                     )
                 )
         if LoanerInventoryItem.objects.all().filter(**d).exists():
             raise serializers.ValidationError(
-                '{0} Already been used with previous existing Loaner Inventory Item .'.format(
+                "{0} Already been used with previous existing Loaner Inventory Item .".format(
                     key
                 )
             )
 
     def validate_serial_number(self, value):
-        self.validate_uniques('serial_number', value)
+        self.validate_uniques("serial_number", value)
         return value
 
     organization = serializers.HyperlinkedRelatedField(
-        queryset=Organization.objects.all(), view_name='organization-detail'
+        queryset=Organization.objects.all(), view_name="organization-detail"
     )
     serial_number = serializers.CharField(max_length=255)
 
@@ -78,17 +78,17 @@ class RepairItemSerializer(BaseSerializer):
     class Meta(BaseMeta):
         model = RepairInventoryItem
         read_only_fields = [
-            'id',
-            'url',
-            'created_by',
-            'created_at',
-            'is_deleted',
-            'guid',
-            'updated_at',
-            'deleted_at',
-            'version',
-            'last_visit_on',
-            'last_modified_by',
-            'consumed',
-            'blocked',
+            "id",
+            "url",
+            "created_by",
+            "created_at",
+            "is_deleted",
+            "guid",
+            "updated_at",
+            "deleted_at",
+            "version",
+            "last_visit_on",
+            "last_modified_by",
+            "consumed",
+            "blocked",
         ]

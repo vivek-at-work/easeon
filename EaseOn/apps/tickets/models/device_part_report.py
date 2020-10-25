@@ -13,12 +13,12 @@ class DevicePartReport(BaseModel):
     initial_status = models.CharField(max_length=50, default="Didn't Check")
     final_status = models.CharField(max_length=50, default="Didn't Check")
     ticket = models.ForeignKey(
-        Ticket, related_name='device_part_reports', on_delete=models.CASCADE
+        Ticket, related_name="device_part_reports", on_delete=models.CASCADE
     )
 
     class Meta:
-        verbose_name = 'Device Part Report'
-        verbose_name_plural = 'Device Part Reports'
+        verbose_name = "Device Part Report"
+        verbose_name_plural = "Device Part Reports"
 
     def __unicode__(self):
         return self.part
@@ -26,6 +26,6 @@ class DevicePartReport(BaseModel):
     @staticmethod
     def get_initial_device_part_report():
         reports = []
-        for i in list_models.Item.objects.filter(list_name='UNIT_PART'):
-            reports.append({'part': i.value, 'initial_status': "Did't Check"})
+        for i in list_models.Item.objects.filter(list_name="UNIT_PART"):
+            reports.append({"part": i.value, "initial_status": "Did't Check"})
         return reports

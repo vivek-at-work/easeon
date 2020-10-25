@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions
 
-SUPER_USER = 'SuperUser'
-OPERATOR = 'Technician'
-TOKEN_USER = 'TokenUser'
-AUDITOR = 'Auditor'
-PRIVILEGED = 'Privileged'
+SUPER_USER = "SuperUser"
+OPERATOR = "Technician"
+TOKEN_USER = "TokenUser"
+AUDITOR = "Auditor"
+PRIVILEGED = "Privileged"
 
 
 class IsSuperUser(permissions.BasePermission):
@@ -85,11 +85,7 @@ class IsTokenUserOrSuperUser(permissions.BasePermission):
     ALLOWED_ROLES = [SUPER_USER, TOKEN_USER, PRIVILEGED]
 
     def has_permission(self, request, view):
-        if (
-            request.method == 'GET'
-            and request.user
-            and request.user.is_authenticated
-        ):
+        if request.method == "GET" and request.user and request.user.is_authenticated:
             return True
         if (
             request.user
@@ -126,6 +122,4 @@ class SuperUserOrSelf(permissions.BasePermission):
             return True
 
         # Instance must have an attribute named `owner`.
-        return obj == request.user or IsSuperUser().has_permission(
-            request, view
-        )
+        return obj == request.user or IsSuperUser().has_permission(request, view)

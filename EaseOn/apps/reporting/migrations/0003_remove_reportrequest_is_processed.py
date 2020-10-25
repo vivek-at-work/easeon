@@ -6,13 +6,8 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('reporting', '0002_reportrequest_report_path'),
-    ]
+    dependencies = [("reporting", "0002_reportrequest_report_path")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='reportrequest',
-            name='is_processed',
-        ),
+        migrations.RemoveField(model_name="reportrequest", name="is_processed")
     ]

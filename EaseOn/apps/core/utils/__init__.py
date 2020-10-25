@@ -21,11 +21,11 @@ from .workdays import workday
 
 
 def get_organization_model():
-    return 'organizations.Organization'
+    return "organizations.Organization"
 
 
 def get_ticket_model():
-    return 'tickets.Ticket'
+    return "tickets.Ticket"
 
 
 def time_by_adding_business_days(add_days, from_date=timezone.now()):
@@ -51,26 +51,24 @@ def default_create_token(token_model, user):
 def send_mail(subject, message, *receivers, **kwargs):
     kwargs.update(
         {
-            'SERVER_IP': settings.SERVER_IP,
-            'site_name': settings.SITE_HEADER,
-            'twitter_handle': settings.TWITTER_HANDLE,
-            'REPLY_TO': settings.EMAIL_HOST_USER,
-            'sender_full_name': 'Team ' + settings.SITE_HEADER,
+            "SERVER_IP": settings.SERVER_IP,
+            "site_name": settings.SITE_HEADER,
+            "twitter_handle": settings.TWITTER_HANDLE,
+            "REPLY_TO": settings.EMAIL_HOST_USER,
+            "sender_full_name": "Team " + settings.SITE_HEADER,
         }
     )
-    if message.endswith('.html'):
+    if message.endswith(".html"):
         html_content = render_to_string(message, kwargs)
         text = strip_tags(html_content)
         print(html_content)
     else:
         text = message
-    msg = EmailMultiAlternatives(
-        subject, text, settings.EMAIL_HOST_USER, receivers
-    )
-    if message.endswith('.html'):
-        msg.attach_alternative(html_content, 'text/html')
-    if 'files' in kwargs:
-        for item in kwargs['files']:
+    msg = EmailMultiAlternatives(subject, text, settings.EMAIL_HOST_USER, receivers)
+    if message.endswith(".html"):
+        msg.attach_alternative(html_content, "text/html")
+    if "files" in kwargs:
+        for item in kwargs["files"]:
             msg.attach_file(item)
     msg.send()
 
@@ -80,15 +78,14 @@ def send_otp(number, otp):
 
 
 def send_token_to_customer(number, otp):
-    return TwoFactorIn.send(number, otp, 'TOKEN_OTP')
+    return TwoFactorIn.send(number, otp, "TOKEN_OTP")
 
 
 def get_random_string(min_char=8, max_char=12):
 
     allchar = string.ascii_letters + string.punctuation + string.digits
-    password = ''.join(
-        random.choice(allchar)
-        for x in range(random.randint(min_char, max_char))
+    password = "".join(
+        random.choice(allchar) for x in range(random.randint(min_char, max_char))
     )
     return password
 
@@ -102,21 +99,19 @@ def get_otp_token_model():
 
 
 def get_url_for_account_approval_from_admin(uid, token):
-    url = '{}/{}/{}'.format(
-        settings.NEW_USER_ADMIN_APPROVE_URL, str(uid), str(token)
-    )
+    url = "{}/{}/{}".format(settings.NEW_USER_ADMIN_APPROVE_URL, str(uid), str(token))
     return url
 
 
 def get_url_for_email_verification(uid, token):
-    return '{}/{}/{}'.format(
+    return "{}/{}/{}".format(
         settings.NEW_USER_EMAIL_VERIFICATION_URL, str(uid), str(token)
     )
 
 
 def get_url_password_reset(uid, token):
-    return '{}/{}/{}'.format(settings.PASSWORD_RESET_URL, str(uid), str(token))
+    return "{}/{}/{}".format(settings.PASSWORD_RESET_URL, str(uid), str(token))
 
 
 def payload_enricher(request):
-    return {'sub': 'mysubject'}
+    return {"sub": "mysubject"}

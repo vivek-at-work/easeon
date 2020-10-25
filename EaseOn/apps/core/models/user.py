@@ -2,7 +2,6 @@
 import logging
 
 from core import utils
-from gsx.core import GSXRequest
 from core.utils import account_activation_token
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -14,16 +13,18 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import encoding, http, timezone
+from gsx.core import GSXRequest
 from otp.mixins import OTPMixin
 from rocketchat import ChatMixin
+
 from .signals import attributes_changed
 from .user_manager import UserManager
 
-SUPER_USER = 'SuperUser'
-OPERATOR = 'Technician'
-TOKEN_USER = 'TokenUser'
-AUDITOR = 'Auditor'
-PRIVILEGED = 'Privileged'
+SUPER_USER = "SuperUser"
+OPERATOR = "Technician"
+TOKEN_USER = "TokenUser"
+AUDITOR = "Auditor"
+PRIVILEGED = "Privileged"
 
 
 def validate_user_email_domain(value):
@@ -37,16 +38,16 @@ def validate_user_email_domain(value):
     else:
         if value in settings.TEST_EMAILS:
             return
-        ','.join(settings.VALID_CLIENT_DOMAIN_NAMES)
+        ",".join(settings.VALID_CLIENT_DOMAIN_NAMES)
         raise ValidationError(
-            'A valid email should be from following domain names {0}.'.format(
+            "A valid email should be from following domain names {0}.".format(
                 settings.VALID_CLIENT_DOMAIN_NAMES
             )
         )
 
 
 class User(AbstractBaseUser, ChatMixin):
-    '''A User'''
+    """A User"""
 
     USER_TYPE_CHOICES = (
         (1, SUPER_USER),
@@ -58,9 +59,7 @@ class User(AbstractBaseUser, ChatMixin):
     email = models.EmailField(
         max_length=100, unique=True, validators=[validate_user_email_domain]
     )
-    user_type = models.PositiveSmallIntegerField(
-        default=2, choices=USER_TYPE_CHOICES
-    )
+    user_type = models.PositiveSmallIntegerField(default=2, choices=USER_TYPE_CHOICES)
     first_name = models.CharField(blank=False, max_length=20)
     last_name = models.CharField(blank=False, max_length=20)
     username = models.CharField(blank=False, max_length=200, unique=True)
@@ -82,43 +81,43 @@ class User(AbstractBaseUser, ChatMixin):
     chat_user_id = models.CharField(null=True, blank=False, max_length=50)
     gsx_user_name = models.CharField(max_length=100)
     gsx_auth_token = models.CharField(max_length=100)
-    gsx_ship_to = models.CharField(max_length=100, default='0001026647')
+    gsx_ship_to = models.CharField(max_length=100, default="0001026647")
     gsx_token_last_refreshed_on = models.DateTimeField(null=True)
     is_admin = models.BooleanField(default=False)  # a superuser
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = [
-        'username',
-        'first_name',
-        'last_name',
-        'contact_number',
-        'address',
-        'pin_code',
-        'city',
-        'gsx_technician_id',
-        'gsx_user_name',
-        'gsx_ship_to',
-        'gsx_auth_token',
+        "username",
+        "first_name",
+        "last_name",
+        "contact_number",
+        "address",
+        "pin_code",
+        "city",
+        "gsx_technician_id",
+        "gsx_user_name",
+        "gsx_ship_to",
+        "gsx_auth_token",
     ]
     objects = UserManager()
 
     @property
     def full_name(self):
-        'Get Full name of the user.'
-        return '{0} {1}'.format(self.first_name, self.last_name)
+        "Get Full name of the user."
+        return "{0} {1}".format(self.first_name, self.last_name)
 
     @property
     def need_to_change_password(self):
-        'Check if user need to change his password.'
+        "Check if user need to change his password."
         return self.next_password_change_at < timezone.now()
 
     @property
     def is_staff(self):
-        'Is the user a member of staff?'
+        "Is the user a member of staff?"
         return self.is_admin
 
     @property
     def is_superuser(self):
-        'is a superuser'
+        "is a superuser"
         return self.is_admin
 
     @property
@@ -132,7 +131,7 @@ class User(AbstractBaseUser, ChatMixin):
                 return y
 
     def has_perm(self, perm, obj=None):
-        'Yet To Be thought of'
+        "Yet To Be thought of"
         # Simplest possible answer: Yes, always
         return True
 
@@ -145,107 +144,97 @@ class User(AbstractBaseUser, ChatMixin):
             return self.send_account_approval_request_to_authorities()
 
     def send_account_approval_request_to_authorities(self):
-        template = settings.EMAIL_TEMPLATES.get('action')
+        template = settings.EMAIL_TEMPLATES.get("action")
         uid = http.urlsafe_base64_encode(encoding.force_bytes(self.pk))
         token = account_activation_token.make_token(self)
-        account_approval_url = utils.get_url_for_account_approval_from_admin(
-            uid, token
-        )
-        subject = 'Approve Account for user {0}'.format(self.full_name)
+        account_approval_url = utils.get_url_for_account_approval_from_admin(uid, token)
+        subject = "Approve Account for user {0}".format(self.full_name)
         message = """If you wish to allow this user to perform day to day
         usage of {0} portal then please click on the link bellow.""".format(
             settings.SITE_HEADER
         )
-        user_action = 'Approve Account For {0} '.format(self.full_name)
+        user_action = "Approve Account For {0} ".format(self.full_name)
         context = {
-            'receiver_short_name': 'All',
-            'summary': message,
-            'detail': '',
-            'action_name': user_action,
-            'action_link': account_approval_url,
+            "receiver_short_name": "All",
+            "summary": message,
+            "detail": "",
+            "action_name": user_action,
+            "action_link": account_approval_url,
         }
 
-        receivers = User.objects.all_superusers().values_list(
-            'email', flat=True
-        )
+        receivers = User.objects.all_superusers().values_list("email", flat=True)
         if not receivers:
             receivers = [email for name, email in settings.ADMINS]
             logging.warning(
-                'No SuperUser is Registed to the {} approval mail will be sent on admin emails {}'.format(
-                    self, ','.join(receivers)
+                "No SuperUser is Registed to the {} approval mail will be sent on admin emails {}".format(
+                    self, ",".join(receivers)
                 )
             )
         else:
             logging.info(
-                'user {} approval mail will be sent on admin emails {}'.format(
-                    self.email, ','.join(receivers)
+                "user {} approval mail will be sent on admin emails {}".format(
+                    self.email, ",".join(receivers)
                 )
             )
             utils.send_mail(subject, template, *receivers, **context)
         return receivers
 
     def send_email_verification_mail(self):
-        template = settings.EMAIL_TEMPLATES.get('action')
+        template = settings.EMAIL_TEMPLATES.get("action")
         uid = http.urlsafe_base64_encode(encoding.force_bytes(self.pk))
         token = account_activation_token.make_token(self)
         email_verification = utils.get_url_for_email_verification(uid, token)
-        subject = 'Verify your {0} email'.format(settings.SITE_HEADER)
+        subject = "Verify your {0} email".format(settings.SITE_HEADER)
         summary = """Please confirm your email address by
         clicking the link below."""
         details = """We may need to send you critical
         information about our service and it is important
         that we have an accurate email address."""
 
-        user_action = 'Confirm your Email'
+        user_action = "Confirm your Email"
         context = {
-            'receiver_short_name': self.get_short_name(),
-            'summary': summary,
-            'detail': details,
-            'uid': uid,
-            'token': token,
-            'action_name': user_action,
-            'action_link': email_verification,
+            "receiver_short_name": self.get_short_name(),
+            "summary": summary,
+            "detail": details,
+            "uid": uid,
+            "token": token,
+            "action_name": user_action,
+            "action_link": email_verification,
         }
         logging.info(
-            'user email verification mail will be sent on email {}'.format(
-                self.email
-            )
+            "user email verification mail will be sent on email {}".format(self.email)
         )
         utils.send_mail(subject, template, self.email, **context)
         self.email_confirmation_mail_sent_on = timezone.now()
         self.save()
 
     def send_reset_password_link(self):
-        template = settings.EMAIL_TEMPLATES.get('action')
+        template = settings.EMAIL_TEMPLATES.get("action")
         uid = http.urlsafe_base64_encode(encoding.force_bytes(self.pk))
         token = default_token_generator.make_token(self)
         reset_password_link = utils.get_url_password_reset(uid, token)
-        subject = 'Reset you password for {0} email'.format(
-            settings.SITE_HEADER
-        )
+        subject = "Reset you password for {0} email".format(settings.SITE_HEADER)
         summary = """Please click on the bellow link to genarate your login password
         clicking the link below."""
-        details = ' '
+        details = " "
 
-        user_action = 'Reset Your Password'
+        user_action = "Reset Your Password"
         context = {
-            'receiver_short_name': self.get_short_name(),
-            'summary': summary,
-            'detail': details,
-            'uid': uid,
-            'token': token,
-            'action_name': user_action,
-            'action_link': reset_password_link,
+            "receiver_short_name": self.get_short_name(),
+            "summary": summary,
+            "detail": details,
+            "uid": uid,
+            "token": token,
+            "action_name": user_action,
+            "action_link": reset_password_link,
         }
         logging.info(
-            'user password reset mail will be sent on email {}'.format(
-                self.email
-            )
+            "user password reset mail will be sent on email {}".format(self.email)
         )
         utils.send_mail(subject, template, self.email, **context)
 
     def has_module_perms(self, app_label):
-        'Does the user have permissions to view the app app_label?'
+        "Does the user have permissions to view the app app_label?"
         return True
 
     def get_short_name(self):
@@ -262,7 +251,7 @@ class User(AbstractBaseUser, ChatMixin):
         self.update_chat_user_info(password)
         self.next_password_change_at = n_time
         logging.info(
-            'user {} next password change time set to {}'.format(
+            "user {} next password change time set to {}".format(
                 self.email, self.next_password_change_at
             )
         )
@@ -270,7 +259,7 @@ class User(AbstractBaseUser, ChatMixin):
     def toggle_activation(self, is_active):
         self.is_active = is_active
         attributes_changed.send(
-            sender=self.__class__, user=self, attributes=['is_active']
+            sender=self.__class__, user=self, attributes=["is_active"]
         )
 
     def change_role(self, role):
@@ -285,16 +274,12 @@ class User(AbstractBaseUser, ChatMixin):
         result = None
         if gsx_token:
             req = GSXRequest(
-                'authenticate',
-                'token',
-                self.gsx_user_name,
-                gsx_token,
-                self.gsx_ship_to,
+                "authenticate", "token", self.gsx_user_name, gsx_token, self.gsx_ship_to
             )
         else:
             req = GSXRequest(
-                'authenticate',
-                'token',
+                "authenticate",
+                "token",
                 self.gsx_user_name,
                 self.gsx_auth_token,
                 self.gsx_ship_to,
@@ -310,18 +295,13 @@ class User(AbstractBaseUser, ChatMixin):
 
 @receiver(attributes_changed)
 def send_activation_mail_to_user(sender, user, attributes, **kwargs):
-    if 'is_active' in attributes and getattr(user, 'is_active'):
+    if "is_active" in attributes and getattr(user, "is_active"):
         if not user.is_superuser:
             user.send_reset_password_link()
 
-    if 'is_active' in attributes and not getattr(user, 'is_active'):
-        template = settings.EMAIL_TEMPLATES.get('alert', None)
-        subject = 'Your {0} account has been deactivate'.format(
-            settings.SITE_HEADER
-        )
+    if "is_active" in attributes and not getattr(user, "is_active"):
+        template = settings.EMAIL_TEMPLATES.get("alert", None)
+        subject = "Your {0} account has been deactivate".format(settings.SITE_HEADER)
         summary = """Your Account has been deactivate by the admin."""
-        context = {
-            'receiver_short_name': user.get_short_name(),
-            'summary': summary,
-        }
+        context = {"receiver_short_name": user.get_short_name(), "summary": summary}
         utils.send_mail(subject, template, user.email, **context)

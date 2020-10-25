@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
-from lists.models import Item, LIST_NAME_CHOICES
+from lists.models import LIST_NAME_CHOICES, Item
 from rest_framework import serializers
 
 
@@ -13,9 +13,9 @@ class ItemModelSerializer(BaseSerializer):
         if user.is_superuser or user.is_privileged:
             valid_list_names = [x for x, y in LIST_NAME_CHOICES]
             if value not in valid_list_names:
-                raise serializers.ValidationError('Not a valid list type.')
-        elif value not in ['SERIALIZABLE_INVENTORY_ITEM']:
-            raise serializers.ValidationError('You can not create this Item.')
+                raise serializers.ValidationError("Not a valid list type.")
+        elif value not in ["SERIALIZABLE_INVENTORY_ITEM"]:
+            raise serializers.ValidationError("You can not create this Item.")
 
         return value
 
