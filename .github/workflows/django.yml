@@ -31,4 +31,5 @@ jobs:
         pre-commit run --all-files
     - name: Run Tests
       run: |
+        pipenv install --system
         python manage.py test
