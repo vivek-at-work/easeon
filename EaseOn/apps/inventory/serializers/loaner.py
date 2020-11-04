@@ -13,22 +13,25 @@ from rest_framework.validators import UniqueTogetherValidator
 
 
 class LoanerItemListSerializer(BaseSerializer):
+    organization_code = serializers.SlugRelatedField(
+        source="organization", read_only=True, slug_field="code"
+    )
+
     class Meta(BaseMeta):
         model = LoanerInventoryItem
-        read_only_fields = [
-            "id",
+        fields = [
             "url",
             "created_by",
             "created_at",
-            "is_deleted",
-            "guid",
-            "updated_at",
-            "deleted_at",
-            "version",
-            "last_visit_on",
-            "last_modified_by",
+            "serial_number",
+            "po_number",
+            "awb_number",
+            "part_number",
+            "description",
             "consumed",
             "blocked",
+            "organization",
+            "organization_code",
         ]
 
 

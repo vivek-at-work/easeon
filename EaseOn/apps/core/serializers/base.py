@@ -23,6 +23,10 @@ class BaseSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True, slug_field="full_name", default=serializers.CurrentUserDefault()
     )
 
+    last_modified_by = serializers.SlugRelatedField(
+        read_only=True, slug_field="full_name", default=serializers.CurrentUserDefault()
+    )
+
     id = serializers.ReadOnlyField()
     created_at = serializers.DateTimeField(
         read_only=True, default=serializers.CreateOnlyDefault(timezone.now)

@@ -2,6 +2,7 @@
 from core.serializers import BaseMeta, BaseSerializer
 from customers.models import Customer
 from customers.validators import validate_open_tickets
+from django.conf import settings
 from django.db import transaction
 from lists.models import get_list_choices
 from rest_framework import serializers
@@ -17,7 +18,7 @@ class CustomerSerializer(BaseSerializer):
     def validate(self, data):
         if "view" in self.context:
             action = self.context["view"].action
-            if action == "create":
+            if action == "create" and not settings.ENABLE_MULTIPLE_TICKETS_FOR_CUSTOMER:
                 validate_open_tickets(data)
         return data
 

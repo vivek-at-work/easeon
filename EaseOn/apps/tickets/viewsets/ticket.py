@@ -4,6 +4,7 @@ View For Ticket related Operations
 """
 import django_filters
 from core import viewsets
+from core.models import AUDITOR, PRIVILEGED, SUPER_USER
 from core.permissions import HasManagerRightsToUpdateOrDelete
 from devices.validators import gsx_validate
 from django.contrib.postgres.search import SearchVector
@@ -56,8 +57,9 @@ class CustomerFilter(django_filters.CharFilter):
     def filter(self, qs, value):
         if value:
             cn_d = {f"{self.field_name}__contact_number": value}
+            al_cn_d = {f"{self.field_name}__alternate_contact_number": value}
             em_d = {f"{self.field_name}__email": value}
-            return qs.filter(Q(**cn_d) | Q(**em_d))
+            return qs.filter(Q(**cn_d) | Q(**al_cn_d) | Q(**em_d))
         return qs
 
 
@@ -100,7 +102,7 @@ class TicketViewSet(viewsets.BaseViewSet):
     list_serializer_class = serializers.TicketListSerializer
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.role in [PRIVILEGED]:
             return models.Ticket.objects.all()
         else:
             (organizations, managed_organizations) = self.get_user_organizations()

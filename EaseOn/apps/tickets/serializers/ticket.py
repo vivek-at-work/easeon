@@ -4,6 +4,7 @@ import devices
 import organizations
 import slas
 from core.serializers import BaseMeta, BaseSerializer, UserSerializer
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from lists.models import get_list_choices
@@ -23,8 +24,9 @@ def device_do_not_have_open_tickets(device):
 
 
 def customer_do_not_have_open_tickets(customer):
-    if customer.open_tickets.count():
-        raise serializers.ValidationError("Customer has previous open tickets.")
+    if not settings.ENABLE_MULTIPLE_TICKETS_FOR_CUSTOMER:
+        if customer.open_tickets.count():
+            raise serializers.ValidationError("Customer has previous open tickets.")
 
 
 class TicketListSerializer(BaseSerializer):
