@@ -25,7 +25,7 @@ jobs:
       uses: dschep/install-pipenv-action@v1
     - name: Install Dependencies
       run: |
-        pipenv install --dev --system
+        pipenv install --system
     - name: Run Static Analysis
       run: |
         pre-commit run --all-files
