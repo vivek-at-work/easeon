@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
+from core.permissions import AUDITOR, OPERATOR, PRIVILEGED, SUPER_USER
 from rest_framework import permissions
-from core.permissions import PRIVILEGED, SUPER_USER, OPERATOR,AUDITOR
 
 
 class DeliveryUpdateOrDelete(permissions.BasePermission):
     """
     Allows Only Manager or super user to update only to Super users.
     """
-    ALLOWED_ROLES = [PRIVILEGED, SUPER_USER, OPERATOR,AUDITOR]
+
+    ALLOWED_ROLES = [PRIVILEGED, SUPER_USER, OPERATOR, AUDITOR]
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
