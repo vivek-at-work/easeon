@@ -26,9 +26,6 @@ jobs:
       run: |
         pipenv install --system --dev
         pipenv install --system
-    - name: Run Static Analysis
-      run: |
-        pre-commit run --all-files
     - name: Run Tests
       run: |
         python manage.py test
