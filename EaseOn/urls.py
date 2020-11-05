@@ -18,12 +18,11 @@ from lists.urls import lists_router
 from organizations.urls import organizations_router
 from reporting.urls import report_router
 from rest_framework.documentation import include_docs_urls
-from rest_framework_swagger.views import get_swagger_view
 from slas.urls import sla_router
 from tickets.urls import ticket_router
 from tokens.urls import token_router
 
-# from reports.urls import scheduler_router
+
 
 API_GATEWAY = settings.ENV("API_GATEWAY")
 ROUTER.extend(core_router)
@@ -36,7 +35,7 @@ ROUTER.extend(inventory_router)
 ROUTER.extend(lists_router)
 ROUTER.extend(token_router)
 ROUTER.extend(report_router)
-schema_view = get_swagger_view(title=settings.SITE_HEADER)
+
 
 
 urlpatterns = [

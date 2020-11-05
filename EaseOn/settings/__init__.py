@@ -62,8 +62,6 @@ THIRD_PART_PACKAGES = [
     "rest_framework.authtoken",
     "corsheaders",
     "oauth2_provider",
-    "django_celery_beat",
-    "import_export",
 ]
 
 LOCAL_APPS = [

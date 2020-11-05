@@ -29,8 +29,6 @@ class DeliveryUpdateOrDelete(permissions.BasePermission):
             and request.user.is_authenticated
         ):
             ticket = obj.ticket
-            if ticket.organization is not None:
-                return request.user == obj.organization.manager
-            elif not ticket.is_closed:
+            if not ticket.is_closed:
                 return True
-        return True
+        return False

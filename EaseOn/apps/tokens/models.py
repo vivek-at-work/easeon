@@ -4,7 +4,6 @@ from core.utils import send_token_to_customer
 from django.contrib.auth import get_user_model
 from django.db import connection, models
 from organizations.models import Organization
-from websocket import create_connection
 
 
 class Token(BaseModel):
