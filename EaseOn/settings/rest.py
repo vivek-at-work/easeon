@@ -26,7 +26,7 @@ REST_FRAMEWORK = {
     ),
     "EXCEPTION_HANDLER": "core.utils.django_exception_handler.exception_handler",
 }
-if env("DEBUG"):
+if env("DEBUG", default=False, cast=bool):
     REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"].append(
         "rest_framework.authentication.SessionAuthentication"
     )

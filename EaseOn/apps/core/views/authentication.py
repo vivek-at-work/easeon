@@ -70,21 +70,12 @@ class RegistrationView(generics.GenericAPIView):
         logging.info("SignUp Request Received and validated payload successfully.")
         user = self.serializer.save()
         logging.info("User Object created {}.".format(user))
-        if get_user_model().objects.all().count() == 1:
-            user.set_password(settings.DEFAULT_PASSWORD_FOR_USER)
-            user.is_admin = True
-            logging.info(
-                "No Other user record pre-exists so marking this new user {} Super User  and setting  default password for him.".format(
-                    user
-                )
+        user.set_unusable_password()
+        logging.info(
+            " Other users exists so setting non readable password for user {} and won't mark him as Super User.".format(
+                user
             )
-        else:
-            user.set_unusable_password()
-            logging.info(
-                " Other users exists so setting non readable password for user {} and won't mark him as Super User.".format(
-                    user
-                )
-            )
+        )
         try:
             user.save()
         except Exception as e:

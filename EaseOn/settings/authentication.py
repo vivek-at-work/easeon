@@ -18,7 +18,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 AUTH_USER_MODEL = "core.User"
-PASSWORD_AGE = int(env("PASSWORD_AGE",default=15))
+PASSWORD_AGE = int(env("PASSWORD_AGE", default=15))
 OTP_ENABLED = True
-DEFAULT_PASSWORD_FOR_USER = env("DEFAULT_PASSWORD_FOR_USER")
 OAUTH2_PROVIDER = {"ACCESS_TOKEN_EXPIRE_SECONDS": 86400}

@@ -52,7 +52,6 @@ def send_mail(subject, message, *receivers, **kwargs):
     local = {
         "SERVER_IP": settings.SERVER_IP,
         "site_name": settings.SITE_HEADER,
-        "twitter_handle": settings.TWITTER_HANDLE,
         "REPLY_TO": settings.EMAIL_HOST_USER,
         "sender_full_name": "Team " + settings.SITE_HEADER,
     }
