@@ -108,3 +108,25 @@ class VerifyOtpSerializer(serializers.Serializer):
             totp = pyotp.TOTP(obj.secret, interval=obj.interval)
             return totp.verify(otp)
         return False
+
+class VerifyCustomerOtpSerializer(serializers.Serializer):
+    """Serializer used to verify OTP"""
+
+    otp = serializers.CharField(required=True)
+    contact_number = serializers.CharField(required=True)
+
+    def verify_otp(self, otp, obj, otp_type):
+        """
+
+        :param otp_type:
+        :return:
+        """
+        if otp_type == "hotp" and obj.count:
+            hotp = pyotp.HOTP(obj.secret)
+            if hotp.verify(otp, obj.count):
+                return True
+        elif otp_type == "totp" and obj.interval:
+            totp = pyotp.TOTP(obj.secret, interval=obj.interval)
+            return totp.verify(otp)
+        return False
+

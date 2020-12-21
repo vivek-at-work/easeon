@@ -33,7 +33,7 @@ class SerializableItemViewSet(BaseBulkCreateViewSet):
     list_serializer_class = SerializableInventoryListSerializer
     delete_serializer_class = SerializableInventoryListSerializer
     permission_classes = [IsOperatorOrSuperUser]
-    ordering = ["id"]
+
 
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_privileged:

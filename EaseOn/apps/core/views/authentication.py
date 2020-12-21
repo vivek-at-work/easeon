@@ -279,7 +279,7 @@ class AdminAccountApprove(views.APIView):
                     {
                         "flag": result,
                         "detail": _(
-                            "User Account have not been approved for performing actions."
+                            "Invlid Token found while  performing user account approval."
                         ),
                     },
                     status=status.HTTP_200_OK,

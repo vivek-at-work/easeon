@@ -1,0 +1,14 @@
+<table style="border: 1px solid #b4b4b4;
+    width: 100%;
+    padding: 10px;">
+    {% for key, value in table_data.items %}
+    <tr style="{% cycle 'background: aliceblue; padding-left:8px' 'background: white;padding-left:8px' %}">
+        <td    style="font-weight: 800;"	>
+            {{key}}
+        </td>
+        <td>
+            {{value}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>

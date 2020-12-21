@@ -6,37 +6,66 @@ import logging
 
 from core.permissions import IsOperatorOrSuperUser
 from gsx import serializers
+from gsx import serializers_uat
 from rest_framework import permissions, response, status, viewsets
 from rest_framework.permissions import AllowAny
-
-
-class GSXViewSet(viewsets.GenericViewSet):
+from rest_framework.views import APIView
+from django.urls import reverse
+from django.urls import reverse_lazy
+serializers_dict = {
+    "warranty": serializers.DeviceSerializer,
+    "diagnostic_suites": serializers.DiagnosticSuitesSerializer,
+    "repair_eligibility": serializers.RepairEligibilitySerializer,
+    "diagnostics_lookup": serializers.DiagnosticsLookupSerializer,
+    "run_diagnosis_suite": serializers.RunDiagnosticsSerializer,
+    "diagnostics_status": serializers.DiagnosticsStatusSerializer,
+    "repair_summary": serializers.RepairSummarySerializer,
+    "repair_details": serializers.RepairDetailsSerializer,
+    "repair_audit": serializers.RepairAuditSerializer,
+    "repair_questions": serializers.RepairQuestionsSerializer,
+    "repair_create": serializers.RepairCreateSerializer,
+    "part_summary": serializers.PartSummarySerializer,
+    "repair_product_componentissue": serializers.ComponentIssueSerializer,
+    "content_article_lookup": serializers.ContentArticleLookupSerializer,
+    "content_article": serializers.ContentArticleSerializer,
+    "consignment_order_lookup": serializers.ConsignmentOrderLookupSerializer,
+    "consignment_delivery_lookup": serializers.ConsignmentDeliveryLookupSerializer,
+    "technician_lookup": serializers.TechnicianLookupSerializer,
+    "attachment_upload_access": serializers.AttachmentUploadAccessSerializer,
+    "document_download": serializers.DocumentDownloadSerializer,
+    "acknowledge_delivery": serializers.AcknowledgeDeliverySerializer,
+    "invoice_summary":serializers_uat.InvoiceSummarySeralizer,
+    "invoice_details":serializers_uat.InvoiceDetailsSerializer,
+    "order_applecare_quote":serializers_uat.OrderAppleCareQuoteSerializer,
+    "order_applecare_eligibility":serializers_uat.OrderAppleCareAgreementEligibilitySerializer,
+    "order_applecare_create":serializers_uat.OrderAppleCareCreateSerializer,
+    "order_applecare_summary":serializers_uat.OrderAppleCareSummarySerializer,
+    "order_applecare_update":serializers_uat.OrderAppleCareUpdateSerializer,
+    "order_applecare_delete":serializers_uat.OrderAppleCareDeleteSerializer,
+    "order_stocking_parts_summary":serializers_uat.StockingOrderPartSummarySerializer,
+    "order_stocking_create":serializers_uat.StockingOrderCreateSerializer,
+    "order_stocking_summary":serializers_uat.StockingOrderSummarySerializer,
+    "order_stocking_update":serializers_uat.StockingOrderUpdateSerializer,
+    "escalation_create":serializers_uat.EscalationCreateSerializer,
+    "escalation_details":serializers_uat.EscalationDetailsSerializer,
+    "escalation_update":serializers_uat.EscalationUpdateSerializer,
+    "attribute_lookup":serializers_uat.AttributeLookupSerializer
+}
+class GSXAPIMetaView(APIView):
     permission_classes = [AllowAny]
-    serializers_dict = {
-        "warranty": serializers.DeviceSerializer,
-        "diagnostic_suites": serializers.DiagnosticSuitesSerializer,
-        "repair_eligibility": serializers.RepairEligibilitySerializer,
-        "diagnostics_lookup": serializers.DiagnosticsLookupSerializer,
-        "run_diagnosis_suite": serializers.RunDiagnosticsSerializer,
-        "diagnostics_status": serializers.DiagnosticsStatusSerializer,
-        "repair_summary": serializers.RepairSummarySerializer,
-        "repair_details": serializers.RepairDetailsSerializer,
-        "repair_audit": serializers.RepairAuditSerializer,
-        "part_summary": serializers.PartSummarySerializer,
-        "repair_product_componentissue": serializers.ComponentIssueSerializer,
-        "content_article_lookup": serializers.ContentArticleLookupSerializer,
-        "content_article": serializers.ContentArticleSerializer,
-        "consignment_order_lookup": serializers.ConsignmentOrderLookupSerializer,
-        "consignment_delivery_lookup": serializers.ConsignmentDeliveryLookupSerializer,
-        "technician_lookup": serializers.TechnicianLookupSerializer,
-        "attachment_upload_access": serializers.AttachmentUploadAccessSerializer,
-        "document_download": serializers.DocumentDownloadSerializer,
-        "acknowledge_delivery": serializers.AcknowledgeDeliverySerializer,
-    }
+    def get(self, request, format=None):
+        l = serializers_dict.keys()
+        data =[]
+        for m in l :
+            data.append({
+                'method':m,
+                'url':reverse('gsx:gsx_api_endpoint',
+                kwargs={'action': m})
+            })
+        return response.Response(data,status=status.HTTP_200_OK)
 
-    def get_serializer_class(self):
-        return self.serializers_dict.get(self.action, serializers.NoneSerializer)
-
+class GSXAPIView(APIView):
+    permission_classes = [AllowAny]
     def _validate(self, serializer, data):
         """
         :param serializer: serializer against which data to ve validated
@@ -48,103 +77,12 @@ class GSXViewSet(viewsets.GenericViewSet):
         serializer_instance.is_valid(raise_exception=True)
         return serializer_instance.save()
 
-    def warranty(self, request):
-        """"""
-        serializer = self.get_serializer_class()
+    def get_serializer_class(self,action):
+        return serializers_dict.get(action, serializers.NoneSerializer)
+
+    def post(self, request, action, format=None):
+        serializer = self.get_serializer_class(action)
         serializer = self._validate(serializer, request.data)
         return response.Response(serializer, status=status.HTTP_201_CREATED)
 
-    def diagnostic_suites(self, request):
-        """"""
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
 
-    def repair_eligibility(self, request):
-        """"""
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def diagnostics_lookup(self, request):
-        """"""
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def run_diagnosis_suite(self, request):
-        """"""
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def diagnostics_status(self, request):
-        """"""
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def repair_summary(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def repair_details(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def repair_audit(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def part_summary(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def repair_product_componentissue(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def content_article_lookup(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def content_article(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def consignment_order_lookup(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def consignment_delivery_lookup(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def technician_lookup(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def attachment_upload_access(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def document_download(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)
-
-    def acknowledge_delivery(self, request):
-        serializer = self.get_serializer_class()
-        serializer = self._validate(serializer, request.data)
-        return response.Response(serializer, status=status.HTTP_201_CREATED)

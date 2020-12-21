@@ -21,6 +21,9 @@ environ.Env.read_env()  # reading .env file
 
 
 SMS_BACKEND_KEY = env("SMS_BACKEND_KEY")
+APP_INDIA_USERNAME = env("APP_INDIA_USERNAME")
+APP_INDIA_PASSWORD = env("APP_INDIA_PASSWORD")
+APP_INDIA_SENDER = env("APP_INDIA_SENDER")
 ADMIN_SITE_HEADER = env("ADMIN_SITE_HEADER")
 SITE_HEADER = env("SITE_HEADER")
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -30,7 +33,7 @@ sys.path.insert(0, APPS_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", cast=bool)
+DEBUG = not env("DEBUG", cast=bool)
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 # Multitenant
 ORGANIZATIONS_ORGANIZATION_MODEL = "organizations.Organization"
@@ -150,11 +153,11 @@ CLIENT_URL = env("CLIENT_URL").strip("/")
 NEW_USER_EMAIL_VERIFICATION_URL = "{}/{}/".format(
     CLIENT_URL, "email_verification"
 ).strip("/")
-NEW_USER_ADMIN_APPROVE_URL = "{}/{}/".format(CLIENT_URL, "user_approve").strip("/")
+NEW_USER_ADMIN_APPROVE_URL = "{}/{}/".format(CLIENT_URL, "dashboard/user_approve").strip("/")
 PASSWORD_RESET_URL = "{}/{}/".format(CLIENT_URL, "password_reset_confirm").strip("/")
+CUSTOMER_TICKET_DISPLAY_URL = "{}/{}/".format(CLIENT_URL, "ticket_status").strip("/")
 
-
-VALID_CLIENT_DOMAIN_NAMES = ["uipl.co.in", "unicornstore.in", "easeon.in"]
+VALID_CLIENT_DOMAIN_NAMES = ["uipl.co.in", "unicornstore.in", "easeon.in","unicorn.com"]
 
 # GSX
 
@@ -162,5 +165,5 @@ ENV = env
 TICKET_SUFFIX = 2  # env('TICKET_SUFFIX')
 ACCESS_TOKEN_EXPIRE_SECONDS = 60
 REFRESH_TOKEN_EXPIRE_SECONDS = 3600
-EXEMPTED_DEVICE = ["FCGT24E5HFM2"]
+EXEMPTED_DEVICE = ["FCGT24E5HFM2","ZZ501AAAOWP"]
 ENABLE_MULTIPLE_TICKETS_FOR_CUSTOMER = True

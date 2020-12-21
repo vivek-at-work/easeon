@@ -29,7 +29,9 @@ class RepairInventoryItem(InventoryItem):
     all_objects = RepairInventoryManager(alive_only=False)
 
     class Meta:
-        ordering = ["-id"]
+        verbose_name = "Repair Inventory Item"
+        verbose_name_plural = "Repair Inventory Items"
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.serial_number

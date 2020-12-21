@@ -3,7 +3,7 @@ import customers
 import devices
 import organizations
 import slas
-from core.serializers import BaseMeta, BaseSerializer, UserSerializer
+from core.serializers import BaseMeta, BaseSerializer, UserSerializer,FileFieldWithLinkRepresentation
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -110,7 +110,9 @@ class TicketSerializer(BaseSerializer):
     )
 
     reference_number = serializers.CharField(read_only=True)
+    unit_part_reports = serializers.JSONField(required=False, initial=dict, allow_null=True)
     password = serializers.CharField(read_only=True)
+    customer_signature = FileFieldWithLinkRepresentation(read_only=True)
     status = serializers.ChoiceField(
         default="Registered", choices=get_list_choices("TICKET_STATUS")
     )
@@ -125,9 +127,6 @@ class TicketSerializer(BaseSerializer):
     loaner_records = serializers.HyperlinkedRelatedField(
         read_only=True, many=True, view_name="loanerrecord-detail"
     )
-    # order_lines = serializers.HyperlinkedRelatedField(
-    #     read_only=True, many=True, view_name='orderline-detail'
-    # )
     serializable_order_lines = serializers.HyperlinkedRelatedField(
         read_only=True, many=True, view_name="serializableorderline-detail"
     )
@@ -288,6 +287,36 @@ class TicketPrintSerializer(BaseSerializer):
         user = self.get_user()
         manager_flag = user.managed_locations.filter(id=obj.organization.id).exists()
         return {"flag": obj.is_closed or manager_flag, "messages": messages}
+
+    class Meta(BaseMeta):
+        model = models.Ticket
+
+
+
+class TicketStatusChangeSerializer(BaseSerializer):
+    def validate_status(self, value):
+        if (
+            self.instance
+            and value
+            in ["Ready", "Ready For Pickup", "PROCESSED FOR REPLACEMENT", "Delivered"]
+            and self.instance.closed_on is None
+        ):
+            self.instance.closed_on = timezone.now()
+
+        if (
+            self.instance
+            and value
+            in ["Delivered"]
+            and not hasattr(self.instance, 'delivery')
+        ):
+            raise serializers.ValidationError("Can not change status to delivered unless delivery infomation is updated")
+
+        return value
+
+
+    status = serializers.ChoiceField(choices=get_list_choices("TICKET_STATUS"))
+
+
 
     class Meta(BaseMeta):
         model = models.Ticket

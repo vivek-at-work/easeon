@@ -1,0 +1,587 @@
+<!-- <table style="font-size: 12px;border-collapse: collapse; width: 100%;" border="1">
+    <tbody>
+        <tr>
+            <td colspan="2">
+                <div style="text-align: center;">
+                    <h1 style="text-align: center;">{{ticket.organization.name}}</h1>
+                    <small>{{ticket.organization.address}},{{ticket.organization.city}} {{ticket.organization.state}}
+                        {{ticket.organization.pin_code}}
+                    </small>
+                    <br />
+                    <small>{{ticket.organization.email}}</small>
+                    <br />
+                    <strong>Service Report</strong>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%; text-align: center;">
+                {{ticket.reference_number}}
+            </td>
+            <td style="width: 50%;"><strong>
+                    <label>Created On:</label>
+                </strong>{{ ticket.created_at|date:'Y-m-d H:i' }}</strong>
+                <div>
+                    <strong>
+                        <label>Expected Delivery Time:</label>
+                        <strong>{{ ticket.expected_delivery_time|date:'Y-m-d H:i' }}</strong>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;" valign="top">
+                <strong><label>Device Information</label></strong>
+                <p>
+                    <strong>
+                        <label>Serial Number:&nbsp;</label>
+                    </strong>{{ ticket.device.serial_number }}
+                </p>
+                <p>
+                    <strong>
+                        <label>IMEI Number:&nbsp;</label>
+                    </strong>{{ ticket.device.alternate_device_id }}
+                </p>
+                <p>
+                    <strong>
+                        <label>Product:&nbsp;</label>
+                    </strong>{{ ticket.device.product_name }}
+                </p>
+                <p>
+                    <strong>
+                        <label>Configuration:&nbsp;</label>
+                    </strong>{{ ticket.device.configuration }}
+                </p>
+            </td>
+            <td style="width: 50%;">&nbsp;<strong><label>Service Provider Information</label></strong>
+                <p><strong><label>Name&nbsp;</label></strong>{{ticket.organization.name}}</p>
+                <p><strong><label>Address:&nbsp;</label>
+                    </strong>{{ticket.organization.address}},{{ticket.organization.city}} {{ticket.organization.state}}
+                    {{ticket.organization.pin_code}}
+                </p>
+                <p><strong><label>Email:</label></strong>{{ticket.organization.email}}</p>
+                <p><strong><label>Contact Number:&nbsp;</label></strong>{{ticket.organization.contact_number}}</p>
+                <p><strong><label>Timing:&nbsp;</label></strong>{{ticket.organization.timings}}.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;" valign="top"><strong><label>Customer Information</label></strong>
+                <p><strong><label>Name:&nbsp;</label></strong>
+                    {{ticket.customer.first_name}} &nbsp; {{ticket.customer.last_name}}
+                </p>
+                <p><strong><label>Address:&nbsp;</label></strong>
+                    {{ticket.customer.address_line_1}}
+                    {{ticket.customer.address_line_2}}
+                    {{ticket.customer.city}}
+                    {{ticket.customer.state}}
+                    {{ticket.customer.pin_code}}
+
+                </p>
+                <p><strong><label>Email:</label></strong>
+                    {{ticket.customer.email}}
+                </p>
+                <p><strong><label>Contact Number:</label></strong>
+                    {{ticket.customer.contact_number}
+                </p>
+            </td>
+            <td style="width: 50%;" valign="top"><strong><label>Issue Reported By Customer:</label></strong>
+                <div class="printsection">
+                    <p>
+                        {{ticket.issue_reported_by_customer}
+
+                    </p>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;" valign="top"><strong><label>Inward Details:</label></strong>
+                <div>
+                    <p><strong><label>Service Type:</label></strong>
+                        &nbsp;{{ticket.coverage_type}
+                    </p>
+                </div>
+                <div>
+                    <p><strong><label>Repair Type:</label>
+                    </strong>&nbsp;{{ticket.repair_type}</p>
+                </div>
+                <div>
+                    <p><strong><label>Accessories Received:</label></strong>&nbsp;
+                        {{ticket.accessories}}</p>
+                </div>
+                <div>
+                    <p><strong><label>Required Upgrades:</label></strong>&nbsp;n
+                    {{ticket.required_upgrades}}
+                    </p>
+                </div>
+                <div>
+                    <p><strong><label>Unit Condition:</label></strong>&nbsp;
+                       {{ticket.device_condition}}
+
+                    </p>
+                </div>
+            </td>
+            <td style="width: 50%;">&nbsp;<strong><label>Device Part Information</label></strong>
+                <table class="table table-borderless table-sm" style="width: 296px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 142.667px;">Part</th>
+                            <th style="width: 137.333px;">Initial Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">FMIP</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Camera</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Adapter</th>
+                            <td style="width: 137.333px;">Not Working</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Battery</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Display</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Speaker</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">USB/DOC</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Bluetooth</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Microphone</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Airport/Wifi</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Touch Screen</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Mouse/Keyboard</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">Touch ID/ Face ID</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; width: 142.667px;">EarPods/Charging cable</th>
+                            <td style="width: 137.333px;">Didn't Check</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;" colspan="2" valign="top">
+                <table style="width: 100%;">
+                    <tbody>
+                        <tr>
+                            <td>&nbsp;<strong><label>Token Number:</label></strong>&nbsp;B037</td>
+                            <td>&nbsp;<strong><label>Operating System:</label></strong>&nbsp;NA</td>
+                            <td>&nbsp;<strong><label>Backup Required:</label></strong>&nbsp;No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;" colspan="2" valign="top">
+                <table style="width: 100%;">
+                    <tbody>
+                        <tr>
+                            <td>&nbsp;<strong><label>Expected Service/Diagnosis
+                                        Cost:</label></strong><strong>0&nbsp;</strong></td>
+                            <td>&nbsp;<strong><label>Expected Hardware Cost:</label></strong><strong>0&nbsp;</strong>
+                            </td>
+                            <td><strong><label>Total Cost:</label></strong><strong>0&nbsp;</strong>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" valign="top">
+                <p><strong>Important</strong></p>
+                <ul>
+                    <li>Apple or Apple Authorized Service centre (AASP) will not be responsible for any damage to the
+                        product that occurs during the repair process that is a result of any unauthorized modifications
+                        or repairs or replacements not performed by Apple or an AASP. If damage results, Apple will seek
+                        your authorization for any additional costs for completing the service even if the product is
+                        covered by warranty or an AppleCare service plan. If you decline authorization, Apple may return
+                        your product unrepaired in the damaged condition without any responsibility. The internal
+                        inspection would be done at the advanced repair centre.</li>
+                    <li>No responsibility for data backup, screen guards, wear and tear. And no warranty for
+                        liquid/physical damages, and unauthorised modifications found in the device. Estimation given
+                        may vary at the time of approval for processing the part or during servicing</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;" valign="top"><strong>&nbsp;Kunal Sarkar</strong></td>
+            <td style="width: 50%; text-align: right;">&nbsp;<strong>Customer Signature</strong></td>
+        </tr>
+    </tbody>
+</table> -->
+
+
+<table style="font-size:12px ;width:100%">
+    <tr>
+        <td colspan="2">
+
+            <div class="text-center">
+                <h2 class="mb-0">Unicorn Infosolutions Pvt. Ltd.</h2>
+                <h6><strong>Service Report</strong></h6>
+            </div>
+            </div>
+        </td>
+
+    </tr>
+    <tr>
+        <td class="text-center" style=" vertical-align: center; border: 1px solid rgb(66, 66, 66);">
+
+            {{ticket.reference_number}}
+
+
+        </td>
+
+        <td style="padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+            <div><strong><label>Created On: </label></strong><time datetime="1606568587272">28-11-2020 06:33
+                    PM</time></div>
+            <div><strong><label>Expected Delivery Time: </label></strong><time datetime="1607170500000">05-12-2020
+                    05:45
+                    PM</time></div>
+
+        </td>
+
+
+    </tr>
+    <tr>
+        <td valign="top" style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+
+            <h5><strong><label>Device Information</label></strong></h5>
+            <p><strong><label>Serial Number: </label></strong>GV4ZL085KXK2</p>
+            <p><strong><label>IMEI Number: </label></strong>353090101909426</p>
+            <p><strong><label>Product: </label></strong>iPhone XR</p>
+            <p><strong><label>Configuration: </label></strong>IPHONE XR,ROW,64GB,WHITE</p>
+
+
+        </td>
+
+        <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+            <h5><strong><label>Service Provider Information</label></strong></h5>
+            <p><strong><label>Name: </label></strong>Unicorn Infosolutions Pvt. Ltd.</p>
+            <p><strong><label>Address: </label></strong>Shop No.1, DLF Cyberhub, DLF Cybercity.Gurgaon-122002
+            </p>
+            <p><strong><label>Email: </label></strong>servicegurgaon@uipl.co.in</p>
+            <p><strong><label>Contact Number: </label></strong>For iOS -9971899772, For Mac-9311800893 For SMS
+                Only-7011770172</p>
+            <p><strong><label>Timing: </label></strong>Monday to Saturday (11:00 am to 6:30 pm) Sunday Closed.
+            </p>
+
+        </td>
+
+
+    </tr>
+    <tr>
+        <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+
+            <h5><strong><label>Customer Information</label></strong></h5>
+            <p><strong><label>Name: </label></strong>Mandeep Singh</p>
+            <p><strong><label>Address: </label></strong>Hno.81 Sector 1 Imt Manesar, Gurgaon Haryana India
+                122052</p>
+            <p><strong><label>Email: </label></strong>mandip87@gmail.com</p>
+            <p><strong><label>Contact Number: </label></strong>8447162605, </p>
+
+        </td>
+
+        <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+            <strong><label>Issue
+                    Reported By
+                    Customer: </label></strong>
+
+            <p>5w Adapter not working KBB GC8940507KVHVW2AH</p>
+
+
+        </td>
+
+
+    </tr>
+    <tr>
+        <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+            <strong><label>Inward
+                    Details:
+                </label></strong>
+
+            <p style="overflow-wrap: break-word;"><strong><label>Service Type: </label></strong> Limited
+                Warranty</p>
+
+            <p style="overflow-wrap: break-word;"><strong><label>Repair Type: </label></strong> Not Confirm</p>
+
+
+            <p style="overflow-wrap: break-word;"><strong><label>Accessories Received: </label></strong> No
+                accessories
+                received</p>
+
+
+            <p style="overflow-wrap: break-word;"><strong><label>Required Upgrades: </label></strong> n/a</p>
+
+
+            <p style="overflow-wrap: break-word;"><strong><label>Unit Condition: </label></strong> User level
+                Scratches
+                on adapter</p>
+
+
+        </td>
+
+        <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+
+            <p><strong><label>Device Part Information</label></strong></p>
+            <table style="padding:0px" class="table table-borderless table-sm">
+                <thead style="padding:0px">
+                    <tr style="padding:0px">
+                        <th style="padding:0px"> Part </th>
+                        <th style="padding:0px"> Initial Status </th>
+                    </tr>
+                </thead>
+                <tbody style="padding:0px">
+                    <tr style="padding:0px">
+                        <th style="padding:0px"> FMIP </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Camera </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Adapter </th>
+                        <td style="padding:0px"> Not Working </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Battery </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Display </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Speaker </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> USB/DOC </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Bluetooth </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Microphone </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Airport/Wifi </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Touch Screen </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Mouse/Keyboard </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> Touch ID/ Face ID </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px"> EarPods/Charging cable </th>
+                        <td style="padding:0px"> Didn't Check </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </td>
+
+
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table style="width:100%">
+                <tr>
+                    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+                        <div>
+                            <p style="overflow-wrap: break-word;"><strong><label>Token Number: </label></strong>
+                                B037</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+                        <div>
+                            <p style="overflow-wrap: break-word;"><strong><label>Operating System: </label></strong>
+                                NA</p>
+                        </div>
+                    </td>
+                    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+
+                        <div>
+                            <p style="overflow-wrap: break-word;"><strong><label>Backup Required: </label></strong>
+                                No</p>
+                        </div>
+                        </div>
+
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+
+        </td>
+
+
+
+
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table style="width:100%">
+                <tr>
+                    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+                        <strong><label>Expected
+                                Service/Diagnosis Cost: </label></strong><strong>0 <svg aria-hidden="true"
+                                focusable="false" data-prefix="fas" data-icon="rupee-sign"
+                                class="svg-inline--fa fa-rupee-sign fa-w-10 " role="img"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                <path fill="currentColor"
+                                    d="M308 96c6.627 0 12-5.373 12-12V44c0-6.627-5.373-12-12-12H12C5.373 32 0 37.373 0 44v44.748c0 6.627 5.373 12 12 12h85.28c27.308 0 48.261 9.958 60.97 27.252H12c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h158.757c-6.217 36.086-32.961 58.632-74.757 58.632H12c-6.627 0-12 5.373-12 12v53.012c0 3.349 1.4 6.546 3.861 8.818l165.052 152.356a12.001 12.001 0 0 0 8.139 3.182h82.562c10.924 0 16.166-13.408 8.139-20.818L116.871 319.906c76.499-2.34 131.144-53.395 138.318-127.906H308c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12h-58.69c-3.486-11.541-8.28-22.246-14.252-32H308z">
+                                </path>
+                            </svg></strong></div>
+                    </td>
+                    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+                        <strong><label>Expected Hardware
+                                Cost: </label></strong><strong>0 <svg aria-hidden="true" focusable="false"
+                                data-prefix="fas" data-icon="rupee-sign" class="svg-inline--fa fa-rupee-sign fa-w-10 "
+                                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                <path fill="currentColor"
+                                    d="M308 96c6.627 0 12-5.373 12-12V44c0-6.627-5.373-12-12-12H12C5.373 32 0 37.373 0 44v44.748c0 6.627 5.373 12 12 12h85.28c27.308 0 48.261 9.958 60.97 27.252H12c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h158.757c-6.217 36.086-32.961 58.632-74.757 58.632H12c-6.627 0-12 5.373-12 12v53.012c0 3.349 1.4 6.546 3.861 8.818l165.052 152.356a12.001 12.001 0 0 0 8.139 3.182h82.562c10.924 0 16.166-13.408 8.139-20.818L116.871 319.906c76.499-2.34 131.144-53.395 138.318-127.906H308c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12h-58.69c-3.486-11.541-8.28-22.246-14.252-32H308z">
+                                </path>
+                            </svg></strong></div>
+                    </td>
+                    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
+                        <strong><label>Total Cost:
+                            </label></strong><strong>0 <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                data-icon="rupee-sign" class="svg-inline--fa fa-rupee-sign fa-w-10 " role="img"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                <path fill="currentColor"
+                                    d="M308 96c6.627 0 12-5.373 12-12V44c0-6.627-5.373-12-12-12H12C5.373 32 0 37.373 0 44v44.748c0 6.627 5.373 12 12 12h85.28c27.308 0 48.261 9.958 60.97 27.252H12c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h158.757c-6.217 36.086-32.961 58.632-74.757 58.632H12c-6.627 0-12 5.373-12 12v53.012c0 3.349 1.4 6.546 3.861 8.818l165.052 152.356a12.001 12.001 0 0 0 8.139 3.182h82.562c10.924 0 16.166-13.408 8.139-20.818L116.871 319.906c76.499-2.34 131.144-53.395 138.318-127.906H308c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12h-58.69c-3.486-11.541-8.28-22.246-14.252-32H308z">
+                                </path>
+                            </svg></strong></div>
+
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+
+        </td>
+
+
+
+
+    </tr>
+</table>
+
+<div style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66); ">
+    <p><strong><label>Important</label></strong></p>
+    <ul>
+        <li class="text-justify">
+            <p style="padding: 5px; overflow-wrap: break-word;">Apple or Apple Authorized Service centre
+                (AASP)
+                will not be responsible for any damage to the product that occurs during the repair
+                process that
+                is a result of any unauthorized modifications or repairs or replacements not performed
+                by Apple
+                or an AASP. If damage results, Apple will seek your authorization for any additional
+                costs for
+                completing the service even if the product is covered by warranty or an AppleCare
+                service plan.
+                If you decline authorization, Apple may return your product unrepaired in the damaged
+                condition
+                without any responsibility.Internal inspection would be done at advanced repair centre.
+            </p>
+        </li>
+        <li class="text-justify">
+            <p style="padding: 5px; overflow-wrap: break-word;">No responsibility for data backup,
+                screen
+                guards, wear and tear. And no warranty for liquid/physical damages, and unauthorised
+                modifications found in the device.Estimation given may vary at the time of approval for
+                processing the part or during servicing of the product. Equipment is accepted subject to
+                the
+                terms and conditions mentioned overleaf..</p>
+        </li>
+    </ul>
+</div>
+
+<table style="font-size:12px ;width:100%"></table>
+
+
+
+
+
+
+
+
+
+<tr>
+
+    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66); ">
+
+        <div>
+            <p style="overflow-wrap: break-word;"> Kunal Sarkar</p>
+        </div>
+        </div>
+    </td>
+    <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66); ">
+        <div class="text-right">
+            <div>
+                <p style="overflow-wrap: break-word;"> Customer Signature</p>
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+</table>

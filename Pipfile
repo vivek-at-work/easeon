@@ -27,6 +27,10 @@ celery = {extras = ["redis"],version = "*"}
 redis = "*"
 ipython = "*"
 rocketchat-api = "*"
+numpy = "*"
+pandas = "*"
+weasyprint = "*"
+django-redis = "*"
 
 [requires]
 python_version = "3.8"

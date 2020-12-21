@@ -39,7 +39,6 @@ class LoanerItemViewSet(BaseBulkCreateViewSet):
     delete_serializer_class = LoanerItemListSerializer
     filter_class = LoanerInventoryItemFilter
     permission_classes = [IsOperatorOrSuperUser]
-    ordering = ["id"]
     filter_fields = ("serial_number", "organization", "part_number", "description")
     search_fields = ("serial_number", "part_number", "description")
 

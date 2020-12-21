@@ -4,7 +4,6 @@ from core.admin import BASE_SITE
 from core.router import ROUTER
 from core.urls import core_router
 from core.views import (
-    account_approval_from_admin_done,
     verify_email_and_request_account_approval_from_admin,
 )
 from customers.urls import customer_router
@@ -52,11 +51,6 @@ urlpatterns = [
         "backend/request_account_approval_from_admin/<str:uid>/<str:token>/",
         verify_email_and_request_account_approval_from_admin,
         name="request_account_approval_from_admin",
-    ),
-    path(
-        "backend/approval_from_admin/<str:uid>/<str:token>/",
-        account_approval_from_admin_done,
-        name="account_approval_from_admin_done",
     ),
     url(r"{0}/{1}".format(API_GATEWAY, settings.CURRENT_API_URL), include(ROUTER.urls)),
     url(

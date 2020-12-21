@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import django_filters
 from core.viewsets import BaseViewSet
 from django.db.models import Q
@@ -6,7 +5,7 @@ from django.utils import timezone
 from rest_framework import decorators, permissions, response
 from tokens import models, serializers
 from tokens.permissions import isValidCaller
-
+from tokens.commands import send_token_display_call_command
 
 class TokenNumberFilter(django_filters.CharFilter):
     empty_value = "EMPTY"
@@ -16,6 +15,7 @@ class TokenNumberFilter(django_filters.CharFilter):
             d = {"token_number": int(value)}
             qs = qs.filter(**d)
         return qs
+
 
 
 class TokenFilter(django_filters.FilterSet):
@@ -50,6 +50,7 @@ class TokenModelViewSet(BaseViewSet):
             permission_classes = [isValidCaller]
         return [permission() for permission in permission_classes]
 
+
     @decorators.action(
         methods=["POST"],
         detail=True,
@@ -72,6 +73,7 @@ class TokenModelViewSet(BaseViewSet):
             ).update(is_present=False)
             token.invite_sent_on = timezone.now()
             token.save()
+            send_token_display_call_command(**serializers.TokenSerializer(token, context=context).data)
         return response.Response(
             serializers.TokenSerializer(token, context=context).data
         )
@@ -95,7 +97,7 @@ class TokenModelViewSet(BaseViewSet):
         url_name="current_customers_at_counter",
     )
     def current_customers_at_counter(self, request, location_code):
-        tokens = models.Token.objects.filter(
+        tokens = self.get_queryset().filter(
             organization__code=location_code, is_present=True
         )
         context = {"request": request}
@@ -111,7 +113,7 @@ class TokenModelViewSet(BaseViewSet):
     )
     def new_tokens(self, request, location_code):
         tokens = (
-            models.Token.objects.filter(
+            self.get_queryset().filter(
                 organization__code=location_code, invited_by__isnull=True
             )
             .exclude(token_number__isnull=True)
@@ -121,19 +123,20 @@ class TokenModelViewSet(BaseViewSet):
         new_tokens_data = serializers.TokenSerializer(
             tokens, many=True, context=context
         ).data
-        current_token = (
-            models.Token.objects.filter(
-                organization__code=location_code,
-                invited_by=request.user,
-                is_present=True,
+        if request.user.is_authenticated:
+            current_token = (
+                self.get_queryset().filter(
+                    organization__code=location_code,
+                    invited_by=request.user,
+                    is_present=True,
+                )
+                .exclude(token_number__isnull=True)
+                .exclude(token_number__exact="")
             )
-            .exclude(token_number__isnull=True)
-            .exclude(token_number__exact="")
-        )
-        current_token_data = serializers.TokenSerializer(
-            current_token, many=True, context=context
-        ).data
-        for d in current_token_data:
-            d["is_current"] = True
-        new_tokens_data = new_tokens_data + current_token_data
+            current_token_data = serializers.TokenSerializer(
+                current_token, many=True, context=context
+            ).data
+            for d in current_token_data:
+                d["is_current"] = True
+            new_tokens_data = new_tokens_data + current_token_data
         return response.Response(new_tokens_data)

@@ -34,6 +34,11 @@ class LoanerInventoryItem(InventoryItem):
     )
     objects = LoanerInventoryManager()
     all_objects = LoanerInventoryManager(alive_only=False)
+    class Meta:
+        verbose_name = "Loaner Inventory Item"
+        verbose_name_plural = "Loaner Inventory Items"
+        ordering = ['-created_at']
+
 
     @property
     def penalty(self):
@@ -45,34 +50,6 @@ class LoanerInventoryItem(InventoryItem):
             results.append({"reason": item.reason, "cost": item.cost})
         return results
 
-        # if self.part_number == 'HN661-01867':
-        #     return [
-        #        ,
-        #         {
-        #             'reason': 'Exchange Price Returnable Damage',
-        #             'cost': '24500',
-        #         },
-        #         {'reason': 'Lost Or Excessive Damage', 'cost': '35500'},
-        #     ]
-        # if self.part_number == 'HN661-01909':
-        #     return [
-        #         {'reason': 'For Display Damage Only', 'cost': '11000'},
-        #         {
-        #             'reason': 'Exchange Price Returnable Damage',
-        #             'cost': '21000',
-        #         },
-        #         {'reason': 'Lost Or Excessive Damage', 'cost': '26500'},
-        #     ]
-        # if self.part_number == 'HN661-12386':
-        #     return [
-        #         {'reason': 'For Display Damage Only', 'cost': '15000'},
-        #         {
-        #             'reason': 'Exchange Price Returnable Damage',
-        #             'cost': '30500',
-        #         },
-        #         {'reason': 'Lost Or Excessive Damage', 'cost': '46000'},
-        #     ]
-        # return [{'event': 'Damage', 'cost_price': 27000}]
 
     def __str__(self):
         return self.serial_number

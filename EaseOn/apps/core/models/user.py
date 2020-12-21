@@ -272,19 +272,13 @@ class User(AbstractBaseUser, ChatMixin):
     def refresh_gsx_token(self, gsx_token=None, gsx_ship_to=None):
         req = None
         result = None
-        if gsx_token:
-            req = GSXRequest(
-                "authenticate", "token", self.gsx_user_name, gsx_token, self.gsx_ship_to
-            )
-        else:
-            req = GSXRequest(
-                "authenticate",
-                "token",
+        final_gsx_token = gsx_token if gsx_token else self.gsx_auth_token
+        req = GSXRequest(
+                "authenticate", "token",
                 self.gsx_user_name,
-                self.gsx_auth_token,
-                self.gsx_ship_to,
+                final_gsx_token,
+                self.gsx_ship_to
             )
-
         if req:
             result = req.handle_token_timeout(self)
         return result

@@ -12,3 +12,4 @@ from .ping import *
 from .sign_up import *
 from .token import *
 from .user import *
+from .fields import *
