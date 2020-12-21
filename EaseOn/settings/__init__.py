@@ -20,11 +20,11 @@ env = environ.Env(DEBUG=(bool, False))  # set default values and casting
 environ.Env.read_env()  # reading .env file
 
 
-SMS_BACKEND_KEY = env("SMS_BACKEND_KEY")
-APP_INDIA_USERNAME = env("APP_INDIA_USERNAME")
-APP_INDIA_PASSWORD = env("APP_INDIA_PASSWORD")
-APP_INDIA_SENDER = env("APP_INDIA_SENDER")
-ADMIN_SITE_HEADER = env("ADMIN_SITE_HEADER")
+SMS_BACKEND_KEY = env("SMS_BACKEND_KEY", default="XXXX")
+APP_INDIA_USERNAME = env("APP_INDIA_USERNAME", default="XXXX")
+APP_INDIA_PASSWORD = env("APP_INDIA_PASSWORD", default="XXXX")
+APP_INDIA_SENDER = env("APP_INDIA_SENDER", default="XXXX")
+ADMIN_SITE_HEADER = env("ADMIN_SITE_HEADER", default="XXXX")
 SITE_HEADER = env("SITE_HEADER")
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = environ.Path(__file__) - 2
@@ -33,16 +33,16 @@ sys.path.insert(0, APPS_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = not env("DEBUG", cast=bool)
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+DEBUG = not env("DEBUG", default=1, cast=bool)
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", default="*")
 # Multitenant
 ORGANIZATIONS_ORGANIZATION_MODEL = "organizations.Organization"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Application definition
-ADMIN_NAME = env("ADMIN_NAME")
-ADMIN_EMAIL = env("ADMIN_EMAIL")
-ADMIN_CONTACT_NUMBER = env("ADMIN_CONTACT_NUMBER")
+ADMIN_NAME = env("ADMIN_NAME", default="XXXX")
+ADMIN_EMAIL = env("ADMIN_EMAIL", default="XXXX")
+ADMIN_CONTACT_NUMBER = env("ADMIN_CONTACT_NUMBER", default="XXXX")
 ADMINS = [(ADMIN_NAME, ADMIN_EMAIL)]
 APPEND_SLASH = False
 TEST_EMAILS = [
@@ -148,8 +148,8 @@ CORS_ORIGIN_WHITELIST = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-SERVER_IP = env("SERVER_IP").strip("/")
-CLIENT_URL = env("CLIENT_URL").strip("/")
+SERVER_IP = env("SERVER_IP", default="XXXX/").strip("/")
+CLIENT_URL = env("CLIENT_URL", default="XXXX/").strip("/")
 NEW_USER_EMAIL_VERIFICATION_URL = "{}/{}/".format(
     CLIENT_URL, "email_verification"
 ).strip("/")

@@ -25,5 +25,5 @@ GSX_SETTINGS_UAT = (
 )
 
 VALIDATE_GSX_AUTH_TOKEN_ON_SIGN_UP = env(
-    "VALIDATE_GSX_AUTH_TOKEN_ON_SIGN_UP",default=1, cast=bool
+    "VALIDATE_GSX_AUTH_TOKEN_ON_SIGN_UP", default=1, cast=bool
 )
