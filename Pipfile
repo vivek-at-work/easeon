@@ -31,6 +31,7 @@ numpy = "*"
 pandas = "*"
 weasyprint = "*"
 django-redis = "*"
+idna = "==2.5"
 
 [requires]
 python_version = "3.8"
