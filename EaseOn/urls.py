@@ -19,7 +19,7 @@ from slas.urls import sla_router
 from tickets.urls import ticket_router
 from tokens.urls import token_router
 
-API_GATEWAY = settings.ENV("API_GATEWAY")
+API_GATEWAY = settings.API_GATEWAY
 ROUTER.extend(core_router)
 ROUTER.extend(customer_router)
 ROUTER.extend(devices_router)
