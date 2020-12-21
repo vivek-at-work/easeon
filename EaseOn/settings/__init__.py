@@ -25,7 +25,7 @@ APP_INDIA_USERNAME = env("APP_INDIA_USERNAME", default="XXXX")
 APP_INDIA_PASSWORD = env("APP_INDIA_PASSWORD", default="XXXX")
 APP_INDIA_SENDER = env("APP_INDIA_SENDER", default="XXXX")
 ADMIN_SITE_HEADER = env("ADMIN_SITE_HEADER", default="XXXX")
-SITE_HEADER = env("SITE_HEADER")
+SITE_HEADER = env("SITE_HEADER",default="XXXX")
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = environ.Path(__file__) - 2
 APPS_DIR = os.path.join(BASE_DIR, "apps")
