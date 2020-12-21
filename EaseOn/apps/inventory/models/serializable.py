@@ -17,11 +17,12 @@ class SerializableInventoryItem(BaseModel):
     available_quantity = models.IntegerField(default=0)
     consumed_quantity = models.IntegerField(default=0)
     consignment_type = models.CharField(max_length=20)
-    part_number = models.CharField(max_length=20,null=True,blank=True)
+    part_number = models.CharField(max_length=20, null=True, blank=True)
+
     class Meta:
         verbose_name = "Non Serialized Inventory Item"
         verbose_name_plural = "Non Serialized Inventory Items"
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
 
 
 @receiver(pre_save, sender=SerializableInventoryItem)

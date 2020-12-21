@@ -12,17 +12,14 @@ from django.contrib.auth import get_user_model
 from django.utils import encoding, timezone
 from rest_framework.exceptions import PermissionDenied, ValidationError
 
-from .error_code import UNAUTHORIZED,SESSION_IDLE_TIMEOUT
+from .error_code import SESSION_IDLE_TIMEOUT, UNAUTHORIZED
 from .gsx_exceptions import GSXResourceNotAvailableError
 
 logger = logging.getLogger()
 
+
 class GSXRequestUAT:
-    def __init__(self,
-        service,
-        method,
-        gsx_user_name,
-        auth_token, ship_to):
+    def __init__(self, service, method, gsx_user_name, auth_token, ship_to):
         self.service = service
         self.method = method
         self.gsx_user_name = gsx_user_name.lower()
@@ -44,9 +41,13 @@ class GSXRequestUAT:
                         error_codes.append(error.get("code"))
                 if "errorId" in message and "errors" in message:
                     logging.error(
-                        "UAT ** Error Response %s received from GSX for url %s", message, self.url
+                        "UAT ** Error Response %s received from GSX for url %s",
+                        message,
+                        self.url,
                     )
-                is_unauthorized = (UNAUTHORIZED in error_codes) or (SESSION_IDLE_TIMEOUT in error_codes)
+                is_unauthorized = (UNAUTHORIZED in error_codes) or (
+                    SESSION_IDLE_TIMEOUT in error_codes
+                )
                 return message, error_codes, is_unauthorized
             except Exception as e:
                 logging.error(
@@ -58,11 +59,9 @@ class GSXRequestUAT:
         return message, [], True
 
     def get_connection(self):
-        cert , key , url, sold_to, ship_to = settings.GSX_SETTINGS_UAT
+        cert, key, url, sold_to, ship_to = settings.GSX_SETTINGS_UAT
         if path.exists(cert) and path.exists(key):
-            return http.client.HTTPSConnection(
-                url, cert_file=cert, key_file=key
-            )
+            return http.client.HTTPSConnection(url, cert_file=cert, key_file=key)
         else:
             raise GSXResourceNotAvailableError()
 
@@ -71,13 +70,13 @@ class GSXRequestUAT:
         if service == "authenticate":
             prefix = "/api/"
 
-        resource = "{}{}".format(prefix,service)
+        resource = "{}{}".format(prefix, service)
         if method:
-            resource = "{}{}/{}".format(prefix,service, method)
+            resource = "{}{}/{}".format(prefix, service, method)
         return resource
 
-    def get_headers(self,auth_token, ship_to):
-        cert , key , url, sold_to, _ = settings.GSX_SETTINGS_UAT
+    def get_headers(self, auth_token, ship_to):
+        cert, key, url, sold_to, _ = settings.GSX_SETTINGS_UAT
         head = {
             "X-Apple-SoldTo": sold_to,
             "X-Apple-ShipTo": ship_to,
@@ -93,7 +92,7 @@ class GSXRequestUAT:
             head["X-Apple-Auth-Token"] = auth_token
         return head
 
-    def is_json(self,data):
+    def is_json(self, data):
         try:
             json.loads(data)
         except ValueError:
@@ -148,8 +147,7 @@ class GSXRequestUAT:
         connection = self.get_connection()
         if method == "GET":
             connection.request(
-                method, url,
-                headers=self.get_headers(self.auth_token, self.ship_to)
+                method, url, headers=self.get_headers(self.auth_token, self.ship_to)
             )
             logging.info(
                 " UAT ** GSX Request Method  %s for endpoint %s with headers %s",

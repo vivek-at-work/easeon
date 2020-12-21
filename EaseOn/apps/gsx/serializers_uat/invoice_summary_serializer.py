@@ -1,16 +1,18 @@
-from .base_gsx_serializer import BaseGSXSerializerUAT
-from rest_framework import serializers
-from gsx.core import GSXRequestUAT
+# -*- coding: utf-8 -*-
 import copy
+
+from gsx.core import GSXRequestUAT
+from rest_framework import serializers
+
+from .base_gsx_serializer import BaseGSXSerializerUAT
 
 
 def get_dummay_payload():  # This is a callable
     # return {"shipTo": "0001026647"}
-    return   {"createdToDate": "2020-12-03T12:31:18.050Z",
- "createdFromDate": "2020-11-20T12:31:18.051Z",
-
- }
-
+    return {
+        "createdToDate": "2020-12-03T12:31:18.050Z",
+        "createdFromDate": "2020-11-20T12:31:18.051Z",
+    }
 
 
 class InvoiceSummarySeralizer(BaseGSXSerializerUAT):

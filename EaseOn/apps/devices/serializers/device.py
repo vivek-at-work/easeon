@@ -39,6 +39,6 @@ class DeviceSerializer(BaseSerializer):
             "identifier",
             "serial_number",
             "alternate_device_id",
-            'gsx_repair_type',
-            'gsx_service_non_repair_type'
+            "gsx_repair_type",
+            "gsx_service_non_repair_type",
         ]

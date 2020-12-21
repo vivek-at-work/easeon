@@ -3,9 +3,7 @@
 from core.admin import BASE_SITE
 from core.router import ROUTER
 from core.urls import core_router
-from core.views import (
-    verify_email_and_request_account_approval_from_admin,
-)
+from core.views import verify_email_and_request_account_approval_from_admin
 from customers.urls import customer_router
 from devices.urls import devices_router
 from django.conf import settings
@@ -21,8 +19,6 @@ from slas.urls import sla_router
 from tickets.urls import ticket_router
 from tokens.urls import token_router
 
-
-
 API_GATEWAY = settings.ENV("API_GATEWAY")
 ROUTER.extend(core_router)
 ROUTER.extend(customer_router)
@@ -34,7 +30,6 @@ ROUTER.extend(inventory_router)
 ROUTER.extend(lists_router)
 ROUTER.extend(token_router)
 ROUTER.extend(report_router)
-
 
 
 urlpatterns = [

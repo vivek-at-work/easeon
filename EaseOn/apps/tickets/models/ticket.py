@@ -1,8 +1,15 @@
+# -*- coding: utf-8 -*-
 import random
 from datetime import date, datetime, time
+
 from core import utils
 from core.models import BaseManager, BaseModel, BaseQuerySet, User
-from core.utils import get_random_string, time_by_adding_business_days,send_sms
+from core.utils import (
+    account_activation_token,
+    get_random_string,
+    send_sms,
+    time_by_adding_business_days,
+)
 from customers.models import Customer
 from devices.models import Device
 from django.conf import settings
@@ -11,13 +18,11 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from django.utils import timezone
-
+from django.utils import encoding, http, timezone
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
 from slas.models import SLA
-from django.utils import encoding, http, timezone
-from core.utils import account_activation_token
+
 from .upload_content import UploadContent
 
 CLOSE_STATUS_VALUES = ["Delivered", "Hold", "DECLINED"]
@@ -76,7 +81,7 @@ class Ticket(BaseModel):
     request_review_by_apple = models.BooleanField(default=False)
     mark_complete = models.BooleanField(default=False)
     box_required = models.BooleanField(default=False)
-    loaner_stock_unavailable =  models.BooleanField(default=False)
+    loaner_stock_unavailable = models.BooleanField(default=False)
     currently_assigned_to = models.ForeignKey(
         User, related_name="assigned_tickets", on_delete=models.DO_NOTHING
     )
@@ -118,9 +123,11 @@ class Ticket(BaseModel):
         SLA, null=False, related_name="tickets", on_delete=models.DO_NOTHING
     )
     uploaded_contents = GenericRelation(UploadContent, related_query_name="tickets")
-    customer_signature = models.ImageField(upload_to="customer_signatures/tickets",null=True, blank=True)
+    customer_signature = models.ImageField(
+        upload_to="customer_signatures/tickets", null=True, blank=True
+    )
     unit_part_reports = JSONField(null=True)
-    component_issues =  JSONField(null=True)
+    component_issues = JSONField(null=True)
     objects = TicketManager()
     all_objects = TicketManager(alive_only=False)
 
@@ -128,7 +135,7 @@ class Ticket(BaseModel):
         "Ticket Model Meta"
         verbose_name = "Ticket"
         verbose_name_plural = "Tickets"
-        ordering = ['-id']
+        ordering = ["-id"]
 
     @property
     def expected_time_to_delivery(self):
@@ -195,12 +202,14 @@ class Ticket(BaseModel):
         template = settings.EMAIL_TEMPLATES.get("action")
         ticket_display_url = settings.CLIENT_URL
         subject = "Device repair details for {0}".format(self)
-        summary="We have received your device for repair and details are listed bellow."
+        summary = (
+            "We have received your device for repair and details are listed bellow."
+        )
         message = """For further assistance you may  call on {0} between ({1})
         or you may also send your queries to {2} .""".format(
             self.organization.contact_number,
             self.organization.timings,
-            self.organization.email
+            self.organization.email,
         )
         action_summary = """We will take it up for diagnosis and updates will be shared
         over email & SMS"""
@@ -212,49 +221,44 @@ class Ticket(BaseModel):
         }
         context = {
             "receiver_short_name": self.customer.full_name,
-            "from_name":self.organization.name,
-            "site_name":self.organization.name,
+            "from_name": self.organization.name,
+            "site_name": self.organization.name,
             "summary": summary,
             "detail": message,
-            "action_summary":action_summary,
+            "action_summary": action_summary,
             "action_name": "Click here to check your repair status",
             "action_link": ticket_display_url,
-            "sender_full_name":"Team {0}".format(self.organization.name),
-            "table_data":table_data
+            "sender_full_name": "Team {0}".format(self.organization.name),
+            "table_data": table_data,
         }
         receivers = [self.customer.email]
         utils.send_mail(subject, template, *receivers, **context)
         return receivers
 
     def send_ticket_details_to_customer_via_sms(self):
-        template = settings.EMAIL_TEMPLATES.get("action")
         message = """Thank you for visiting {0}.Your Ticket No is {1} visit {2} to track status.Updates will be sent on SMS and Email.""".format(
-            self.organization.name.split(' ')[0],
-            self,
-            settings.CLIENT_URL
+            self.organization.name.split(" ")[0], self, settings.CLIENT_URL
         )
 
-        send_sms_res = send_sms(self.customer.contact_number,message)
+        send_sms_res = send_sms(self.customer.contact_number, message)
         return send_sms_res
 
     def get_invite_message_by_status(self):
-        if self.status.lower() in ['Ready For Pickup'.lower()]:
+        if self.status.lower() in ["Ready For Pickup".lower()]:
             return "Device ready for delivery. Timings {} Call {} for home delivery.".format(
-            self.organization.timings,
-            self.organization.contact_number)
+                self.organization.timings, self.organization.contact_number
+            )
         return "Ticket status changed to {}. Timings {} Call {} for your query.".format(
-            self.status,
-            self.organization.timings,
-            self.organization.contact_number)
+            self.status, self.organization.timings, self.organization.contact_number
+        )
 
     def send_ticket_status_update_to_customer_via_sms(self):
-        template = settings.EMAIL_TEMPLATES.get("action")
         message = """{0} update for Ticket No {1}. {2}""".format(
-            self.organization.name.split(' ')[0],
+            self.organization.name.split(" ")[0],
             self,
-            self.get_invite_message_by_status()
+            self.get_invite_message_by_status(),
         )
-        send_sms_res = send_sms(self.customer.contact_number,message)
+        send_sms_res = send_sms(self.customer.contact_number, message)
 
         return send_sms_res
 
@@ -262,12 +266,14 @@ class Ticket(BaseModel):
         template = settings.EMAIL_TEMPLATES.get("action")
         ticket_display_url = settings.CLIENT_URL
 
-        subject = "{0} update for Ticket No {1}".format(self.organization.name.split(' ')[0], self)
+        subject = "{0} update for Ticket No {1}".format(
+            self.organization.name.split(" ")[0], self
+        )
         message = """{0} update for Ticket No {1}.
         {2}""".format(
-            self.organization.name.split(' ')[0],
+            self.organization.name.split(" ")[0],
             self,
-            self.get_invite_message_by_status()
+            self.get_invite_message_by_status(),
         )
 
         action_summary = """Any other updates will be shared
@@ -277,28 +283,24 @@ class Ticket(BaseModel):
             "Product Details.": self.device.product_name,
             "Serial Number.": self.device.serial_number,
             "Problem Reported": self.issue_reported_by_customer,
-            "Current Status": self.status
+            "Current Status": self.status,
         }
 
         context = {
             "receiver_short_name": self.customer.full_name,
-            "from_name":self.organization.name,
-            "site_name":self.organization.name,
+            "from_name": self.organization.name,
+            "site_name": self.organization.name,
             "detail": message,
-            "action_summary":action_summary,
+            "action_summary": action_summary,
             "action_name": "Click here to check your repair status",
             "action_link": ticket_display_url,
-            "sender_full_name":"Team {0}".format(self.organization.name),
-            "table_data":table_data
+            "sender_full_name": "Team {0}".format(self.organization.name),
+            "table_data": table_data,
         }
 
         receivers = [self.customer.email]
         utils.send_mail(subject, template, *receivers, **context)
         return receivers
-
-
-
-
 
     def __str__(self):
         return self.reference_number

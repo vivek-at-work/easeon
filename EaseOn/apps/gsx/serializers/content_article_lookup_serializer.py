@@ -1,7 +1,11 @@
-from .base_gsx_serializer import BaseGSXSerializer
-from rest_framework import serializers
-from gsx.core import GSXRequest
+# -*- coding: utf-8 -*-
 import copy
+
+from gsx.core import GSXRequest
+from rest_framework import serializers
+
+from .base_gsx_serializer import BaseGSXSerializer
+
 
 class ContentArticleLookupSerializer(BaseGSXSerializer):
     """

@@ -1,9 +1,12 @@
-from .base_gsx_serializer import BaseGSXSerializer
-from core.utils import time_by_adding_business_days
-from .gsx_validate import gsx_validate
-from rest_framework import serializers
-from gsx.core import GSXRequest
+# -*- coding: utf-8 -*-
 import copy
+
+from core.utils import time_by_adding_business_days
+from gsx.core import GSXRequest
+from rest_framework import serializers
+
+from .base_gsx_serializer import BaseGSXSerializer
+from .gsx_validate import gsx_validate
 
 
 class PartSummarySerializer(BaseGSXSerializer):
@@ -20,4 +23,3 @@ class PartSummarySerializer(BaseGSXSerializer):
         data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         return response
-

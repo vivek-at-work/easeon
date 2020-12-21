@@ -7,7 +7,6 @@ from rest_framework import serializers
 from tickets.models import OrderLine, SerializableOrderLine, Ticket
 
 
-
 class OrderLineSerializer(BaseSerializer):
     inventory_item = serializers.HyperlinkedRelatedField(
         queryset=RepairInventoryItem.objects.all().available(),
@@ -44,7 +43,9 @@ class OrderLineSerializer(BaseSerializer):
 
 
 class SerializableOrderLineSerializer(BaseSerializer):
-    description = serializers.ChoiceField(choices=get_list_choices("SERIALIZABLE_INVENTORY_ITEM"))
+    description = serializers.ChoiceField(
+        choices=get_list_choices("SERIALIZABLE_INVENTORY_ITEM")
+    )
     ticket = serializers.HyperlinkedRelatedField(
         queryset=Ticket.objects.all(), view_name="ticket-detail"
     )
@@ -52,7 +53,8 @@ class SerializableOrderLineSerializer(BaseSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["description"] = serializers.ChoiceField(
-            choices=get_list_choices("SERIALIZABLE_INVENTORY_ITEM"))
+            choices=get_list_choices("SERIALIZABLE_INVENTORY_ITEM")
+        )
 
     def validate(self, data):
         """
@@ -73,7 +75,9 @@ class SerializableOrderLineSerializer(BaseSerializer):
                 if val < quantity:
                     msz = "quantity {0} for {2} not available,\
                         we have only {1} available"
-                    raise serializers.ValidationError(msz.format(quantity, val, description))
+                    raise serializers.ValidationError(
+                        msz.format(quantity, val, description)
+                    )
         return data
 
     class Meta(BaseMeta):

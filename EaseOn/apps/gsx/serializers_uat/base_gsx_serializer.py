@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import copy
 import re
 
@@ -5,7 +6,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 USER = get_user_model()
-
 
 
 class BaseGSXSerializerUAT(serializers.Serializer):

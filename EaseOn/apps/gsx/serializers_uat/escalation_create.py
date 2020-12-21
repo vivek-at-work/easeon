@@ -1,30 +1,26 @@
+# -*- coding: utf-8 -*-
+import copy
 
+from gsx.core import GSXRequestUAT
+from rest_framework import serializers
 
 from .base_gsx_serializer import BaseGSXSerializerUAT
-from rest_framework import serializers
-from gsx.core import GSXRequestUAT
-import copy
 
 
 def get_dummay_payload():
     return {
-  "issueType":"SIG",
-  "escalationTypeCode": "GSXHELP",
-  "notes": [
-    {
-      "type": "ESCALATION",
-      "content": "You’ll move the world forward. Every day, we create the most innovative mapping and location technologies to shape tomorrow’s mobility for the better."
+        "issueType": "SIG",
+        "escalationTypeCode": "GSXHELP",
+        "notes": [
+            {
+                "type": "ESCALATION",
+                "content": "You’ll move the world forward. Every day, we create the most innovative mapping and location technologies to shape tomorrow’s mobility for the better.",
+            }
+        ],
+        "context": [{"contextType": "IMEI_NO", "id": "451142410360030"}],
+        "escalateTo": "APPLE",
+        "shipTo": "0001026647",
     }
-  ],
-  "context": [
-    {
-      "contextType": "IMEI_NO",
-      "id": "451142410360030"
-    }
-  ],
-  "escalateTo": "APPLE",
-  "shipTo": "0001026647"
-}
 
 
 class EscalationCreateSerializer(BaseGSXSerializerUAT):

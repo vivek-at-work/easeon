@@ -274,11 +274,12 @@ class User(AbstractBaseUser, ChatMixin):
         result = None
         final_gsx_token = gsx_token if gsx_token else self.gsx_auth_token
         req = GSXRequest(
-                "authenticate", "token",
-                self.gsx_user_name,
-                final_gsx_token,
-                self.gsx_ship_to
-            )
+            "authenticate",
+            "token",
+            self.gsx_user_name,
+            final_gsx_token,
+            self.gsx_ship_to,
+        )
         if req:
             result = req.handle_token_timeout(self)
         return result

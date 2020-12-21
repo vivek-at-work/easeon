@@ -1,20 +1,19 @@
-from .base_gsx_serializer import BaseGSXSerializerUAT
-from rest_framework import serializers
-from gsx.core import GSXRequestUAT
+# -*- coding: utf-8 -*-
 import copy
+
+from gsx.core import GSXRequestUAT
+from rest_framework import serializers
+
+from .base_gsx_serializer import BaseGSXSerializerUAT
 
 
 def get_dummay_payload():
-    return  {
-  "orderId": "GS1000008736",
-  "purchaseOrderNumber": "DL66103997",
-  "shipToCode": "0001026647",
-
-  "action": "CONFIRM"
-}
-
-
-
+    return {
+        "orderId": "GS1000008736",
+        "purchaseOrderNumber": "DL66103997",
+        "shipToCode": "0001026647",
+        "action": "CONFIRM",
+    }
 
 
 class StockingOrderUpdateSerializer(BaseGSXSerializerUAT):

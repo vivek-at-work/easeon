@@ -1,17 +1,14 @@
-from .base_gsx_serializer import BaseGSXSerializerUAT
-from rest_framework import serializers
-from gsx.core import GSXRequestUAT
+# -*- coding: utf-8 -*-
 import copy
+
+from gsx.core import GSXRequestUAT
+from rest_framework import serializers
+
+from .base_gsx_serializer import BaseGSXSerializerUAT
 
 
 def get_dummay_payload():
-    return   {
-   "device": {
-    "id": "511113481600080"
-    }
-
- }
-
+    return {"device": {"id": "511113481600080"}}
 
 
 class OrderAppleCareAgreementEligibilitySerializer(BaseGSXSerializerUAT):

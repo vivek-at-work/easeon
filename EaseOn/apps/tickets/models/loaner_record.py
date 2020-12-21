@@ -26,13 +26,15 @@ class LoanerRecord(BaseModel):
     )
     returned_on = models.DateTimeField(null=True, blank=True)
     is_lost = models.NullBooleanField()
-    customer_signature = models.ImageField(upload_to="customer_signatures/loaner_record",
-    null=True, blank=True)
+    customer_signature = models.ImageField(
+        upload_to="customer_signatures/loaner_record", null=True, blank=True
+    )
     penalty = JSONField()
+
     class Meta:
         verbose_name = "Loaner Record"
         verbose_name_plural = "Loaner Records"
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def get_readonly_fields(self, request, obj=None):
         if obj:
@@ -104,6 +106,7 @@ class LoanerRecord(BaseModel):
 
     def __str__(self):
         return str(self.id)
+
 
 @receiver(pre_save, sender=LoanerRecord)
 def set_penalty(sender, instance, *args, **kwargs):

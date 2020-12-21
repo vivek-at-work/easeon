@@ -2,7 +2,7 @@
 from core.models import BaseModel
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.signals import post_delete, post_save , pre_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from inventory.models import RepairInventoryItem, SerializableInventoryItem
 
@@ -19,19 +19,16 @@ class OrderLine(BaseModel):
     quantity = models.IntegerField(default=1)
     amount = models.FloatField(default=0.0)
     inventory_item = models.ForeignKey(
-        RepairInventoryItem,
-        related_name="order_line",
-        on_delete=models.DO_NOTHING
+        RepairInventoryItem, related_name="order_line", on_delete=models.DO_NOTHING
     )
-    coverage_option = models.CharField(max_length=100,null=True)
-    pricing_option = models.CharField(max_length=100,null=True)
+    coverage_option = models.CharField(max_length=100, null=True)
+    pricing_option = models.CharField(max_length=100, null=True)
     from_consigned_stock = models.BooleanField(default=True)
-
 
     class Meta:
         verbose_name = "Replacement Spare"
         verbose_name_plural = "Replacement Spares"
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def get_readonly_fields(self, request, obj=None):
         if obj:
@@ -141,5 +138,8 @@ def add_inventory_item(sender, instance, *args, **kwargs):
 @receiver(pre_save, sender=SerializableOrderLine)
 def set_part_number(sender, instance, *args, **kwargs):
     if instance.description:
-        instance.part_number = SerializableInventoryItem.objects.all().filter(
-            description=instance.description)[0].part_number
+        instance.part_number = (
+            SerializableInventoryItem.objects.all()
+            .filter(description=instance.description)[0]
+            .part_number
+        )

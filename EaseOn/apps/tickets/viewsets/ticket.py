@@ -3,28 +3,32 @@
 View For Ticket related Operations
 """
 import os
+import tempfile
+
 import django_filters
 from core import viewsets
 from core.models import AUDITOR, PRIVILEGED, SUPER_USER
 from core.permissions import HasManagerRightsToUpdateOrDelete
 from devices.validators import gsx_validate
+from django.conf import settings
 from django.contrib.postgres.search import SearchVector
 from django.db.models import Q
-from django.utils import timezone
 from django.http import HttpResponse
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
+from django.utils import timezone
+from gsx.converters import get_convertor_class
+from gsx.serializers import (
+    ComponentIssueSerializer,
+    RepairEligibilitySerializer,
+    RepairQuestionsSerializer,
+)
 from inventory.serializers import LoanerItemSerializer, RepairItemSerializer
-from rest_framework import decorators, response, status,permissions
+from rest_framework import decorators, permissions, response, status
 from rest_framework.parsers import MultiPartParser
 from tickets import models, serializers
 from tickets.permissions import TicketPermissions
-from django.http import HttpResponse
-from django.conf import settings
-from django.template.loader import render_to_string
-from weasyprint import HTML,CSS
-import tempfile
-from gsx.converters import get_convertor_class
-from gsx.serializers import RepairEligibilitySerializer,ComponentIssueSerializer,RepairQuestionsSerializer
+from weasyprint import CSS, HTML
+
 
 class UserNameFilter(django_filters.CharFilter):
     empty_value = "EMPTY"
@@ -94,7 +98,7 @@ class TicketFilter(django_filters.FilterSet):
 
     class Meta(object):
         model = models.Ticket
-        exclude = ('unit_part_reports','customer_signature','component_issues')
+        exclude = ("unit_part_reports", "customer_signature", "component_issues")
 
 
 class TicketViewSet(viewsets.BaseViewSet):
@@ -183,7 +187,8 @@ class TicketViewSet(viewsets.BaseViewSet):
         methods=["post"],
         detail=True,
         serializer_class=serializers.TicketStatusChangeSerializer,
-        url_name="change_ticket_status",)
+        url_name="change_ticket_status",
+    )
     def change_status(self, request, pk):
         "Get diagnosis suites for device."
         ticket = self.get_object()
@@ -191,7 +196,7 @@ class TicketViewSet(viewsets.BaseViewSet):
             ticket, data=request.data, partial=True, context={"request": request}
         )
         if serializer.is_valid(raise_exception=True):
-            if serializer.validated_data['status']  in ["Delivered"]:
+            if serializer.validated_data["status"] in ["Delivered"]:
                 delivery = ticket.delivery
                 delivery.device_pickup_time = timezone.now()
                 delivery.save()
@@ -201,11 +206,9 @@ class TicketViewSet(viewsets.BaseViewSet):
         data = self.retrieve_serializer_class(obj, context={"request": request}).data
         return response.Response(data, status=status.HTTP_200_OK, headers=headers)
 
-
     @decorators.action(
-        methods=["post","get"],
-        detail=True,
-        url_name="send_ticket_details_by_email",)
+        methods=["post", "get"], detail=True, url_name="send_ticket_details_by_email"
+    )
     def send_ticket_details_by_email(self, request, pk):
         "Get diagnosis suites for device."
         ticket = self.get_object()
@@ -213,11 +216,9 @@ class TicketViewSet(viewsets.BaseViewSet):
         data = self.retrieve_serializer_class(ticket, context={"request": request}).data
         return response.Response(data, status=status.HTTP_200_OK)
 
-
     @decorators.action(
-        methods=["post","get"],
-        detail=True,
-        url_name="send_ticket_details_by_sms",)
+        methods=["post", "get"], detail=True, url_name="send_ticket_details_by_sms"
+    )
     def send_ticket_details_by_sms(self, request, pk):
         "Get diagnosis suites for device."
         ticket = self.get_object()
@@ -226,9 +227,8 @@ class TicketViewSet(viewsets.BaseViewSet):
         return response.Response(data, status=status.HTTP_200_OK)
 
     @decorators.action(
-        methods=["post","get"],
-        detail=True,
-        url_name="send_ticket_status_by_email",)
+        methods=["post", "get"], detail=True, url_name="send_ticket_status_by_email"
+    )
     def send_ticket_status_by_email(self, request, pk):
         "Get diagnosis suites for device."
         ticket = self.get_object()
@@ -237,9 +237,8 @@ class TicketViewSet(viewsets.BaseViewSet):
         return response.Response(data, status=status.HTTP_200_OK)
 
     @decorators.action(
-        methods=["post","get"],
-        detail=True,
-        url_name="send_ticket_status_by_sms",)
+        methods=["post", "get"], detail=True, url_name="send_ticket_status_by_sms"
+    )
     def send_ticket_status_by_sms(self, request, pk):
         "Get diagnosis suites for device."
         ticket = self.get_object()
@@ -247,30 +246,27 @@ class TicketViewSet(viewsets.BaseViewSet):
         data = self.retrieve_serializer_class(ticket, context={"request": request}).data
         return response.Response(data, status=status.HTTP_200_OK)
 
-    @decorators.action(
-        methods=["post","get"],
-        detail=True,
-        url_name="ticket_pdf",)
+    @decorators.action(methods=["post", "get"], detail=True, url_name="ticket_pdf")
     def pdf(self, request, pk):
         """Generate pdf."""
         ticket = self.get_object()
-        html_string = render_to_string('ticket.html', {'ticket': ticket})
+        html_string = render_to_string("ticket.html", {"ticket": ticket})
         html = HTML(string=html_string)
-        margins = '{header_size}px {side_margin} {footer_size}px {side_margin}'.format(
-            header_size=10,
-            footer_size=10,
-            side_margin=f'1cm',
+        margins = "{0}px {1} {2}px {1}".format(10, 10, "1cm")
+        content_print_layout = "@page {size: A4 portrait; margin: %s;}" % margins
+        result = html.write_pdf(
+            stylesheets=[
+                CSS(string=content_print_layout),
+                os.path.join(settings.STATIC_ROOT, "bootstrap.min.css"),
+            ]
         )
-        content_print_layout = '@page {size: A4 portrait; margin: %s;}' % margins
-        result = html.write_pdf(stylesheets=[CSS(string=content_print_layout),
-        os.path.join(settings.STATIC_ROOT , 'bootstrap.min.css')],)
-        response = HttpResponse(content_type='application/pdf;')
-        response['Content-Disposition'] = 'inline; filename=list_people.pdf'
-        response['Content-Transfer-Encoding'] = 'binary'
+        response = HttpResponse(content_type="application/pdf;")
+        response["Content-Disposition"] = "inline; filename=list_people.pdf"
+        response["Content-Transfer-Encoding"] = "binary"
         with tempfile.NamedTemporaryFile(delete=True) as output:
             output.write(result)
             output.flush()
-            output = open(output.name, 'rb')
+            output = open(output.name, "rb")
             response.write(output.read())
         return response
 
@@ -301,12 +297,12 @@ class TicketViewSet(viewsets.BaseViewSet):
         detail=True,
         url_path="upload_signature/(?P<reference_number>\w+)/(?P<guid>\w+)",
         serializer_class=serializers.TicketSignatureSerializer,
-        permission_classes = [permissions.AllowAny],
+        permission_classes=[permissions.AllowAny],
     )
-    def upload_signature(self, request, pk,reference_number,guid):
+    def upload_signature(self, request, pk, reference_number, guid):
         "Get diagnosis suites for device."
         ticket = self.get_object()
-        if ticket.reference_number == reference_number and ticket.guid ==  guid:
+        if ticket.reference_number == reference_number and ticket.guid == guid:
             serializer = self.get_serializer_class()(
                 ticket, data=request.data, partial=True, context={"request": request}
             )
@@ -314,29 +310,23 @@ class TicketViewSet(viewsets.BaseViewSet):
                 serializer.save()
             headers = self.get_success_headers(serializer.data)
             obj = self.get_object()
-            data = self.retrieve_serializer_class(obj, context={"request": request}).data
+            data = self.retrieve_serializer_class(
+                obj, context={"request": request}
+            ).data
             return response.Response(data, status=status.HTTP_200_OK, headers=headers)
         return response.Response("Invalid paramters", status.HTTP_400_BAD_REQUEST)
 
-    @decorators.action(
-        methods=["post","get"],
-        detail=True,
-        url_name="get_gsx_data",)
+    @decorators.action(methods=["post", "get"], detail=True, url_name="get_gsx_data")
     def get_gsx_data(self, request, pk):
         "Get diagnosis suites for device."
         ticket = self.get_object()
         gsx_repair_type = ticket.device.gsx_repair_type
         converter = get_convertor_class(gsx_repair_type)
-        data={}
-        if(converter):
+        data = {}
+        if converter:
             c = converter(ticket)
             c.convert()
             data = c.data
         else:
-            data={
-                "meta":{
-                    "messages":["No Adeqaute convertor found."]
-
-                }
-            }
+            data = {"meta": {"messages": ["No Adeqaute convertor found."]}}
         return response.Response(data, status=status.HTTP_200_OK)

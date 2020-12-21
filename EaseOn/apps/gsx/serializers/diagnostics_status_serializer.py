@@ -1,8 +1,10 @@
-from .base_gsx_serializer import BaseGSXSerializer
+# -*- coding: utf-8 -*-
 from core.utils import time_by_adding_business_days
-from .gsx_validate import gsx_validate
-from rest_framework import serializers
 from gsx.core import GSXRequest
+from rest_framework import serializers
+
+from .base_gsx_serializer import BaseGSXSerializer
+from .gsx_validate import gsx_validate
 
 
 class DiagnosticsStatusSerializer(BaseGSXSerializer):
@@ -35,4 +37,3 @@ class DiagnosticsStatusSerializer(BaseGSXSerializer):
         device = {"id": validated_data["identifier"]}
         response = req.post(device=device)
         return response
-

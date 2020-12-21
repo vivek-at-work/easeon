@@ -1,6 +1,4 @@
-from .base_gsx_serializer import BaseGSXSerializer
-
-
+# -*- coding: utf-8 -*-
 import copy
 import re
 
@@ -9,14 +7,10 @@ from django.contrib.auth import get_user_model
 from gsx.core import GSXRequest
 from rest_framework import serializers
 
+from .base_gsx_serializer import BaseGSXSerializer
+
 USER = get_user_model()
 
-from .base_gsx_serializer import BaseGSXSerializer
-from core.utils import time_by_adding_business_days
-from .gsx_validate import gsx_validate
-from rest_framework import serializers
-from gsx.core import GSXRequest
-import copy
 
 class RepairSummarySerializer(BaseGSXSerializer):
     """
@@ -43,10 +37,9 @@ class RepairSummarySerializer(BaseGSXSerializer):
         data = copy.deepcopy(self.validated_data["search_criteria"])
         response = req.post(**data)
         out = {
-            'count':response['totalNumberOfRecords'],
-            'current':page,
-            'page_size':page_size,
-            'results':response['repairs'] if 'repairs' in response else []
+            "count": response["totalNumberOfRecords"],
+            "current": page,
+            "page_size": page_size,
+            "results": response["repairs"] if "repairs" in response else [],
         }
         return out
-

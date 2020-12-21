@@ -1,40 +1,36 @@
+# -*- coding: utf-8 -*-
+import copy
 
+from gsx.core import GSXRequestUAT
+from rest_framework import serializers
 
 from .base_gsx_serializer import BaseGSXSerializerUAT
-from rest_framework import serializers
-from gsx.core import GSXRequestUAT
-import copy
 
 
 def get_dummay_payload():
-    return  {
-
-  "action": "SAVE",
-  "partNumber": "S4517ZM/A",
-  "device": {
-    "id": "511113481600090"
-    },
-  "customer": {
-    "firstName": "string",
-    "lastName": "string",
-    "primaryPhone": "9657946755",
-    "emailAddress": "ervivek.rbl@gmail.com",
-    "address": [
-      {
-        "city": "string",
-        "countryCode": "IND",
-        "postalCode": "411007",
-        "stateCode": "D",
-        "line3": "string",
-        "line2": "string",
-        "line1": "string"
-      }
-          ],
-    "companyName": "string"
-  }
-
- }
-
+    return {
+        "action": "SAVE",
+        "partNumber": "S4517ZM/A",
+        "device": {"id": "511113481600090"},
+        "customer": {
+            "firstName": "string",
+            "lastName": "string",
+            "primaryPhone": "9657946755",
+            "emailAddress": "ervivek.rbl@gmail.com",
+            "address": [
+                {
+                    "city": "string",
+                    "countryCode": "IND",
+                    "postalCode": "411007",
+                    "stateCode": "D",
+                    "line3": "string",
+                    "line2": "string",
+                    "line1": "string",
+                }
+            ],
+            "companyName": "string",
+        },
+    }
 
 
 class OrderAppleCareCreateSerializer(BaseGSXSerializerUAT):

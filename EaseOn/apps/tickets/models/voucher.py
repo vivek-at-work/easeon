@@ -30,9 +30,9 @@ class Voucher(BaseModel):
     ticket = models.ForeignKey(
         Ticket, related_name="vouchers", on_delete=models.CASCADE
     )
-    customer_signature = models.ImageField(upload_to="customer_signatures/vouchers",
-    null=True, blank=True)
-
+    customer_signature = models.ImageField(
+        upload_to="customer_signatures/vouchers", null=True, blank=True
+    )
 
     @property
     def total_amount(self):
@@ -54,7 +54,7 @@ class Voucher(BaseModel):
     class Meta:
         verbose_name = "Voucher"
         verbose_name_plural = "Vouchers"
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def __str__(self):
         return self.reference_number

@@ -2,7 +2,7 @@
 from core import viewsets
 from core.permissions import HasManagerRightsToUpdateOrDelete
 from django.utils import timezone
-from rest_framework import decorators, response,permissions,status
+from rest_framework import decorators, permissions, response, status
 from tickets import models, serializers
 
 
@@ -36,14 +36,20 @@ class LoanerRecordViewSet(viewsets.BaseViewSet):
         detail=True,
         url_path="upload_signature/(?P<reference_number>\w+)/(?P<guid>\w+)",
         serializer_class=serializers.LoanerRecordSignatureSerializer,
-        permission_classes = [permissions.AllowAny],
+        permission_classes=[permissions.AllowAny],
     )
-    def upload_signature(self, request, pk,reference_number,guid):
+    def upload_signature(self, request, pk, reference_number, guid):
         "Get diagnosis suites for device."
         loanerRecord = self.get_object()
-        if loanerRecord.ticket.reference_number == reference_number and loanerRecord.guid ==  guid:
+        if (
+            loanerRecord.ticket.reference_number == reference_number
+            and loanerRecord.guid == guid
+        ):
             serializer = self.get_serializer_class()(
-                loanerRecord, data=request.data, partial=True, context={"request": request}
+                loanerRecord,
+                data=request.data,
+                partial=True,
+                context={"request": request},
             )
             if serializer.is_valid(raise_exception=True):
                 serializer.save()

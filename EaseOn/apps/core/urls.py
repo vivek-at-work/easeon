@@ -25,7 +25,7 @@ UUID_REGEX = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 otp_options = LoginViewSet.as_view({"post": "get_otp_options"})
 generate_otp = LoginViewSet.as_view({"post": "generate_otp"})
 verify_otp = LoginViewSet.as_view({"post": "verify_otp"})
-verify_customer_otp  = LoginViewSet.as_view({"post": "verify_customer_otp"})
+verify_customer_otp = LoginViewSet.as_view({"post": "verify_customer_otp"})
 refresh_token = LoginViewSet.as_view({"post": "refresh_token"})
 
 
@@ -46,7 +46,6 @@ urlpatterns = [
         verify_customer_otp,
         name="verify_customer_otp",
     ),
-
     url(r"^refresh_token", refresh_token, name="refresh_token"),
     url(r"^register/$", RegistrationView.as_view(), name="register"),
     url(r"^logout/$", LogoutView.as_view(), name="rest_logout"),

@@ -18,7 +18,7 @@ class Comment(BaseModel):
     class Meta:
         verbose_name = "Comment"
         verbose_name_plural = "Comments"
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def __str__(self):
         return self.value

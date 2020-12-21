@@ -153,11 +153,18 @@ CLIENT_URL = env("CLIENT_URL").strip("/")
 NEW_USER_EMAIL_VERIFICATION_URL = "{}/{}/".format(
     CLIENT_URL, "email_verification"
 ).strip("/")
-NEW_USER_ADMIN_APPROVE_URL = "{}/{}/".format(CLIENT_URL, "dashboard/user_approve").strip("/")
+NEW_USER_ADMIN_APPROVE_URL = "{}/{}/".format(
+    CLIENT_URL, "dashboard/user_approve"
+).strip("/")
 PASSWORD_RESET_URL = "{}/{}/".format(CLIENT_URL, "password_reset_confirm").strip("/")
 CUSTOMER_TICKET_DISPLAY_URL = "{}/{}/".format(CLIENT_URL, "ticket_status").strip("/")
 
-VALID_CLIENT_DOMAIN_NAMES = ["uipl.co.in", "unicornstore.in", "easeon.in","unicorn.com"]
+VALID_CLIENT_DOMAIN_NAMES = [
+    "uipl.co.in",
+    "unicornstore.in",
+    "easeon.in",
+    "unicorn.com",
+]
 
 # GSX
 
@@ -165,5 +172,5 @@ ENV = env
 TICKET_SUFFIX = 2  # env('TICKET_SUFFIX')
 ACCESS_TOKEN_EXPIRE_SECONDS = 60
 REFRESH_TOKEN_EXPIRE_SECONDS = 3600
-EXEMPTED_DEVICE = ["FCGT24E5HFM2","ZZ501AAAOWP"]
+EXEMPTED_DEVICE = ["FCGT24E5HFM2", "ZZ501AAAOWP"]
 ENABLE_MULTIPLE_TICKETS_FOR_CUSTOMER = True

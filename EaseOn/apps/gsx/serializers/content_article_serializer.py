@@ -1,7 +1,8 @@
-from .base_gsx_serializer import BaseGSXSerializer
-from rest_framework import serializers
+# -*- coding: utf-8 -*-
 from gsx.core import GSXRequest
+from rest_framework import serializers
 
+from .base_gsx_serializer import BaseGSXSerializer
 
 
 class ContentArticleSerializer(BaseGSXSerializer):
@@ -22,4 +23,3 @@ class ContentArticleSerializer(BaseGSXSerializer):
 
         response = req.get(**self.validated_data)
         return response
-

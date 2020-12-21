@@ -1,15 +1,14 @@
+# -*- coding: utf-8 -*-
+import copy
 
+from gsx.core import GSXRequestUAT
+from rest_framework import serializers
 
 from .base_gsx_serializer import BaseGSXSerializerUAT
-from rest_framework import serializers
-from gsx.core import GSXRequestUAT
-import copy
 
 
 def get_dummay_payload():
-    return {
-  "escalationId": "10000154302621"
-}
+    return {"escalationId": "10000154302621"}
 
 
 class EscalationDetailsSerializer(BaseGSXSerializerUAT):
@@ -27,6 +26,6 @@ class EscalationDetailsSerializer(BaseGSXSerializerUAT):
             self.gsx_auth_token,
             self.gsx_ship_to,
         )
-        data = copy.deepcopy(self.validated_data['data'])
+        data = copy.deepcopy(self.validated_data["data"])
         response = req.get(**data)
         return response

@@ -109,6 +109,7 @@ class VerifyOtpSerializer(serializers.Serializer):
             return totp.verify(otp)
         return False
 
+
 class VerifyCustomerOtpSerializer(serializers.Serializer):
     """Serializer used to verify OTP"""
 
@@ -129,4 +130,3 @@ class VerifyCustomerOtpSerializer(serializers.Serializer):
             totp = pyotp.TOTP(obj.secret, interval=obj.interval)
             return totp.verify(otp)
         return False
-

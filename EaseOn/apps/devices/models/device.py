@@ -17,7 +17,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-
 class Device(BaseModel):
     serial_number = models.CharField(
         null=True,
@@ -34,6 +33,7 @@ class Device(BaseModel):
     gsx_repair_type = models.CharField(null=True, max_length=100)
     gsx_service_non_repair_type = models.CharField(null=True, max_length=100)
     address_cosmetic_changes = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Device"
         verbose_name_plural = "Devices"
@@ -70,8 +70,6 @@ class Device(BaseModel):
     def open_tickets(self):
         Ticket = apps.get_model(utils.get_ticket_model())
         return Ticket.objects.filter(device__serial_number=self.serial_number).open()
-
-
 
     def __str__(self):
         return self.identifier

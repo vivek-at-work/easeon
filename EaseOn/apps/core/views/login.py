@@ -3,9 +3,10 @@
 from __future__ import unicode_literals
 
 import logging
+
+from core.serializers import OTPOptionsSerializer
 from core.utils import get_ticket_model
 from django.apps import apps
-from core.serializers import OTPOptionsSerializer
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
@@ -18,7 +19,11 @@ from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.signals import app_authorized
 from oauth2_provider.views.mixins import OAuthLibMixin
 from otp.models import PyOTP
-from otp.serializers import HotpSerializer, VerifyOtpSerializer,VerifyCustomerOtpSerializer
+from otp.serializers import (
+    HotpSerializer,
+    VerifyCustomerOtpSerializer,
+    VerifyOtpSerializer,
+)
 from rest_framework import permissions
 from rest_framework import status as rest_status
 from rest_framework import viewsets
@@ -136,7 +141,6 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
             raise NotAuthenticated(detail="Unable To Login", code=status)
         return response
 
-
     def verify_customer_otp(self, request, uuid):
         """
 
@@ -145,7 +149,6 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         :param uuid: OTP instance UUID
         :return: 200_ok OR 400_bad_request
         """
-        user_dirty = False
         otp_type = "hotp"
         obj = PyOTP.objects.get(uuid=uuid)
         serializer = self.get_serializer_class()
@@ -154,17 +157,20 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         contact_number = serializer.validated_data.get("contact_number")
         valid_otp = serializer.verify_otp(serializer.data.get("otp"), obj, otp_type)
         if not valid_otp:
-            logging.warning("OTP validation failed for customer {}".format(contact_number))
+            logging.warning(
+                "OTP validation failed for customer {}".format(contact_number)
+            )
             return Response(status=rest_status.HTTP_400_BAD_REQUEST)
         else:
             logging.info("OTP validation succeeded for user {}".format(contact_number))
             ticket_modal = apps.get_model(*get_ticket_model().split(".", 1))
-            tickets = ticket_modal.objects.all().filter(
-                **{'customer__contact_number':contact_number}).order_by('-id')[:10].values('reference_number',
-                'status','expected_delivery_time')
-            return Response(tickets,status=rest_status.HTTP_201_CREATED)
-        return response
-
+            tickets = (
+                ticket_modal.objects.all()
+                .filter(**{"customer__contact_number": contact_number})
+                .order_by("-id")[:10]
+                .values("reference_number", "status", "expected_delivery_time")
+            )
+            return Response(tickets, status=rest_status.HTTP_201_CREATED)
 
     def refresh_token(self, request):
         url, headers, body, status = self.create_token_response(request)

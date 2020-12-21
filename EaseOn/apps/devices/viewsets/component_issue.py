@@ -11,8 +11,6 @@ from django.db.models import Q
 from rest_framework import decorators, generics, permissions, response, status, views
 
 
-
 class ComponenetIssueViewSet(BaseViewSet):
     serializer_class = serializers.ComponentIssueSerializer
     queryset = models.ComponentIssue.objects.all()
-

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import http.client
 import ssl
+
 from django.conf import settings
 
 APIKEY = settings.SMS_BACKEND_KEY
@@ -34,20 +35,27 @@ class TwoFactorIn(object):
         data = res.read()
         return data.decode("utf-8")
 
+
 class APPIndia(object):
     @staticmethod
     def send(number, message, template_name="LOGIN_OTP"):
         import urllib
+
         conn = http.client.HTTPSConnection("app.indiasms.com")
-        payload = ''
+        payload = ""
         headers = {}
-        conn.request("GET",
-        "/sendsms/sendsms.php?username={}&password={}&type=TEXT&sender={}&mobile={}&message={}".format(
-        settings.APP_INDIA_USERNAME,
-        settings.APP_INDIA_PASSWORD,
-        settings.APP_INDIA_SENDER,
-        number,
-        urllib.parse.quote(message)), payload, headers)
+        conn.request(
+            "GET",
+            "/sendsms/sendsms.php?username={}&password={}&type=TEXT&sender={}&mobile={}&message={}".format(
+                settings.APP_INDIA_USERNAME,
+                settings.APP_INDIA_PASSWORD,
+                settings.APP_INDIA_SENDER,
+                number,
+                urllib.parse.quote(message),
+            ),
+            payload,
+            headers,
+        )
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
@@ -61,5 +69,3 @@ class APPIndia(object):
         res = conn.getresponse()
         data = res.read()
         return data.decode("utf-8")
-
-

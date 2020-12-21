@@ -11,7 +11,7 @@ class TicketPermissions(permissions.BasePermission):
     ALLOWED_ROLES = [PRIVILEGED, SUPER_USER, OPERATOR, AUDITOR]
 
     def has_permission(self, request, view):
-        if view.action=="upload_signature":
+        if view.action == "upload_signature":
             return True
         if not request.user.is_authenticated:
             return False
@@ -22,15 +22,11 @@ class TicketPermissions(permissions.BasePermission):
         )
 
     def has_object_permission(self, request, view, obj):
-        if view.action=="upload_signature":
+        if view.action == "upload_signature":
             return True
         if request.user.role == SUPER_USER or request.user.role == PRIVILEGED:
             return True
-        if (
-            view.action in ["update"]
-            and request.user
-            and request.user.is_authenticated
-        ):
+        if view.action in ["update"] and request.user and request.user.is_authenticated:
             if hasattr(obj, "organization") and obj.organization is not None:
                 return request.user == obj.organization.manager
 
@@ -39,11 +35,9 @@ class TicketPermissions(permissions.BasePermission):
             and request.user
             and request.user.is_authenticated
         ):
-           return False
+            return False
 
         return True
-
-
 
 
 class DeliveryUpdateOrDelete(permissions.BasePermission):

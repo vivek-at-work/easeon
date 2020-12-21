@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token as TokenModel
 from .django_exception_handler import *
 from .pagination import *
 from .token_generator import *
-from .two_factor_client import TwoFactorIn,APPIndia
+from .two_factor_client import TwoFactorIn, APPIndia
 from .workdays import workday
 
 
@@ -50,12 +50,12 @@ def default_create_token(token_model, user):
 
 def send_mail(subject, message, *receivers, **kwargs):
     local = {
-            "SERVER_IP": settings.SERVER_IP,
-            "site_name": settings.SITE_HEADER,
-            "twitter_handle": settings.TWITTER_HANDLE,
-            "REPLY_TO": settings.EMAIL_HOST_USER,
-            "sender_full_name": "Team " + settings.SITE_HEADER,
-        }
+        "SERVER_IP": settings.SERVER_IP,
+        "site_name": settings.SITE_HEADER,
+        "twitter_handle": settings.TWITTER_HANDLE,
+        "REPLY_TO": settings.EMAIL_HOST_USER,
+        "sender_full_name": "Team " + settings.SITE_HEADER,
+    }
     local.update(kwargs)
     if message.endswith(".html"):
         html_content = render_to_string(message, local)
@@ -76,12 +76,12 @@ def send_sms(number, message):
 
 
 def send_otp(number, otp):
-    message="You Login OTP is {}".format(otp)
+    message = "You Login OTP is {}".format(otp)
     return APPIndia.send(number, message)
 
 
 def send_token_to_customer(number, otp):
-    message="Your Unicorn Customer Token is {}. Please Wait !".format(otp)
+    message = "Your Unicorn Customer Token is {}. Please Wait !".format(otp)
     return APPIndia.send(number, message)
 
 
@@ -119,6 +119,7 @@ def get_url_password_reset(uid, token):
 
 def payload_enricher(request):
     return {"sub": "mysubject"}
+
 
 def get_url_for_customer_ticket_display(uid, token):
     url = "{}/{}/{}".format(settings.CUSTOMER_TICKET_DISPLAY_URL, str(uid), str(token))

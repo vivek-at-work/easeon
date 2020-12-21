@@ -2,7 +2,7 @@
 """
 Voucher Serializer
 """
-from core.serializers import BaseMeta, BaseSerializer,FileFieldWithLinkRepresentation
+from core.serializers import BaseMeta, BaseSerializer, FileFieldWithLinkRepresentation
 from django.db import transaction
 from rest_framework import serializers
 from tickets import models

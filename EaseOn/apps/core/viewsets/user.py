@@ -153,7 +153,6 @@ class UserViewSet(BaseViewSet):
             self.serializer_class(user, context={"request": request}).data
         )
 
-
     def _get_gsx_token(self, request):
         gsx_token = None
         query_params = request.query_params

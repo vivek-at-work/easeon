@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from core import viewsets
 from core.permissions import HasManagerRightsToUpdateOrDelete
-from rest_framework import decorators, response,permissions,status
+from rest_framework import decorators, permissions, response, status
 from tickets import models, serializers
 
 
@@ -35,12 +35,12 @@ class VoucherViewSet(viewsets.BaseViewSet):
         detail=True,
         url_path="upload_signature/(?P<reference_number>\w+)/(?P<guid>\w+)",
         serializer_class=serializers.VoucherSignatureSerializer,
-        permission_classes = [permissions.AllowAny],
+        permission_classes=[permissions.AllowAny],
     )
-    def upload_signature(self, request, pk,reference_number,guid):
+    def upload_signature(self, request, pk, reference_number, guid):
         "Get diagnosis suites for device."
         voucher = self.get_object()
-        if voucher.reference_number == reference_number and voucher.guid ==  guid:
+        if voucher.reference_number == reference_number and voucher.guid == guid:
             serializer = self.get_serializer_class()(
                 voucher, data=request.data, partial=True, context={"request": request}
             )

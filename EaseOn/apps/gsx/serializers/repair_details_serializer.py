@@ -1,9 +1,12 @@
-from .base_gsx_serializer import BaseGSXSerializer
-from core.utils import time_by_adding_business_days
-from .gsx_validate import gsx_validate
-from rest_framework import serializers
-from gsx.core import GSXRequest
+# -*- coding: utf-8 -*-
 import copy
+
+from core.utils import time_by_adding_business_days
+from gsx.core import GSXRequest
+from rest_framework import serializers
+
+from .base_gsx_serializer import BaseGSXSerializer
+from .gsx_validate import gsx_validate
 
 
 class RepairDetailsSerializer(BaseGSXSerializer):
@@ -24,4 +27,3 @@ class RepairDetailsSerializer(BaseGSXSerializer):
         data = copy.deepcopy(self.validated_data)
         response = req.get(**data)
         return response
-

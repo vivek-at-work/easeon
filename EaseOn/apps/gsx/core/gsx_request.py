@@ -17,12 +17,9 @@ from .gsx_exceptions import GSXResourceNotAvailableError
 
 logger = logging.getLogger()
 
+
 class GSXRequest:
-    def __init__(self,
-        service,
-        method,
-        gsx_user_name,
-        auth_token, ship_to):
+    def __init__(self, service, method, gsx_user_name, auth_token, ship_to):
         self.service = service
         self.method = method
         self.gsx_user_name = gsx_user_name.lower()
@@ -57,11 +54,9 @@ class GSXRequest:
             )
 
     def get_connection(self):
-        cert , key , url, sold_to, ship_to = settings.GSX_SETTINGS_PROD
+        cert, key, url, sold_to, ship_to = settings.GSX_SETTINGS_PROD
         if path.exists(cert) and path.exists(key):
-            return http.client.HTTPSConnection(
-                url, cert_file=cert, key_file=key
-            )
+            return http.client.HTTPSConnection(url, cert_file=cert, key_file=key)
         else:
             raise GSXResourceNotAvailableError()
 
@@ -71,8 +66,8 @@ class GSXRequest:
             resource = "/gsx/api/{0}/{1}".format(service, method)
         return resource
 
-    def get_headers(self,auth_token, ship_to):
-        cert , key , url, sold_to, _ = settings.GSX_SETTINGS_PROD
+    def get_headers(self, auth_token, ship_to):
+        cert, key, url, sold_to, _ = settings.GSX_SETTINGS_PROD
         head = {
             "X-Apple-SoldTo": sold_to,
             "X-Apple-ShipTo": ship_to,
@@ -87,7 +82,7 @@ class GSXRequest:
             head["X-Apple-Auth-Token"] = auth_token
         return head
 
-    def is_json(self,data):
+    def is_json(self, data):
         try:
             json.loads(data)
         except ValueError:
@@ -142,8 +137,7 @@ class GSXRequest:
         connection = self.get_connection()
         if method == "GET":
             connection.request(
-                method, url,
-                headers=self.get_headers(self.auth_token, self.ship_to)
+                method, url, headers=self.get_headers(self.auth_token, self.ship_to)
             )
             logging.info(
                 "GSX Request Method  %s for endpoint %s with headers %s",

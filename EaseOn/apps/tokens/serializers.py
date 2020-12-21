@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
 from core.utils import get_organization_model
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from tokens.models import Token
 from tokens.commands import send_token_display_refresh_command
+from tokens.models import Token
+
 
 class TokenSerializer(BaseSerializer):
     organization_code = serializers.SlugRelatedField(
@@ -20,13 +22,20 @@ class TokenSerializer(BaseSerializer):
     technician_name = serializers.SlugRelatedField(
         read_only=True, slug_field="first_name", source="invited_by"
     )
+
     def validate(self, data):
         return data
         if "view" in self.context:
             action = self.context["view"].action
             if action == "create":
-                if Token.objects.all().created_between(contact_number=data['contact_number']).exists():
-                    raise serializers.ValidationError("You already have token send on you number.")
+                if (
+                    Token.objects.all()
+                    .created_between(contact_number=data["contact_number"])
+                    .exists()
+                ):
+                    raise serializers.ValidationError(
+                        "You already have token send on you number."
+                    )
         return data
 
     class Meta(BaseMeta):

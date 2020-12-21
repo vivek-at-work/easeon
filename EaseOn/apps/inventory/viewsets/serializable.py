@@ -34,7 +34,6 @@ class SerializableItemViewSet(BaseBulkCreateViewSet):
     delete_serializer_class = SerializableInventoryListSerializer
     permission_classes = [IsOperatorOrSuperUser]
 
-
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_privileged:
             return models.SerializableInventoryItem.objects.all()

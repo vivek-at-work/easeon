@@ -3,9 +3,10 @@
 View For Ticket related Operations
 """
 from core import viewsets
+from rest_framework import decorators, permissions, response, status
 from tickets import models, serializers
 from tickets.permissions import DeliveryUpdateOrDelete
-from rest_framework import decorators, response, status,permissions
+
 
 class DeliveryViewSet(viewsets.BaseViewSet):
     serializer_class = serializers.DeliverySerializer
@@ -19,13 +20,13 @@ class DeliveryViewSet(viewsets.BaseViewSet):
         detail=True,
         serializer_class=serializers.DeliverySignatureSerializer,
         url_path="upload_signature/(?P<reference_number>\w+)/(?P<guid>\w+)",
-        permission_classes = [permissions.AllowAny],
+        permission_classes=[permissions.AllowAny],
     )
-    def upload_signature(self, request, pk,reference_number,guid):
+    def upload_signature(self, request, pk, reference_number, guid):
         "Get diagnosis suites for device."
         delivery = self.get_object()
         ticket = delivery.ticket
-        if ticket.reference_number == reference_number and delivery.guid ==  guid:
+        if ticket.reference_number == reference_number and delivery.guid == guid:
             serializer = self.get_serializer_class()(
                 delivery, data=request.data, partial=True, context={"request": request}
             )

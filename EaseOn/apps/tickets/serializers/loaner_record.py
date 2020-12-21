@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from core.serializers import BaseMeta, BaseSerializer,FileFieldWithLinkRepresentation
+from core.serializers import BaseMeta, BaseSerializer, FileFieldWithLinkRepresentation
 from inventory.models import LoanerInventoryItem
 from inventory.serializers import LoanerItemSerializer
 from rest_framework import serializers

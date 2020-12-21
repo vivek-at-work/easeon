@@ -3,7 +3,12 @@ import customers
 import devices
 import organizations
 import slas
-from core.serializers import BaseMeta, BaseSerializer, UserSerializer,FileFieldWithLinkRepresentation
+from core.serializers import (
+    BaseMeta,
+    BaseSerializer,
+    FileFieldWithLinkRepresentation,
+    UserSerializer,
+)
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -110,7 +115,9 @@ class TicketSerializer(BaseSerializer):
     )
 
     reference_number = serializers.CharField(read_only=True)
-    unit_part_reports = serializers.JSONField(required=False, initial=dict, allow_null=True)
+    unit_part_reports = serializers.JSONField(
+        required=False, initial=dict, allow_null=True
+    )
     password = serializers.CharField(read_only=True)
     customer_signature = FileFieldWithLinkRepresentation(read_only=True)
     status = serializers.ChoiceField(
@@ -292,7 +299,6 @@ class TicketPrintSerializer(BaseSerializer):
         model = models.Ticket
 
 
-
 class TicketStatusChangeSerializer(BaseSerializer):
     def validate_status(self, value):
         if (
@@ -305,18 +311,16 @@ class TicketStatusChangeSerializer(BaseSerializer):
 
         if (
             self.instance
-            and value
-            in ["Delivered"]
-            and not hasattr(self.instance, 'delivery')
+            and value in ["Delivered"]
+            and not hasattr(self.instance, "delivery")
         ):
-            raise serializers.ValidationError("Can not change status to delivered unless delivery infomation is updated")
+            raise serializers.ValidationError(
+                "Can not change status to delivered unless delivery infomation is updated"
+            )
 
         return value
 
-
     status = serializers.ChoiceField(choices=get_list_choices("TICKET_STATUS"))
-
-
 
     class Meta(BaseMeta):
         model = models.Ticket

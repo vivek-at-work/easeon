@@ -9,19 +9,20 @@ environ.Env.read_env()  # reading .env file
 GSX_SOLD_TO = env("GSX_SOLD_TO")
 GSX_SHIP_TO = env("GSX_SHIP_TO")
 GSX_ENV = env("GSX_ENV")
-GSX_SETTINGS_PROD = (env("GSX_CERT_FILE_PATH_PROD"),
-                     env("GSX_KEY_FILE_PATH_PROD"),
-                     env("GSX_URL_PROD"),
-                     GSX_SOLD_TO,
-                     GSX_SHIP_TO,
-                    )
-GSX_SETTINGS_UAT = ( env("GSX_CERT_FILE_PATH_UAT"),
-                     env("GSX_KEY_FILE_PATH_UAT"),
-                     env("GSX_URL_UAT"),
-                     GSX_SOLD_TO,
-                     GSX_SHIP_TO
-
-                    )
+GSX_SETTINGS_PROD = (
+    env("GSX_CERT_FILE_PATH_PROD"),
+    env("GSX_KEY_FILE_PATH_PROD"),
+    env("GSX_URL_PROD"),
+    GSX_SOLD_TO,
+    GSX_SHIP_TO,
+)
+GSX_SETTINGS_UAT = (
+    env("GSX_CERT_FILE_PATH_UAT"),
+    env("GSX_KEY_FILE_PATH_UAT"),
+    env("GSX_URL_UAT"),
+    GSX_SOLD_TO,
+    GSX_SHIP_TO,
+)
 GSX_URL = env("GSX_URL_" + GSX_ENV)
 
 

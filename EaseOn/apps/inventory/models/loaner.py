@@ -34,11 +34,11 @@ class LoanerInventoryItem(InventoryItem):
     )
     objects = LoanerInventoryManager()
     all_objects = LoanerInventoryManager(alive_only=False)
+
     class Meta:
         verbose_name = "Loaner Inventory Item"
         verbose_name_plural = "Loaner Inventory Items"
-        ordering = ['-created_at']
-
+        ordering = ["-created_at"]
 
     @property
     def penalty(self):
@@ -49,7 +49,6 @@ class LoanerInventoryItem(InventoryItem):
         ):
             results.append({"reason": item.reason, "cost": item.cost})
         return results
-
 
     def __str__(self):
         return self.serial_number

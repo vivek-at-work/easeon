@@ -11,6 +11,7 @@ class SerializableInventoryListSerializer(BaseSerializer):
     organization_code = serializers.SlugRelatedField(
         source="organization", read_only=True, slug_field="code"
     )
+
     class Meta(BaseMeta):
         model = SerializableInventoryItem
         read_only_fields = [
@@ -27,7 +28,7 @@ class SerializableInventoryListSerializer(BaseSerializer):
             "last_modified_by",
             "consumed",
             "blocked",
-            'organization_code'
+            "organization_code",
         ]
 
 

@@ -31,7 +31,7 @@ class RepairInventoryItem(InventoryItem):
     class Meta:
         verbose_name = "Repair Inventory Item"
         verbose_name_plural = "Repair Inventory Items"
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.serial_number

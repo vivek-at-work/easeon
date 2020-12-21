@@ -1,20 +1,14 @@
+# -*- coding: utf-8 -*-
+import copy
 
+from gsx.core import GSXRequestUAT
+from rest_framework import serializers
 
 from .base_gsx_serializer import BaseGSXSerializerUAT
-from rest_framework import serializers
-from gsx.core import GSXRequestUAT
-import copy
 
 
 def get_dummay_payload():
-    return {
-  "attributes": [
-    {
-      "type": "ESC_TYPE_ISSUECATEGORIES_MAP",
-      "key": "GSXHELP"
-    }
-  ]
-}
+    return {"attributes": [{"type": "ESC_TYPE_ISSUECATEGORIES_MAP", "key": "GSXHELP"}]}
 
 
 class AttributeLookupSerializer(BaseGSXSerializerUAT):
