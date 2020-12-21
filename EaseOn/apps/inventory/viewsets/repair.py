@@ -35,7 +35,6 @@ class RepairItemViewSet(BaseBulkCreateViewSet):
     permission_classes = [IsOperatorOrSuperUser]
     filter_fields = ("serial_number", "organization", "part_number", "description")
     search_fields = ("serial_number", "part_number", "description")
-    ordering = ["id"]
 
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_privileged:

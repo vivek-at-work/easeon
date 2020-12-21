@@ -17,5 +17,10 @@ class GSXInfo(BaseModel):
     gsx_repair_type = models.CharField(max_length=50)
     comptia_code = models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name = "GSX Info"
+        verbose_name_plural = "GSX Info"
+        ordering = ["-id"]
+
     def __unicode__(self):
         return self.gsx_reference_number

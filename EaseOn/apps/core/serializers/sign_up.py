@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import time
 
-# from core.gsx import GSXRequest
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from gsx.core import GSXRequest
+from gsx.core import GSXRequest, GSXRequestUAT
 from rest_framework import serializers
 
 USER_MODEL = get_user_model()
@@ -15,8 +14,11 @@ class SignUpSerializer(serializers.HyperlinkedModelSerializer):
         """
         Check that gsx_auth_token from gsx if it is valid and via token refresh.
         """
+        req_class = GSXRequest
+        if "UAT_USER" in data["first_name"]:
+            req_class = GSXRequestUAT
         if settings.VALIDATE_GSX_AUTH_TOKEN_ON_SIGN_UP:
-            req = GSXRequest(
+            req = req_class(
                 "authenticate",
                 "token",
                 data["gsx_user_name"],

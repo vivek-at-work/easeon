@@ -6,7 +6,6 @@ import django_filters
 from core import serializers
 from core.filters import FullNameFilter
 from core.permissions import SuperUserOrReadOnly, SuperUserOrSelf
-from core.utils.two_factor_client import TwoFactorIn
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from gsx.core import GSXRequest
@@ -114,15 +113,6 @@ class UserViewSet(BaseViewSet):
             },
         ]
 
-        if user.is_superuser:
-            count.append(
-                {
-                    "order": 5,
-                    "heading": "Available SMS Credit",
-                    "value": json.loads(TwoFactorIn.check_balance())["Details"],
-                }
-            )
-
         dashboard_data["counts"] = count
         return response.Response({"result": dashboard_data})
 
@@ -163,11 +153,6 @@ class UserViewSet(BaseViewSet):
             self.serializer_class(user, context={"request": request}).data
         )
 
-    @decorators.action(methods=["get"], detail=False)
-    def check_gsx_connectivity(self, request):
-        req = GSXRequest("authenticate", "check", None, None, None)
-        return response.Response(req.get(), status=status.HTTP_200_OK)
-
     def _get_gsx_token(self, request):
         gsx_token = None
         query_params = request.query_params
@@ -180,7 +165,9 @@ class UserViewSet(BaseViewSet):
         user = self.get_object()
         gsx_token = self._get_gsx_token(request)
         result = user.refresh_gsx_token(gsx_token, user.gsx_ship_to)
-        return response.Response(result, status=status.HTTP_200_OK)
+        if result:
+            return response.Response(result, status=status.HTTP_200_OK)
+        return response.Response(result, status=status.HTTP_400_BAD_REQUEST)
 
     @decorators.action(methods=["post", "get"], detail=True)
     def logout(self, request, pk=None):
@@ -188,88 +175,6 @@ class UserViewSet(BaseViewSet):
         gsx_token = self._get_gsx_token(request, user)
         req = GSXRequest("authenticate", "end-session", user.gsx_user_name, gsx_token)
         result = req.post(userAppleId=user.gsx_user_name, authToken=gsx_token)
-        return response.Response(result, status=status.HTTP_200_OK)
-
-    @decorators.action(methods=["post", "get"], detail=False)
-    def technician_lookup(self, request):
-        gsx_token = self._get_gsx_token(request, request.user)
-        user = request.user
-        req = GSXRequest("technician", "lookup", user.gsx_user_name, gsx_token)
-        data = [{"condition": "equals", "field": "firstName", "value": "GSX"}]
-        result = req.post(payload=data)
-        return response.Response(result, status=status.HTTP_200_OK)
-
-    @decorators.action(methods=["post", "get"], detail=False)
-    def serializer_lookup(self, request):
-        gsx_token = self._get_gsx_token(request, request.user)
-        user = request.user
-        req = GSXRequest(
-            "repair/product", "serializer/lookup", user.gsx_user_name, gsx_token
-        )
-        data = {}
-        result = req.post(payload=data)
-        return response.Response(result, status=status.HTTP_200_OK)
-
-    @decorators.action(methods=["post", "get"], detail=True)
-    def document_download(self, request, pk=None):
-        user = self.get_object()
-        gsx_token = self._get_gsx_token(request, user)
-        req = GSXRequest("document-download", None, user.gsx_user_name, gsx_token)
-
-        result = req.get()
-        return response.Response(result, status=status.HTTP_200_OK)
-
-    @decorators.action(
-        methods=["post"], detail=True, serializer_class=serializers.GSXPayloadSerializer
-    )
-    def send_GSX_request(self, request, pk=None):
-        user = self.get_object()
-        gsx_token = self._get_gsx_token(request, user)
-        # /attachment/upload-access
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        payload = request.data.get("payload")
-        method = request.data.get("method")
-        resource_name = request.data.get("resource_name")
-        req = GSXRequest(resource_name, None, user.gsx_user_name, gsx_token)
-        result = None
-        if method == "GET":
-            result = req.get(**json.loads(payload))
-        else:
-            result = req.post(payload=json.loads(payload))
-        return response.Response(result, status=status.HTTP_200_OK)
-
-    @decorators.action(methods=["post", "get"], detail=True)
-    def document_upload_access(self, request, pk=None):
-        user = self.get_object()
-        gsx_token = self._get_gsx_token(request, user)
-        # /attachment/upload-access
-        req = GSXRequest("attachment", "upload-access", user.gsx_user_name, gsx_token)
-        data = {
-            "attachments": [{"sizeInBytes": 10, "name": "WarrantyClaim.pdf"}],
-            "device": {"id": "FCGT24E5HFM2"},
-        }
-        result = req.post(payload=data)
-        return response.Response(result, status=status.HTTP_200_OK)
-
-    @decorators.action(methods=["post", "get"], detail=True)
-    def content_article_lookup(self, request, pk=None):
-        user = self.get_object()
-        gsx_token = self._get_gsx_token(request, user)
-        req = GSXRequest("content", "article/lookup", user.gsx_user_name, gsx_token)
-        data = {"articleType": "PRODUCT_HELP"}
-        result = req.post(payload=data)
-        return response.Response(result, status=status.HTTP_200_OK)
-
-    @decorators.action(methods=["post", "get"], detail=False)
-    def get_article_content(self, request):
-        query_params = request.query_params
-        article_id = query_params.get("article_id")
-        gsx_token = self._get_gsx_token(request, request.user)
-        a = "article?articleId={0}".format(article_id)
-        user = request.user
-        req = GSXRequest("content", a, user.gsx_user_name, gsx_token)
-        result = req.get()
         return response.Response(result, status=status.HTTP_200_OK)
 
     @decorators.action(

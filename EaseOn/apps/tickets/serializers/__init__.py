@@ -9,3 +9,4 @@ from .orderline import *
 from .ticket import *
 from .upload_content_serializer import *
 from .voucher import *
+from .signature_serializer import *

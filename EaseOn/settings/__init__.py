@@ -13,33 +13,36 @@ from .email import *
 from .gsx import *
 from .logging import *
 from .rest import *
-from .social import *
+
 
 root = environ.Path(__file__) - 1  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False))  # set default values and casting
 environ.Env.read_env()  # reading .env file
 
 
-SMS_BACKEND_KEY = env("SMS_BACKEND_KEY")
-ADMIN_SITE_HEADER = env("ADMIN_SITE_HEADER")
-SITE_HEADER = env("SITE_HEADER")
+SMS_BACKEND_KEY = env("SMS_BACKEND_KEY", default="XXXX")
+APP_INDIA_USERNAME = env("APP_INDIA_USERNAME", default="XXXX")
+APP_INDIA_PASSWORD = env("APP_INDIA_PASSWORD", default="XXXX")
+APP_INDIA_SENDER = env("APP_INDIA_SENDER", default="XXXX")
+ADMIN_SITE_HEADER = env("ADMIN_SITE_HEADER", default="XXXX")
+SITE_HEADER = env("SITE_HEADER",default="XXXX")
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = environ.Path(__file__) - 2
 APPS_DIR = os.path.join(BASE_DIR, "apps")
 sys.path.insert(0, APPS_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY",default="XXXX")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", cast=bool)
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+DEBUG = not env("DEBUG", default=1, cast=bool)
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", default="*")
 # Multitenant
 ORGANIZATIONS_ORGANIZATION_MODEL = "organizations.Organization"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Application definition
-ADMIN_NAME = env("ADMIN_NAME")
-ADMIN_EMAIL = env("ADMIN_EMAIL")
-ADMIN_CONTACT_NUMBER = env("ADMIN_CONTACT_NUMBER")
+ADMIN_NAME = env("ADMIN_NAME", default="XXXX")
+ADMIN_EMAIL = env("ADMIN_EMAIL", default="XXXX")
+ADMIN_CONTACT_NUMBER = env("ADMIN_CONTACT_NUMBER", default="XXXX")
 ADMINS = [(ADMIN_NAME, ADMIN_EMAIL)]
 APPEND_SLASH = False
 TEST_EMAILS = [
@@ -62,8 +65,6 @@ THIRD_PART_PACKAGES = [
     "rest_framework.authtoken",
     "corsheaders",
     "oauth2_provider",
-    "django_celery_beat",
-    "import_export",
 ]
 
 LOCAL_APPS = [
@@ -147,16 +148,23 @@ CORS_ORIGIN_WHITELIST = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-SERVER_IP = env("SERVER_IP").strip("/")
-CLIENT_URL = env("CLIENT_URL").strip("/")
+SERVER_IP = env("SERVER_IP", default="XXXX/").strip("/")
+CLIENT_URL = env("CLIENT_URL", default="XXXX/").strip("/")
 NEW_USER_EMAIL_VERIFICATION_URL = "{}/{}/".format(
     CLIENT_URL, "email_verification"
 ).strip("/")
-NEW_USER_ADMIN_APPROVE_URL = "{}/{}/".format(CLIENT_URL, "user_approve").strip("/")
+NEW_USER_ADMIN_APPROVE_URL = "{}/{}/".format(
+    CLIENT_URL, "dashboard/user_approve"
+).strip("/")
 PASSWORD_RESET_URL = "{}/{}/".format(CLIENT_URL, "password_reset_confirm").strip("/")
+CUSTOMER_TICKET_DISPLAY_URL = "{}/{}/".format(CLIENT_URL, "ticket_status").strip("/")
 
-
-VALID_CLIENT_DOMAIN_NAMES = ["uipl.co.in", "unicornstore.in", "easeon.in"]
+VALID_CLIENT_DOMAIN_NAMES = [
+    "uipl.co.in",
+    "unicornstore.in",
+    "easeon.in",
+    "unicorn.com",
+]
 
 # GSX
 
@@ -164,5 +172,5 @@ ENV = env
 TICKET_SUFFIX = 2  # env('TICKET_SUFFIX')
 ACCESS_TOKEN_EXPIRE_SECONDS = 60
 REFRESH_TOKEN_EXPIRE_SECONDS = 3600
-EXEMPTED_DEVICE = ["FCGT24E5HFM2"]
+EXEMPTED_DEVICE = ["FCGT24E5HFM2", "ZZ501AAAOWP"]
 ENABLE_MULTIPLE_TICKETS_FOR_CUSTOMER = True

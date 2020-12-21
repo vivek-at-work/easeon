@@ -2,7 +2,7 @@
 """
 Voucher Serializer
 """
-from core.serializers import BaseMeta, BaseSerializer
+from core.serializers import BaseMeta, BaseSerializer, FileFieldWithLinkRepresentation
 from django.db import transaction
 from rest_framework import serializers
 from tickets import models
@@ -19,6 +19,7 @@ class VoucherSerializer(BaseSerializer):
 
     total_amount = serializers.ReadOnlyField()
     actual_payment_modes = serializers.ReadOnlyField()
+    customer_signature = FileFieldWithLinkRepresentation(read_only=True)
 
     class Meta(BaseMeta):
         model = models.Voucher

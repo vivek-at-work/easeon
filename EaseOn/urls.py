@@ -3,10 +3,7 @@
 from core.admin import BASE_SITE
 from core.router import ROUTER
 from core.urls import core_router
-from core.views import (
-    account_approval_from_admin_done,
-    verify_email_and_request_account_approval_from_admin,
-)
+from core.views import verify_email_and_request_account_approval_from_admin
 from customers.urls import customer_router
 from devices.urls import devices_router
 from django.conf import settings
@@ -18,14 +15,11 @@ from lists.urls import lists_router
 from organizations.urls import organizations_router
 from reporting.urls import report_router
 from rest_framework.documentation import include_docs_urls
-from rest_framework_swagger.views import get_swagger_view
 from slas.urls import sla_router
 from tickets.urls import ticket_router
 from tokens.urls import token_router
 
-# from reports.urls import scheduler_router
-
-API_GATEWAY = settings.ENV("API_GATEWAY")
+API_GATEWAY = settings.API_GATEWAY
 ROUTER.extend(core_router)
 ROUTER.extend(customer_router)
 ROUTER.extend(devices_router)
@@ -36,7 +30,6 @@ ROUTER.extend(inventory_router)
 ROUTER.extend(lists_router)
 ROUTER.extend(token_router)
 ROUTER.extend(report_router)
-schema_view = get_swagger_view(title=settings.SITE_HEADER)
 
 
 urlpatterns = [
@@ -53,11 +46,6 @@ urlpatterns = [
         "backend/request_account_approval_from_admin/<str:uid>/<str:token>/",
         verify_email_and_request_account_approval_from_admin,
         name="request_account_approval_from_admin",
-    ),
-    path(
-        "backend/approval_from_admin/<str:uid>/<str:token>/",
-        account_approval_from_admin_done,
-        name="account_approval_from_admin_done",
     ),
     url(r"{0}/{1}".format(API_GATEWAY, settings.CURRENT_API_URL), include(ROUTER.urls)),
     url(

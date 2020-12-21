@@ -7,6 +7,10 @@ from rest_framework import serializers
 
 
 class RepairItemListSerializer(BaseSerializer):
+    organization_code = serializers.SlugRelatedField(
+        source="organization", read_only=True, slug_field="code"
+    )
+
     class Meta(BaseMeta):
         model = RepairInventoryItem
         read_only_fields = [
@@ -23,6 +27,7 @@ class RepairItemListSerializer(BaseSerializer):
             "last_modified_by",
             "consumed",
             "blocked",
+            "organization_code",
         ]
 
 

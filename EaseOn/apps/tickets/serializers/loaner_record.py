@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from core.serializers import BaseMeta, BaseSerializer
+from core.serializers import BaseMeta, BaseSerializer, FileFieldWithLinkRepresentation
 from inventory.models import LoanerInventoryItem
 from inventory.serializers import LoanerItemSerializer
 from rest_framework import serializers
@@ -22,6 +22,7 @@ class LoanerRecordSerializer(BaseSerializer):
         queryset=Ticket.objects.all(), view_name="ticket-detail"
     )
     agreement = serializers.ReadOnlyField()
+    customer_signature = FileFieldWithLinkRepresentation(read_only=True)
 
     class Meta(BaseMeta):
 

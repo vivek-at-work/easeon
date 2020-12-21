@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
+from core.cache_mixin import ModelCacheMixin
 from core.models import BaseModel
 from core.utils import send_token_to_customer
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.db import connection, models
+from django.db.models.signals import post_delete, post_save
 from organizations.models import Organization
-from websocket import create_connection
 
 
 class Token(BaseModel):
     """A Service Token"""
+
+    CACHE_KEY = "token"
+    CACHED_RELATED_OBJECT = ["organization"]
 
     organization = models.ForeignKey(
         Organization,
@@ -45,3 +50,19 @@ class Token(BaseModel):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+# def clear_model_cache(sender, *args, **kwargs):
+#     """
+#     Clears cached data of models on update or delete.
+#     :param sender: Model Class triggering this signal.
+#     :param args: extra arguments
+#     :param kwargs: extra keyword arguments
+#     :return: None
+#     """
+#     if Token.CACHE_KEY in cache:
+#         cache.delete(Token.CACHE_KEY)
+
+
+# post_save.connect(clear_student_cache, sender=Student)
+# post_delete.connect(clear_student_cache, sender=Student)

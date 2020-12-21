@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token as TokenModel
 from .django_exception_handler import *
 from .pagination import *
 from .token_generator import *
-from .two_factor_client import TwoFactorIn
+from .two_factor_client import TwoFactorIn, APPIndia
 from .workdays import workday
 
 
@@ -49,36 +49,39 @@ def default_create_token(token_model, user):
 
 
 def send_mail(subject, message, *receivers, **kwargs):
-    kwargs.update(
-        {
-            "SERVER_IP": settings.SERVER_IP,
-            "site_name": settings.SITE_HEADER,
-            "twitter_handle": settings.TWITTER_HANDLE,
-            "REPLY_TO": settings.EMAIL_HOST_USER,
-            "sender_full_name": "Team " + settings.SITE_HEADER,
-        }
-    )
+    local = {
+        "SERVER_IP": settings.SERVER_IP,
+        "site_name": settings.SITE_HEADER,
+        "REPLY_TO": settings.EMAIL_HOST_USER,
+        "sender_full_name": "Team " + settings.SITE_HEADER,
+    }
+    local.update(kwargs)
     if message.endswith(".html"):
-        html_content = render_to_string(message, kwargs)
+        html_content = render_to_string(message, local)
         text = strip_tags(html_content)
-        print(html_content)
     else:
         text = message
     msg = EmailMultiAlternatives(subject, text, settings.EMAIL_HOST_USER, receivers)
     if message.endswith(".html"):
         msg.attach_alternative(html_content, "text/html")
-    if "files" in kwargs:
-        for item in kwargs["files"]:
+    if "files" in local:
+        for item in local["files"]:
             msg.attach_file(item)
     msg.send()
 
 
+def send_sms(number, message):
+    return APPIndia.send(number, message)
+
+
 def send_otp(number, otp):
-    return TwoFactorIn.send(number, otp)
+    message = "You Login OTP is {}".format(otp)
+    return APPIndia.send(number, message)
 
 
 def send_token_to_customer(number, otp):
-    return TwoFactorIn.send(number, otp, "TOKEN_OTP")
+    message = "Your Unicorn Customer Token is {}. Please Wait !".format(otp)
+    return APPIndia.send(number, message)
 
 
 def get_random_string(min_char=8, max_char=12):
@@ -115,3 +118,8 @@ def get_url_password_reset(uid, token):
 
 def payload_enricher(request):
     return {"sub": "mysubject"}
+
+
+def get_url_for_customer_ticket_display(uid, token):
+    url = "{}/{}/{}".format(settings.CUSTOMER_TICKET_DISPLAY_URL, str(uid), str(token))
+    return url

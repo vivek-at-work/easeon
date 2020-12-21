@@ -6,10 +6,12 @@ from lists.models import get_list_choices
 from organizations.models import Organization
 from rest_framework import serializers
 
-dc = get_list_choices("SERIALIZABLE_INVENTORY_ITEM")
-
 
 class SerializableInventoryListSerializer(BaseSerializer):
+    organization_code = serializers.SlugRelatedField(
+        source="organization", read_only=True, slug_field="code"
+    )
+
     class Meta(BaseMeta):
         model = SerializableInventoryItem
         read_only_fields = [
@@ -26,6 +28,7 @@ class SerializableInventoryListSerializer(BaseSerializer):
             "last_modified_by",
             "consumed",
             "blocked",
+            "organization_code",
         ]
 
 
@@ -33,7 +36,6 @@ class SerializableInventoryItemSerializer(BaseSerializer):
     organization = serializers.HyperlinkedRelatedField(
         queryset=Organization.objects, view_name="organization-detail"
     )
-    description = serializers.ChoiceField(choices=dc)
 
     def __init__(self, *args, **kwargs):
         super(SerializableInventoryItemSerializer, self).__init__(*args, **kwargs)

@@ -5,6 +5,7 @@ from django.apps import apps
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from tokens.commands import send_token_display_refresh_command
 from tokens.models import Token
 
 
@@ -21,6 +22,21 @@ class TokenSerializer(BaseSerializer):
     technician_name = serializers.SlugRelatedField(
         read_only=True, slug_field="first_name", source="invited_by"
     )
+
+    def validate(self, data):
+        return data
+        if "view" in self.context:
+            action = self.context["view"].action
+            if action == "create":
+                if (
+                    Token.objects.all()
+                    .created_between(contact_number=data["contact_number"])
+                    .exists()
+                ):
+                    raise serializers.ValidationError(
+                        "You already have token send on you number."
+                    )
+        return data
 
     class Meta(BaseMeta):
         model = Token
@@ -55,6 +71,7 @@ class TokenSerializer(BaseSerializer):
         )
         instance = Token.objects.create(**validated_data)
         instance.send_token_number_by_sms()
+        send_token_display_refresh_command(instance)
         return instance
 
     def get_can_invite(self, obj):

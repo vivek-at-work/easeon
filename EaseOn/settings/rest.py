@@ -26,9 +26,10 @@ REST_FRAMEWORK = {
     ),
     "EXCEPTION_HANDLER": "core.utils.django_exception_handler.exception_handler",
 }
-if env("DEBUG"):
+if env("DEBUG", default=False, cast=bool):
     REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"].append(
         "rest_framework.authentication.SessionAuthentication"
     )
 API_VERSION = "v1"
 CURRENT_API_URL = "rest/api/{0}/".format(API_VERSION)
+API_GATEWAY = env("API_GATEWAY",default="backend")
