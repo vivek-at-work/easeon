@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 import logging
-
+import json
 from core.serializers import OTPOptionsSerializer
 from core.utils import get_ticket_model
 from django.apps import apps
@@ -108,8 +108,6 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         user = None
         response = None
         if status == 200:
-            import json
-
             access_token = json.loads(body).get("access_token")
             if access_token is not None:
                 token = get_access_token_model().objects.get(token=access_token)
@@ -117,6 +115,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                 app_authorized.send(sender=self, request=request, token=token)
                 chat_token = None
                 if settings.ENABLE_CHAT:
+                    import pdb ; pdb.set_trace()
                     user_dirty, chat_token = user.do_chat_login(password)
                 if user_dirty:
                     user.save()
@@ -177,8 +176,6 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         user = None
         response = None
         if status == 200:
-            import json
-
             access_token = json.loads(body).get("access_token")
             if access_token is not None:
                 token = get_access_token_model().objects.get(token=access_token)

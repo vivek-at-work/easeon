@@ -11,10 +11,6 @@ from organizations.models import Organization
 
 class Token(BaseModel):
     """A Service Token"""
-
-    CACHE_KEY = "token"
-    CACHED_RELATED_OBJECT = ["organization"]
-
     organization = models.ForeignKey(
         Organization,
         related_name="tokens",
@@ -35,6 +31,7 @@ class Token(BaseModel):
     )
     counter_number = models.IntegerField(null=True)
     contact_number = models.CharField(blank=True, null=True, max_length=50)
+    category = models.CharField(blank=True, null=True, max_length=50)
     invite_sent_on = models.DateTimeField(null=True)
     is_present = models.BooleanField(default=False)
 

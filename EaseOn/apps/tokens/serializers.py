@@ -55,6 +55,7 @@ class TokenSerializer(BaseSerializer):
             "invite_sent_on",
             "can_invite",
             "is_present",
+            "category"
         )
 
     def create(self, validated_data):
@@ -79,5 +80,5 @@ class TokenSerializer(BaseSerializer):
         return obj.can_invite(requesting_user)
 
 
-class InviteCustomerSerilizer(serializers.Serializer):
+class InviteCustomerSerializer(serializers.Serializer):
     counter_number = serializers.IntegerField(min_value=1, max_value=50)

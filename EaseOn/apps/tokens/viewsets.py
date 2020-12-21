@@ -55,7 +55,7 @@ class TokenModelViewSet(BaseViewSet):
         methods=["POST"],
         detail=True,
         url_name="invite_customer_to_counter",
-        serializer_class=serializers.InviteCustomerSerilizer,
+        serializer_class=serializers.InviteCustomerSerializer,
     )
     def invite_customer_to_counter(self, request, pk):
         token = self.get_object()
