@@ -5,7 +5,7 @@ import logging
 import django_filters
 from core import serializers
 from core.filters import FullNameFilter
-from core.permissions import SuperUserOrReadOnly, SuperUserOrSelf
+from core.permissions import SuperUserOrReadOnly, SuperUserOrSelf, IsSuperUser
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from gsx.core import GSXRequest
@@ -181,6 +181,7 @@ class UserViewSet(BaseViewSet):
         methods=["POST"],
         detail=True,
         serializer_class=serializers.ChangeUserRoleSerializer,
+        permission_classes=[IsSuperUser],
     )
     def change_user_role(self, request, pk):
         serializer = self.serializer_class(data=request.data)

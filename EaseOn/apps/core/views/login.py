@@ -115,7 +115,6 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                 app_authorized.send(sender=self, request=request, token=token)
                 chat_token = None
                 if settings.ENABLE_CHAT:
-                    import pdb ; pdb.set_trace()
                     user_dirty, chat_token = user.do_chat_login(password)
                 if user_dirty:
                     user.save()
