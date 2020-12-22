@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
-from core.utils import get_organization_model
+from core.utils import get_organization_model, is_in_dev_mode
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
@@ -55,7 +55,7 @@ class TokenSerializer(BaseSerializer):
             "invite_sent_on",
             "can_invite",
             "is_present",
-            "category"
+            "category",
         )
 
     def create(self, validated_data):
@@ -72,7 +72,8 @@ class TokenSerializer(BaseSerializer):
         )
         instance = Token.objects.create(**validated_data)
         instance.send_token_number_by_sms()
-        send_token_display_refresh_command(instance)
+        if not is_in_dev_mode():
+            send_token_display_refresh_command(instance)
         return instance
 
     def get_can_invite(self, obj):

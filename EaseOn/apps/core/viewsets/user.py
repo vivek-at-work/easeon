@@ -5,7 +5,7 @@ import logging
 import django_filters
 from core import serializers
 from core.filters import FullNameFilter
-from core.permissions import SuperUserOrReadOnly, SuperUserOrSelf, IsSuperUser
+from core.permissions import IsSuperUser, SuperUserOrReadOnly, SuperUserOrSelf
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from gsx.core import GSXRequest

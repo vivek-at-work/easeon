@@ -87,6 +87,9 @@ class TicketFilter(django_filters.FilterSet):
     )
     created_by = UserNameFilter(field_name="created_by")
     organization = django_filters.CharFilter(field_name="organization__code")
+    currently_assigned_to_email = django_filters.CharFilter(
+        field_name="currently_assigned_to__email"
+    )
     device = DeviceFilter(field_name="device")
     customer = CustomerFilter(field_name="customer")
     created_at_before = django_filters.DateTimeFilter(

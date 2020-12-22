@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_filters
+from core.utils import is_in_dev_mode
 from core.viewsets import BaseViewSet
 from django.db.models import Q
 from django.utils import timezone
@@ -73,9 +74,10 @@ class TokenModelViewSet(BaseViewSet):
             ).update(is_present=False)
             token.invite_sent_on = timezone.now()
             token.save()
-            send_token_display_call_command(
-                **serializers.TokenSerializer(token, context=context).data
-            )
+            if not is_in_dev_mode():
+                send_token_display_call_command(
+                    **serializers.TokenSerializer(token, context=context).data
+                )
         return response.Response(
             serializers.TokenSerializer(token, context=context).data
         )

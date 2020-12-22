@@ -19,7 +19,7 @@ root = environ.Path(__file__) - 1  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False))  # set default values and casting
 environ.Env.read_env()  # reading .env file
 
-
+ENV = env("ENV", default="PROD")
 SMS_BACKEND_KEY = env("SMS_BACKEND_KEY", default="XXXX")
 APP_INDIA_USERNAME = env("APP_INDIA_USERNAME", default="XXXX")
 APP_INDIA_PASSWORD = env("APP_INDIA_PASSWORD", default="XXXX")
@@ -31,7 +31,7 @@ BASE_DIR = environ.Path(__file__) - 2
 APPS_DIR = os.path.join(BASE_DIR, "apps")
 sys.path.insert(0, APPS_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY",default="XXXX")
+SECRET_KEY = env("SECRET_KEY", default="XXXX")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not env("DEBUG", default=1, cast=bool)
 ALLOWED_HOSTS = env("ALLOWED_HOSTS", default="*")
@@ -168,7 +168,6 @@ VALID_CLIENT_DOMAIN_NAMES = [
 
 # GSX
 
-ENV = env
 TICKET_SUFFIX = 2  # env('TICKET_SUFFIX')
 ACCESS_TOKEN_EXPIRE_SECONDS = 60
 REFRESH_TOKEN_EXPIRE_SECONDS = 3600

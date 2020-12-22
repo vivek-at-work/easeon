@@ -275,25 +275,26 @@ class TicketPrintSerializer(BaseSerializer):
         if not obj.has_consolidated_loaner_items():
             messages.append(
                 """Consolidation of loaner Items is Pending.
-             Check If Any of the loaner record is not moarked retuned"""
+             Check If Any of the loaner record is not marked returned"""
             )
 
         if not obj.has_consolidated_order_lines():
             messages.append(
                 """Consolidation of Order Line Items is Pending.
-             Check atleast one OrderLine or serilizable Orderline
+             Check at least one OrderLine or serializable Orderline
              record should exist"""
             )
         if not obj.has_consolidated_gsx_repair_info():
             messages.append(
                 """Consolidation of GSX Repair Info is Pending.
-             Check atleast one GSX Repair Info
+             Check at least one GSX Repair Info
              record should exist"""
             )
 
-        user = self.get_user()
-        manager_flag = user.managed_locations.filter(id=obj.organization.id).exists()
-        return {"flag": obj.is_closed or manager_flag, "messages": messages}
+        # user = self.get_user()
+        # manager_flag = user.managed_locations.filter(id=obj.organization.id).exists()
+        # return {"flag": obj.is_closed or manager_flag, "messages": messages}
+        return {"flag": obj.is_closed, "messages": messages}
 
     class Meta(BaseMeta):
         model = models.Ticket

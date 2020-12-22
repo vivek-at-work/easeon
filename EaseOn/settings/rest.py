@@ -32,4 +32,4 @@ if env("DEBUG", default=False, cast=bool):
     )
 API_VERSION = "v1"
 CURRENT_API_URL = "rest/api/{0}/".format(API_VERSION)
-API_GATEWAY = env("API_GATEWAY",default="backend")
+API_GATEWAY = env("API_GATEWAY", default="backend")

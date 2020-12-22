@@ -11,6 +11,7 @@ from organizations.models import Organization
 
 class Token(BaseModel):
     """A Service Token"""
+
     organization = models.ForeignKey(
         Organization,
         related_name="tokens",
@@ -47,19 +48,3 @@ class Token(BaseModel):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
-
-
-# def clear_model_cache(sender, *args, **kwargs):
-#     """
-#     Clears cached data of models on update or delete.
-#     :param sender: Model Class triggering this signal.
-#     :param args: extra arguments
-#     :param kwargs: extra keyword arguments
-#     :return: None
-#     """
-#     if Token.CACHE_KEY in cache:
-#         cache.delete(Token.CACHE_KEY)
-
-
-# post_save.connect(clear_student_cache, sender=Student)
-# post_delete.connect(clear_student_cache, sender=Student)

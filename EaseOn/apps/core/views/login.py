@@ -2,8 +2,9 @@
 # future
 from __future__ import unicode_literals
 
-import logging
 import json
+import logging
+
 from core.serializers import OTPOptionsSerializer
 from core.utils import get_ticket_model
 from django.apps import apps
@@ -123,6 +124,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     res["auth"] = json.loads(body)
                     res["user"] = {}
                     res["user"]["full_name"] = user.full_name
+                    res["user"]["email"] = user.email
                     res["user"]["url"] = self._get_user_url(user, request)
                     res["user"][
                         "need_to_change_password"

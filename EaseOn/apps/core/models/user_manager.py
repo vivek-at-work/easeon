@@ -92,11 +92,10 @@ class UserManager(BaseUserManager):
         return user
 
     def all_superusers(self):
-        return self.get_queryset().filter(
-            user_type__in=[1,5])
+        return self.get_queryset().filter(user_type__in=[1, 5])
 
     def all_non_superusers(self):
-        return self.get_queryset().exclude(user_type__in=[1,5])
+        return self.get_queryset().exclude(user_type__in=[1, 5])
 
     def all_superusers_email(self):
         return self.all_superusers().values_list("email", flat=True)

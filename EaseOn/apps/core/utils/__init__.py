@@ -20,6 +20,10 @@ from .two_factor_client import TwoFactorIn, APPIndia
 from .workdays import workday
 
 
+def is_in_dev_mode():
+    return settings.ENV == "DEV"
+
+
 def get_organization_model():
     return "organizations.Organization"
 
@@ -76,7 +80,10 @@ def send_sms(number, message):
 
 def send_otp(number, otp):
     message = "You Login OTP is {}".format(otp)
-    return APPIndia.send(number, message)
+    if is_in_dev_mode():
+        print(message)
+    else:
+        return APPIndia.send(number, message)
 
 
 def send_token_to_customer(number, otp):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import http.client
 import ssl
+import urllib
 
 from django.conf import settings
 
@@ -39,26 +40,21 @@ class TwoFactorIn(object):
 class APPIndia(object):
     @staticmethod
     def send(number, message, template_name="LOGIN_OTP"):
-        import urllib
-        print(message)
-        try:
-            conn = http.client.HTTPSConnection("app.indiasms.com")
-            payload = ""
-            headers = {}
-            conn.request(
-                "GET",
-                "/sendsms/sendsms.php?username={}&password={}&type=TEXT&sender={}&mobile={}&message={}".format(
-                    settings.APP_INDIA_USERNAME,
-                    settings.APP_INDIA_PASSWORD,
-                    settings.APP_INDIA_SENDER,
-                    number,
-                    urllib.parse.quote(message),
-                ),
-                payload,
-                headers,
-            )
-            res = conn.getresponse()
-            data = res.read()
-            print(data.decode("utf-8"))
-        except:
-            pass
+        conn = http.client.HTTPSConnection("app.indiasms.com")
+        payload = ""
+        headers = {}
+        conn.request(
+            "GET",
+            "/sendsms/sendsms.php?username={}&password={}&type=TEXT&sender={}&mobile={}&message={}".format(
+                settings.APP_INDIA_USERNAME,
+                settings.APP_INDIA_PASSWORD,
+                settings.APP_INDIA_SENDER,
+                number,
+                urllib.parse.quote(message),
+            ),
+            payload,
+            headers,
+        )
+        res = conn.getresponse()
+        data = res.read()
+        return data
