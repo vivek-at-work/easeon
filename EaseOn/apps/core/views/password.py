@@ -103,10 +103,10 @@ class PasswordChangeView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     @sensitive_post_parameters_m
-    def dispatch(self, *args, **kwargs):  # pylint:disable=W0221
+    def dispatch(self, *args, **kwargs):
         return super(PasswordChangeView, self).dispatch(*args, **kwargs)
 
-    def post(self, request, *args, **kwargs):  # pylint:disable=W0613
+    def post(self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -124,7 +124,7 @@ class PasswordChangeView(generics.GenericAPIView):
                 )
             )
             return response.Response(
-                {"detail": "Password change failed."},
+                serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

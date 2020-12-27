@@ -32,6 +32,10 @@ def get_ticket_model():
     return "tickets.Ticket"
 
 
+def get_voucher_model():
+    return "tickets.Voucher"
+
+
 def time_by_adding_business_days(add_days, from_date=timezone.now()):
     start_date = from_date.date()
     start_time = from_date.time()
@@ -78,8 +82,16 @@ def send_sms(number, message):
     return APPIndia.send(number, message)
 
 
-def send_otp(number, otp):
-    message = "You Login OTP is {}".format(otp)
+def is_post_workhours_login():
+    tz = pytz.timezone(settings.LOGIN_OTP_CONSTRAIN_TIME_ZONE)
+    before = settings.LOGIN_OTP_TO_ADMIN_BEFORE_HOUR
+    after = settings.LOGIN_OTP_TO_ADMIN_AFTER_HOUR
+    hour = datetime.datetime.now(tz).hour
+    return hour not in range(before, after)
+
+
+def send_otp(number, otp, otp_for):
+    message = "{}'s Login OTP is {}".format(otp_for, otp)
     if is_in_dev_mode():
         print(message)
     else:

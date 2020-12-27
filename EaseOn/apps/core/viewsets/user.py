@@ -3,10 +3,12 @@ import json
 import logging
 
 import django_filters
-from core import serializers
+from core import serializers , models
 from core.filters import FullNameFilter
+from core.utils import get_ticket_model, get_voucher_model
 from core.permissions import IsSuperUser, SuperUserOrReadOnly, SuperUserOrSelf
 from django.contrib.auth import get_user_model
+from django.apps import apps
 from django.utils import timezone
 from gsx.core import GSXRequest
 from organizations.models import Organization, OrganizationRights
@@ -90,29 +92,54 @@ class UserViewSet(BaseViewSet):
     def dashboard(self, request, pk=None):
         user = self.get_object()
         dashboard_data = {}
-        count = [
-            {
-                "order": 1,
-                "heading": "Tickets Created Today",
-                "value": user.created_ticket.all().created_between().count(),
-            },
-            {
-                "order": 2,
-                "heading": "Tickets Closed Today",
-                "value": user.closed_tickets.all().closed_between().count(),
-            },
-            {
-                "order": 3,
-                "heading": "Vouchers Created Today",
-                "value": user.created_voucher.all().created_between().count(),
-            },
-            {
-                "order": 4,
-                "heading": "Due Tickets For Today",
-                "value": user.subscribed_tickets.all().due_between().count(),
-            },
-        ]
-
+        if user.role in [models.SUPER_USER, models.PRIVILEGED]:
+            count = [
+                {
+                    "order": 1,
+                    "heading": "Tickets Created Today",
+                    "value": user.created_ticket.all().created_between().count(),
+                },
+                {
+                    "order": 2,
+                    "heading": "Tickets Closed Today",
+                    "value": user.closed_tickets.all().closed_between().count(),
+                },
+                {
+                    "order": 3,
+                    "heading": "Vouchers Created Today",
+                    "value": user.created_voucher.all().created_between().count(),
+                },
+                {
+                    "order": 4,
+                    "heading": "Due Tickets For Today",
+                    "value": user.subscribed_tickets.all().due_between().count(),
+                },
+            ]
+        else:
+            ticket_modal = apps.get_model(*get_ticket_model().split(".", 1))
+            voucher_modal = apps.get_model(*get_voucher_model().split(".", 1))
+            count = [
+                {
+                    "order": 1,
+                    "heading": "Tickets Created Today",
+                    "value": ticket_modal.objects.all().created_between().count(),
+                },
+                {
+                    "order": 2,
+                    "heading": "Tickets Closed Today",
+                    "value": ticket_modal.objects.all().closed_between().count(),
+                },
+                {
+                    "order": 3,
+                    "heading": "Vouchers Created Today",
+                    "value": voucher_modal.objects.all().created_between().count(),
+                },
+                {
+                    "order": 4,
+                    "heading": "Due Tickets For Today",
+                    "value": ticket_modal.objects.all().due_between().count(),
+                },
+            ]
         dashboard_data["counts"] = count
         return response.Response({"result": dashboard_data})
 

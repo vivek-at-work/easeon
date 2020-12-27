@@ -6,12 +6,13 @@ from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from slas.models import SLA
 
 from .ticket import Ticket
 
 
 class Voucher(BaseModel):
-    """A voucher"""
+    """A  Payment Voucher"""
 
     cash = models.FloatField(null=True, blank=True, default=0.0)
     cheque = models.FloatField(null=True, blank=True, default=0.0)
@@ -32,6 +33,11 @@ class Voucher(BaseModel):
     )
     customer_signature = models.ImageField(
         upload_to="customer_signatures/vouchers", null=True, blank=True
+    )
+    sla = models.ForeignKey(
+        SLA, null=True,
+        related_name="vouchers",
+        on_delete=models.DO_NOTHING
     )
 
     @property
@@ -68,6 +74,8 @@ def set_reference_number_for_voucher(sender, instance, *args, **kwargs):
             instance.ticket.organization.code, instance.ticket.id, suffix
         )
         instance.reference_number = reference_number
+    if not instance.sla and SLA.objects.get_default_voucher_sla().exists():
+        instance.sla = SLA.objects.get_default_voucher_sla()[0]
 
 
 @receiver(post_save, sender=Voucher)

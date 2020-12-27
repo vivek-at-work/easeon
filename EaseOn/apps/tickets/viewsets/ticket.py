@@ -26,8 +26,13 @@ from inventory.serializers import LoanerItemSerializer, RepairItemSerializer
 from rest_framework import decorators, permissions, response, status
 from rest_framework.parsers import MultiPartParser
 from tickets import models, serializers
+from tickets.models import DELIVERED_STATUS_VALUES, CLOSED_STATUS_VALUES
 from tickets.permissions import TicketPermissions
 from weasyprint import CSS, HTML
+
+
+class StringInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
+    pass
 
 
 class UserNameFilter(django_filters.CharFilter):
@@ -98,6 +103,7 @@ class TicketFilter(django_filters.FilterSet):
     created_at_after = django_filters.DateTimeFilter(
         field_name="created_at", lookup_expr="gte"
     )
+    status_in = StringInFilter(field_name='status', lookup_expr='in')
 
     class Meta(object):
         model = models.Ticket
@@ -170,7 +176,6 @@ class TicketViewSet(viewsets.BaseViewSet):
         if pk is not None:
             ticket = models.Ticket.objects.get(pk=pk)
             org = ticket.organization
-
             devices = org.get_available_repair_items()
             if "search" in request.query_params:
                 search_text = request.query_params["search"]
@@ -198,11 +203,20 @@ class TicketViewSet(viewsets.BaseViewSet):
         serializer = self.get_serializer_class()(
             ticket, data=request.data, partial=True, context={"request": request}
         )
+
         if serializer.is_valid(raise_exception=True):
-            if serializer.validated_data["status"] in ["Delivered"]:
+            if ticket.status == serializer.validated_data["status"]:
+                data = self.retrieve_serializer_class(ticket, context={"request": request}).data
+                headers = self.get_success_headers(serializer.data)
+                return response.Response(data, status=status.HTTP_200_OK, headers=headers)
+            if serializer.validated_data["status"] in DELIVERED_STATUS_VALUES:
                 delivery = ticket.delivery
                 delivery.device_pickup_time = timezone.now()
                 delivery.save()
+            elif serializer.validated_data["status"] in CLOSED_STATUS_VALUES and not ticket.is_closed:
+                ticket.instance.closed_on = timezone.now()
+            ticket.refresh_escalation_timestamps()
+            ticket.save()
             serializer.save()
         headers = self.get_success_headers(serializer.data)
         obj = self.get_object()
@@ -311,12 +325,8 @@ class TicketViewSet(viewsets.BaseViewSet):
             )
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-            headers = self.get_success_headers(serializer.data)
-            obj = self.get_object()
-            data = self.retrieve_serializer_class(
-                obj, context={"request": request}
-            ).data
-            return response.Response(data, status=status.HTTP_200_OK, headers=headers)
+                headers = self.get_success_headers(serializer.data)
+                return response.Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
         return response.Response("Invalid paramters", status.HTTP_400_BAD_REQUEST)
 
     @decorators.action(methods=["post", "get"], detail=True, url_name="get_gsx_data")

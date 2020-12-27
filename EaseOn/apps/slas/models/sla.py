@@ -6,6 +6,7 @@ SLA_TYPE_CHOICES = (
     ("TICKET_SLA", "Ticket SLA"),
     ("DELIVERY_SLA", "Delivery SLA"),
     ("PHONE_LOAN_AGREEMENT", "Phone Loan Agreement"),
+    ("VOUCHER_SLA", "Voucher Agreement"),
 )
 
 
@@ -16,6 +17,9 @@ class SLAManager(BaseManager):
     def get_default_delivery_sla(self):
         return self.get_queryset().filter(sla_type="DELIVERY_SLA", is_default=True)
 
+    def get_default_voucher_sla(self):
+        return self.get_queryset().filter(sla_type="VOUCHER_SLA", is_default=True)
+
     def get_queryset(self):
         return super(SLAManager, self).get_queryset()
 
@@ -24,7 +28,8 @@ class SLA(BaseModel):
     """A SLA"""
 
     sla_type = models.CharField(
-        max_length=100, choices=SLA_TYPE_CHOICES, default="TICKET_SLA"
+        max_length=100, choices=SLA_TYPE_CHOICES,
+        default="TICKET_SLA"
     )
     name = models.CharField(max_length=100)
     is_default = models.BooleanField(default=False)

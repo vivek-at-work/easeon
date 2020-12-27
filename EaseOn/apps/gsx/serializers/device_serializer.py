@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import copy
 
-from core.utils import time_by_adding_business_days
+from core.utils import time_by_adding_business_days, is_in_dev_mode
 from gsx.core import GSXRequest
 from rest_framework import serializers
 
 from .base_gsx_serializer import BaseGSXSerializer
 from .gsx_validate import gsx_validate
+
+dummy_response = {"device": {"identifiers": {"serial": "FCGT24E5HFM2", "imei": "359223073482536", "meid": "35922307348253"}, "productDescription": "iPhone 6s Plus", "activationDetails": {"carrierName": "*****", "lastRestoreDate": "1970-01-01T00:00:00Z", "firstActivationDate": "1970-01-01T00:00:00Z", "unlockDate": "1970-01-01T00:00:00Z", "productVersion": "*****", "initialActivationPolicyID": "***", "initialActivationPolicyDetails": "********", "appliedActivationPolicyID": "****", "appliedActivationDetails": "********", "nextTetherPolicyID": "***", "nextTetherPolicyDetails": "********", "productDescription": "IPHONE 6S PLUS SPACE GRAY 32GB-HIN", "lastUnbrickOsBuild": "******"}, "productLine": "*******", "configCode": "*****", "configDescription": "******************************", "soldToName": "************************************",
+                             "warrantyInfo": {"warrantyStatusCode": "***", "warrantyStatusDescription": "******************************", "coverageEndDate": "1970-01-01T00:00:00Z", "coverageStartDate": "1970-01-01T00:00:00Z", "daysRemaining": 0, "purchaseDate": "1970-01-01T00:00:00Z", "onsiteStartDate": "1970-01-01T00:00:00Z", "onsiteEndDate": "1970-01-01T00:00:00Z", "purchaseCountry": "****", "registrationDate": "1970-01-01T00:00:00Z", "contractCoverageEndDate": "1970-01-01T00:00:00Z", "contractCoverageStartDate": "1970-01-01T00:00:00Z"}, "caseDetails": [{"caseId": "*************", "createdDateTime": "1970-01-01T00:00:00Z", "summary": "*******"}, {"caseId": "*************", "createdDateTime": "1970-01-01T00:00:00Z", "summary": "*******"}, {"caseId": "*************", "createdDateTime": "1970-01-01T00:00:00Z", "summary": "*******"}]}}
 
 
 class DeviceSerializer(BaseGSXSerializer):
@@ -34,6 +37,8 @@ class DeviceSerializer(BaseGSXSerializer):
         :param validated_data: valid data
         :return: pyotp object
         """
+        if is_in_dev_mode():
+            return dummy_response
         req = GSXRequest(
             "repair",
             "product/details?activationDetails=true",

@@ -43,15 +43,3 @@ class CustomerSerializer(BaseSerializer):
             "token_number",
             "user_messages",
         ]
-
-    # def create(self, validated_data):
-    #     # TODO: what if address needes to be updated  for next ticket
-    #     with transaction.atomic():
-    #         email = validated_data['email']
-    #         contact_number = validated_data['contact_number']
-    #         results = Customer.objects.filter(email=email,
-    #                                           contact_number=contact_number)
-    #         if results.count() > 0:
-    #             return results[0]
-    #         else:
-    #             return super(CustomerSerializer, self).create(validated_data)

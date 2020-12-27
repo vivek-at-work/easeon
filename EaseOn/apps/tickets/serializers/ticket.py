@@ -9,10 +9,12 @@ from core.serializers import (
     FileFieldWithLinkRepresentation,
     UserSerializer,
 )
+from core.utils import time_by_adding_business_days
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from lists.models import get_list_choices
+from devices.serializers import ComponentIssueSerializer
 from rest_framework import serializers
 from tickets import models
 from tickets import serializers as t_serializer
@@ -71,16 +73,6 @@ class TicketSerializer(BaseSerializer):
     Used in Post/and put  requests
     """
 
-    def validate_status(self, value):
-        if (
-            self.instance
-            and value
-            in ["Ready", "Ready For Pickup", "PROCESSED FOR REPLACEMENT", "Delivered"]
-            and self.instance.closed_on is None
-        ):
-            self.instance.closed_on = timezone.now()
-        return value
-
     def validate(self, values):
         if (
             "organization" in values
@@ -121,9 +113,10 @@ class TicketSerializer(BaseSerializer):
     password = serializers.CharField(read_only=True)
     customer_signature = FileFieldWithLinkRepresentation(read_only=True)
     status = serializers.ChoiceField(
-        default="Registered", choices=get_list_choices("TICKET_STATUS")
+        default="Registered",
+        choices=get_list_choices("TICKET_STATUS")
     )
-    coverage_type = serializers.ChoiceField(choices=get_list_choices("COVERAGE_TYPE"))
+    # coverage_type = serializers.ChoiceField(choices=get_list_choices("COVERAGE_TYPE"))
     repair_type = serializers.ChoiceField(choices=get_list_choices("REPAIR_TYPE"))
     comments = serializers.HyperlinkedRelatedField(
         read_only=True, many=True, view_name="comment-detail"
@@ -145,6 +138,11 @@ class TicketSerializer(BaseSerializer):
     currently_assigned_to_name = serializers.SlugRelatedField(
         source="currently_assigned_to", read_only=True, slug_field="full_name"
     )
+    first_escalation_after = serializers.DateTimeField(
+        default=time_by_adding_business_days(2))
+    second_escalation_after = serializers.DateTimeField(default=time_by_adding_business_days(3))
+    final_escalation_after = serializers.DateTimeField(
+        default=time_by_adding_business_days(30))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -152,7 +150,6 @@ class TicketSerializer(BaseSerializer):
         context = kwargs.get("context", None)
         if context:
             request = kwargs["context"]["request"]
-            # rganization.objects.all(id__in=OrganizationRights.objects.all().values_list('organization',flat=True))
             queryset = organizations.models.Organization.objects.filter(
                 id__in=request.user.locations.filter(
                     tickets=True, is_active=True
@@ -189,8 +186,9 @@ class TicketSerializer(BaseSerializer):
             "first_escalation_after",
             "second_escalation_after",
             "vouchers",
-            "comments" "serializable_order_lines",
-            "final_escalation_after",
+            "comments",
+            "serializable_order_lines",
+
             "closed_on",
             "closed_by",
             "last_modified_by",
@@ -208,6 +206,8 @@ class DeviceSerializer(BaseSerializer):
     identifier = serializers.CharField()
     product_name = serializers.ReadOnlyField()
     configuration = serializers.ReadOnlyField()
+    component_issues = ComponentIssueSerializer(many=True)
+
 
     class Meta(BaseMeta):
         model = devices.models.Device
@@ -218,6 +218,7 @@ class DeviceSerializer(BaseSerializer):
             "identifier",
             "serial_number",
             "alternate_device_id",
+            "component_issues"
         ]
 
 
@@ -249,7 +250,6 @@ class TicketPrintSerializer(BaseSerializer):
 
     def get_can_update_ticket(self, obj):
         status_flag = not obj.is_closed
-
         return (
             status_flag
             or self.get_user().is_superuser
@@ -268,7 +268,7 @@ class TicketPrintSerializer(BaseSerializer):
         if not obj.is_closed:
             messages.append(
                 "Current Status of ticket is {0} it should be one from {1}".format(
-                    obj.status, ",".join(models.CLOSE_STATUS_VALUES)
+                    obj.status, ",".join(models.CLOSED_STATUS_VALUES)
                 )
             )
 
@@ -302,14 +302,6 @@ class TicketPrintSerializer(BaseSerializer):
 
 class TicketStatusChangeSerializer(BaseSerializer):
     def validate_status(self, value):
-        if (
-            self.instance
-            and value
-            in ["Ready", "Ready For Pickup", "PROCESSED FOR REPLACEMENT", "Delivered"]
-            and self.instance.closed_on is None
-        ):
-            self.instance.closed_on = timezone.now()
-
         if (
             self.instance
             and value in ["Delivered"]

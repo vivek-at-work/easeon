@@ -55,21 +55,21 @@ class OTPMixin(object):
         uid = response.get("otp_uuid")
         response["verify_url"] = "core/verify-otp/hotp/{}".format(uid)
         receiving_address = data.get("contact_number", None)
+        otp_for = data.get("otp_for", "")
         is_valid_email = False
         try:
             validate_email(receiving_address)
             is_valid_email = True
-        except Exception as e:
-            logger.info("User requested OTP on contact number %s", e)
+        except Exception:
             is_valid_email = False
 
         if not is_valid_email:
-            utils.send_otp(receiving_address, otp)
+            utils.send_otp(receiving_address, otp, otp_for)
         else:
             template = settings.EMAIL_TEMPLATES.get("alert")
             context = {
                 "receiver_short_name": "",
-                "summary": "OTP for your login is {0}".format(otp),
+                "summary": "OTP for {}'s login is {}".format(otp_for, otp),
                 "detail": """Please use given login otp
                             to login to {0}""".format(
                     settings.SITE_HEADER

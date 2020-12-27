@@ -5,12 +5,18 @@ from inventory.models import RepairInventoryItem, SerializableInventoryItem
 from lists.models import get_list_choices
 from rest_framework import serializers
 from tickets.models import OrderLine, SerializableOrderLine, Ticket
+from devices.models import ComponentIssue
 
 
 class OrderLineSerializer(BaseSerializer):
     inventory_item = serializers.HyperlinkedRelatedField(
         queryset=RepairInventoryItem.objects.all().available(),
         view_name="repairinventoryitem-detail",
+    )
+    component_issue = serializers.HyperlinkedRelatedField(
+        queryset=ComponentIssue.objects.all(),
+        allow_null=True, required=False,
+        view_name="componentissue-detail",
     )
     ticket = serializers.HyperlinkedRelatedField(
         queryset=Ticket.objects.all(), view_name="ticket-detail"
