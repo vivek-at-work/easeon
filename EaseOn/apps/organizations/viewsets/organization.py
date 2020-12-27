@@ -17,7 +17,7 @@ class OrganizationPermissions(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if (
-            view.action in ["list", "get_holidays"]
+            view.action in ["list", "get_holidays", "expected_delivery_date"]
             and request.user
             and request.user.is_authenticated
             and request.user.role in self.READ_ROLES
@@ -44,7 +44,7 @@ class OrganizationPermissions(permissions.BasePermission):
         if request.user.role == SUPER_USER:
             return True
         if (
-            view.action in ["get_holidays"]
+            view.action in ["get_holidays", "expected_delivery_date"]
             and request.user
             and request.user.is_authenticated
             and request.user.role in self.READ_ROLES
@@ -52,7 +52,7 @@ class OrganizationPermissions(permissions.BasePermission):
             return True
         if (
             view.action
-            in ["retrieve", "update", "partial_update", "destroy", "add_holiday"]
+            in ["retrieve", "update", "partial_update", "destroy", "add_holiday", "expected_delivery_date"]
             and request.user
             and request.user.is_authenticated
             and request.user.role in self.UPDATE_ROLES
@@ -117,3 +117,11 @@ class OrganizationViewSet(BaseViewSet):
             organization.holidays.all(), many=True, context={"request": request}
         )
         return response.Response(serializer.data)
+
+    @decorators.action(
+        methods=["GET"], detail=True)
+    def expected_delivery_date(self, request, pk=None):
+        "Get diagnosis suites for device."
+        organization = self.get_object()
+        data = {'expected_delivery_date':organization.get_expected_delivery_date(5)}
+        return response.Response(data)

@@ -25,7 +25,8 @@ from slas.models import SLA
 
 from .upload_content import UploadContent
 
-CLOSE_STATUS_VALUES = ["Delivered", "Hold", "DECLINED"]
+DELIVERED_STATUS_VALUES = ["Delivered"]
+CLOSED_STATUS_VALUES = ["Ready", "Ready For Pickup"]
 
 
 class TicketManager(BaseManager):
@@ -43,16 +44,14 @@ class TicketQuerySet(BaseQuerySet):
         return super(TicketQuerySet, self).delete()
 
     def open(self):
-        return self.filter(closed_on__isnull=True, is_deleted=False)
+        return self.exclude(status__in=DELIVERED_STATUS_VALUES)
 
     def due_between(self, **kwargs):
         dt = timezone.now()
         mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
-        return self.filter(
-            closed_on__isnull=True,
-            is_deleted=False,
-            expected_delivery_time__lt=end_time,
+        return self.open().filter(
+            expected_delivery_time__lt=end_time
         )
 
     def closed_between(self, **kwargs):
@@ -62,6 +61,27 @@ class TicketQuerySet(BaseQuerySet):
         start_time = kwargs.get("start_time", mid_night_today)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.filter(closed_on__range=[start_time, end_time])
+
+    def first_level_escalations(self, **kwargs):
+        dt = timezone.now()
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
+        end_time = kwargs.get("end_time", mid_night_tomorrow)
+        return self.open().filter(final_escalation_after__lt=end_time)
+
+    def second_level_escalations(self, **kwargs):
+        dt = timezone.now()
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
+        end_time = kwargs.get("end_time", mid_night_tomorrow)
+        return self.open().filter(second_escalation_after__lt=end_time)
+
+    def final_level_escalations(self, **kwargs):
+        dt = timezone.now()
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
+        end_time = kwargs.get("end_time", mid_night_tomorrow)
+        return self.open().filter(final_escalation_after__lt=end_time)
 
 
 class Ticket(BaseModel):
@@ -152,10 +172,11 @@ class Ticket(BaseModel):
 
     @property
     def is_closed(self):
-        return self.status in CLOSE_STATUS_VALUES
+        return self.closed_on is None
 
-    def can_be_closed(self):
-        return self.status in CLOSE_STATUS_VALUES
+    @property
+    def is_delivered(self):
+        return self.status in DELIVERED_STATUS_VALUES
 
     def has_consolidated_loaner_items(self):
         flag = True
@@ -193,10 +214,10 @@ class Ticket(BaseModel):
         self.reference_number = reference_number
 
     def refresh_escalation_timestamps(self, closed=False):
-        if not closed:
+        if not self.is_closed:
             self.first_escalation_after = time_by_adding_business_days(1)
             self.second_escalation_after = time_by_adding_business_days(2)
-            self.final_escalation_after = time_by_adding_business_days(3)
+            self.final_escalation_after = time_by_adding_business_days(29)
 
     def send_ticket_details_to_customer_via_email(self):
         template = settings.EMAIL_TEMPLATES.get("action")
@@ -310,21 +331,5 @@ class Ticket(BaseModel):
 def set_reference_number_for_ticket(sender, instance, *args, **kwargs):
     if not instance.reference_number:
         instance.set_reference_number()
-    instance.refresh_escalation_timestamps()
-
-
-@receiver(pre_save, sender=Ticket)
-def set_closed_on(sender, instance, *args, **kwargs):
-    if not instance.closed_on and instance.can_be_closed():
-        instance.closed_on = timezone.now()
-        instance.closed_by = instance.last_modified_by
-        instance.refresh_escalation_timestamps(closed=True)
-
-
-# @receiver(post_save, sender=Ticket)
-# def add_subscribers(sender, instance, *args, **kwargs):
-#     subscribers = [
-#         instance.currently_assigned_to,
-#         instance.created_by,
-#         instance.organization.manager,
-#     ]
+    if not instance.id:
+        instance.refresh_escalation_timestamps()

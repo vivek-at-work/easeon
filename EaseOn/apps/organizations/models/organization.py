@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import datetime
-
+import pytz
 from core.models import BaseManager, BaseModel, BaseQuerySet
-from core.utils import send_mail, time_by_adding_business_days
+from core.utils import send_mail, workday
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone as dtz
 from django.db.models import Q, UniqueConstraint
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -75,6 +76,23 @@ class Organization(BaseModel):
 
     def get_available_repair_items(self):
         return self.repair_inventory_items.all().available()
+
+    def get_expected_delivery_date(self, add_days, from_date=dtz.now()):
+        start_date = from_date.date()
+        start_time = from_date.time()
+        end_date = workday(
+            start_date, add_days,
+            self.holidays.all().values_list('date', flat=True))
+        return datetime.datetime(
+            end_date.year,
+            end_date.month,
+            end_date.day,
+            start_time.hour,
+            start_time.minute,
+            start_time.second,
+            tzinfo=pytz.UTC,
+        )
+
 
     def __str__(self):
         return self.code

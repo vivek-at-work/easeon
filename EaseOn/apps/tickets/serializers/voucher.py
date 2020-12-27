@@ -6,6 +6,7 @@ from core.serializers import BaseMeta, BaseSerializer, FileFieldWithLinkRepresen
 from django.db import transaction
 from rest_framework import serializers
 from tickets import models
+import slas
 
 
 class VoucherSerializer(BaseSerializer):
@@ -16,6 +17,7 @@ class VoucherSerializer(BaseSerializer):
     ticket = serializers.HyperlinkedRelatedField(
         queryset=models.Ticket.objects.all(), view_name="ticket-detail"
     )
+    sla = slas.serializers.SLASerializer(read_only=True)
 
     total_amount = serializers.ReadOnlyField()
     actual_payment_modes = serializers.ReadOnlyField()
