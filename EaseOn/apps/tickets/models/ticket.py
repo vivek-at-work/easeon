@@ -172,7 +172,7 @@ class Ticket(BaseModel):
 
     @property
     def is_closed(self):
-        return self.closed_on is None
+        return self.status is CLOSED_STATUS_VALUES
 
     @property
     def is_delivered(self):
@@ -266,8 +266,8 @@ class Ticket(BaseModel):
 
     def get_invite_message_by_status(self):
         if self.status.lower() in ["Ready For Pickup".lower()]:
-            return "Device ready for delivery. Timings {} Call {} for home delivery.".format(
-                self.organization.timings, self.organization.contact_number
+            return "Device ready for delivery. Timings {}.".format(
+                self.organization.timings
             )
         return "Ticket status changed to {}. Timings {} Call {} for your query.".format(
             self.status, self.organization.timings, self.organization.contact_number

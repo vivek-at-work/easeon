@@ -24,17 +24,16 @@ class TokenSerializer(BaseSerializer):
     )
 
     def validate(self, data):
-        return data
         if "view" in self.context:
             action = self.context["view"].action
             if action == "create":
                 if (
                     Token.objects.all()
-                    .created_between(contact_number=data["contact_number"])
+                    .created_between().filter(contact_number=data["contact_number"])
                     .exists()
                 ):
                     raise serializers.ValidationError(
-                        "You already have token send on you number."
+                        "You already have a token sent on you number.If Not received in next 2 minutes, Please reach out to reception"
                     )
         return data
 

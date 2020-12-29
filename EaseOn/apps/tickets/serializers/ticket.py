@@ -265,10 +265,10 @@ class TicketPrintSerializer(BaseSerializer):
             messages.append("There is no delivery Infomation Updated")
             return {"flag": has_delivery, "messages": messages}
 
-        if not obj.is_closed:
+        if not obj.is_delivered:
             messages.append(
                 "Current Status of ticket is {0} it should be one from {1}".format(
-                    obj.status, ",".join(models.CLOSED_STATUS_VALUES)
+                    obj.status, ",".join(models.DELIVERED_STATUS_VALUES)
                 )
             )
 

@@ -142,7 +142,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                         res["valid_work_hours"] = [x for x in range(
                             settings.LOGIN_OTP_TO_ADMIN_AFTER_HOUR, 25
                         )] + [x for x in range(
-                            1,
+                            0,
                             settings.LOGIN_OTP_TO_ADMIN_BEFORE_HOUR
                         )]
                     else:

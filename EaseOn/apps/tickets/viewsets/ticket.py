@@ -213,8 +213,8 @@ class TicketViewSet(viewsets.BaseViewSet):
                 delivery = ticket.delivery
                 delivery.device_pickup_time = timezone.now()
                 delivery.save()
-            elif serializer.validated_data["status"] in CLOSED_STATUS_VALUES and not ticket.is_closed:
-                ticket.instance.closed_on = timezone.now()
+            elif serializer.validated_data["status"] in CLOSED_STATUS_VALUES:
+                ticket.closed_on = timezone.now()
             ticket.refresh_escalation_timestamps()
             ticket.save()
             serializer.save()

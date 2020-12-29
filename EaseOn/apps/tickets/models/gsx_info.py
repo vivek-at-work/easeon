@@ -15,7 +15,7 @@ class GSXInfo(BaseModel):
     )
     gsx_reference_number = models.CharField(max_length=30)
     gsx_repair_type = models.CharField(max_length=50)
-    comptia_code = models.CharField(max_length=50)
+    comptia_code = models.CharField(max_length=200)
 
     class Meta:
         verbose_name = "GSX Info"

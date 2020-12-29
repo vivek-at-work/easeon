@@ -91,7 +91,9 @@ def is_post_workhours_login():
 
 
 def send_otp(number, otp, otp_for):
-    message = "{}'s Login OTP is {}".format(otp_for, otp)
+    message = "Login OTP is {}".format(otp)
+    if otp_for:
+        message = "{}'s Login OTP is {}".format(otp_for, otp)
     if is_in_dev_mode():
         print(message)
     else:

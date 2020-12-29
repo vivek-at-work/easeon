@@ -38,7 +38,7 @@ class Token(BaseModel):
 
     def send_token_number_by_sms(self):
         send_token_to_customer(
-            self.contact_number, str(self.token_number).rjust(4, "0")
+            self.contact_number, self.token_number
         )
 
     def can_invite(self, user):
