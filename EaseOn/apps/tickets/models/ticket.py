@@ -50,9 +50,7 @@ class TicketQuerySet(BaseQuerySet):
         dt = timezone.now()
         mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
-        return self.open().filter(
-            expected_delivery_time__lt=end_time
-        )
+        return self.open().filter(expected_delivery_time__lt=end_time)
 
     def closed_between(self, **kwargs):
         dt = timezone.now()
@@ -64,22 +62,19 @@ class TicketQuerySet(BaseQuerySet):
 
     def first_level_escalations(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(
-            dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.open().filter(final_escalation_after__lt=end_time)
 
     def second_level_escalations(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(
-            dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.open().filter(second_escalation_after__lt=end_time)
 
     def final_level_escalations(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(
-            dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.open().filter(final_escalation_after__lt=end_time)
 

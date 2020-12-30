@@ -37,9 +37,7 @@ class Token(BaseModel):
     is_present = models.BooleanField(default=False)
 
     def send_token_number_by_sms(self):
-        send_token_to_customer(
-            self.contact_number, self.token_number
-        )
+        send_token_to_customer(self.contact_number, self.token_number)
 
     def can_invite(self, user):
         return (self.invited_by is None) or (self.invited_by == user)

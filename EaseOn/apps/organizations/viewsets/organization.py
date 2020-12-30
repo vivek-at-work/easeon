@@ -52,7 +52,14 @@ class OrganizationPermissions(permissions.BasePermission):
             return True
         if (
             view.action
-            in ["retrieve", "update", "partial_update", "destroy", "add_holiday", "expected_delivery_date"]
+            in [
+                "retrieve",
+                "update",
+                "partial_update",
+                "destroy",
+                "add_holiday",
+                "expected_delivery_date",
+            ]
             and request.user
             and request.user.is_authenticated
             and request.user.role in self.UPDATE_ROLES
@@ -118,10 +125,9 @@ class OrganizationViewSet(BaseViewSet):
         )
         return response.Response(serializer.data)
 
-    @decorators.action(
-        methods=["GET"], detail=True)
+    @decorators.action(methods=["GET"], detail=True)
     def expected_delivery_date(self, request, pk=None):
         "Get diagnosis suites for device."
         organization = self.get_object()
-        data = {'expected_delivery_date':organization.get_expected_delivery_date(5)}
+        data = {"expected_delivery_date": organization.get_expected_delivery_date(5)}
         return response.Response(data)

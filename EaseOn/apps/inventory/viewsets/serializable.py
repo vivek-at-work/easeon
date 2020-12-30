@@ -8,6 +8,7 @@ from inventory.serializers import (
     SerializableInventoryItemSerializer,
     SerializableInventoryListSerializer,
 )
+from rest_framework import decorators, generics, permissions, response, status, views
 
 
 class SerializableInventoryItemFilter(django_filters.FilterSet):
@@ -33,6 +34,20 @@ class SerializableItemViewSet(BaseBulkCreateViewSet):
     list_serializer_class = SerializableInventoryListSerializer
     delete_serializer_class = SerializableInventoryListSerializer
     permission_classes = [IsOperatorOrSuperUser]
+
+    @decorators.action(
+        methods=["GET"],
+        detail=False,
+        url_path="part_number_by_description/(?P<description>[\w\s,()-_*!@&\+]+)",
+    )
+    def get_part_number_by_description(self, request, description):
+        "Get diagnosis suites for device."
+        data = (
+            models.SerializableInventoryItem.objects.filter(description=description)
+            .exclude(part_number__isnull=True)
+            .values_list("part_number", flat=True)
+        )
+        return response.Response(data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_privileged:

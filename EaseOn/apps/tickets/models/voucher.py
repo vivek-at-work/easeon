@@ -35,9 +35,7 @@ class Voucher(BaseModel):
         upload_to="customer_signatures/vouchers", null=True, blank=True
     )
     sla = models.ForeignKey(
-        SLA, null=True,
-        related_name="vouchers",
-        on_delete=models.DO_NOTHING
+        SLA, null=True, related_name="vouchers", on_delete=models.DO_NOTHING
     )
 
     @property

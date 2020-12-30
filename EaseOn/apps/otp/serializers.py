@@ -38,7 +38,8 @@ class HotpSerializer(mixins.OTPMixin, serializers.Serializer):
         required=False, allow_blank=True, help_text="Contact Number to Send OTP TO."
     )
     otp_for = serializers.CharField(
-        required=False, allow_blank=True,help_text="Name of the OTP Owner/Generator.")
+        required=False, allow_blank=True, help_text="Name of the OTP Owner/Generator."
+    )
 
     def create(self, validated_data):
         """

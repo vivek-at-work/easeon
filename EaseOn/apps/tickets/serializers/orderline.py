@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
+from devices.models import ComponentIssue
 from django.db.models import Sum
 from inventory.models import RepairInventoryItem, SerializableInventoryItem
 from lists.models import get_list_choices
 from rest_framework import serializers
 from tickets.models import OrderLine, SerializableOrderLine, Ticket
-from devices.models import ComponentIssue
 
 
 class OrderLineSerializer(BaseSerializer):
@@ -15,7 +15,8 @@ class OrderLineSerializer(BaseSerializer):
     )
     component_issue = serializers.HyperlinkedRelatedField(
         queryset=ComponentIssue.objects.all(),
-        allow_null=True, required=False,
+        allow_null=True,
+        required=False,
         view_name="componentissue-detail",
     )
     ticket = serializers.HyperlinkedRelatedField(
@@ -72,8 +73,12 @@ class SerializableOrderLineSerializer(BaseSerializer):
                 organization = data["ticket"].organization
                 description = data["description"]
                 quantity = data["quantity"]
+                d = {"description": description, "organization": organization}
+                part_number = data.get("part_number", None)
+                if part_number and part_number is not None and part_number != "":
+                    d["part_number"] = part_number
                 available_quantity = SerializableInventoryItem.objects.filter(
-                    description=description, organization=organization
+                    **d
                 ).aggregate(Sum("available_quantity"))
                 val = available_quantity["available_quantity__sum"]
                 if val is None:

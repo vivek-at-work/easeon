@@ -10,7 +10,9 @@ AUTHENTICATION_BACKENDS = [
     "core.utils.authentication_backend.EaseOnAuthenticationBackend",
 ]
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -19,9 +21,8 @@ AUTH_USER_MODEL = "core.User"
 PASSWORD_AGE = int(env("PASSWORD_AGE", default=15))
 OTP_ENABLED = True
 OAUTH2_PROVIDER = {"ACCESS_TOKEN_EXPIRE_SECONDS": 86400}
-LOGIN_OTP_TO_ADMIN_BEFORE_HOUR = int(
-    env("LOGIN_OTP_TO_ADMIN_BEFORE_HOUR", default=9))
-LOGIN_OTP_TO_ADMIN_AFTER_HOUR = int(
-    env("LOGIN_OTP_TO_ADMIN_AFTER_HOUR", default=19))
+LOGIN_OTP_TO_ADMIN_BEFORE_HOUR = int(env("LOGIN_OTP_TO_ADMIN_BEFORE_HOUR", default=9))
+LOGIN_OTP_TO_ADMIN_AFTER_HOUR = int(env("LOGIN_OTP_TO_ADMIN_AFTER_HOUR", default=19))
 LOGIN_OTP_CONSTRAIN_TIME_ZONE = env(
-    "LOGIN_OTP_CONSTRAIN_TIME_ZONE", default='Asia/Kolkata')
+    "LOGIN_OTP_CONSTRAIN_TIME_ZONE", default="Asia/Kolkata"
+)

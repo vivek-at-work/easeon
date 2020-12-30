@@ -124,8 +124,7 @@ class PasswordChangeView(generics.GenericAPIView):
                 )
             )
             return response.Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST,
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
             )
 
 

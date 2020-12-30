@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import logging
-
 from datetime import datetime
+
+from core.models import PRIVILEGED, SUPER_USER
+from core.utils import is_post_workhours_login
+from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.urls import reverse
-from django.conf import settings
 from rest_framework import exceptions, serializers
-from core.models import SUPER_USER, PRIVILEGED
-from core.utils import is_post_workhours_login
+
 USER_MODEL = get_user_model()
 
 
@@ -50,14 +51,16 @@ class OTPOptionsSerializer(serializers.Serializer):
     def to_representation(self, data):
         user = data["user"]
         otp_receive_options = []
-        otp_mode = 'direct'
+        otp_mode = "direct"
         if user.role not in [SUPER_USER, PRIVILEGED] and is_post_workhours_login():
             users = get_user_model().objects.all_superusers()
             for u in users:
-                d = {'name': u.full_name, 'otp_receive_options': u.contact_number.split(
-                    ",") + [u.email]}
+                d = {
+                    "name": u.full_name,
+                    "otp_receive_options": u.contact_number.split(",") + [u.email],
+                }
                 otp_receive_options.append(d)
-                otp_mode = 'indirect'
+                otp_mode = "indirect"
         else:
             otp_receive_options = user.contact_number.split(",") + [user.email]
 

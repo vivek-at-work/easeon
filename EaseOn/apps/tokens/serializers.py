@@ -29,7 +29,8 @@ class TokenSerializer(BaseSerializer):
             if action == "create":
                 if (
                     Token.objects.all()
-                    .created_between().filter(contact_number=data["contact_number"])
+                    .created_between()
+                    .filter(contact_number=data["contact_number"])
                     .exists()
                 ):
                     raise serializers.ValidationError(

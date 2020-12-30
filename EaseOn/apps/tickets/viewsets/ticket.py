@@ -26,7 +26,7 @@ from inventory.serializers import LoanerItemSerializer, RepairItemSerializer
 from rest_framework import decorators, permissions, response, status
 from rest_framework.parsers import MultiPartParser
 from tickets import models, serializers
-from tickets.models import DELIVERED_STATUS_VALUES, CLOSED_STATUS_VALUES
+from tickets.models import CLOSED_STATUS_VALUES, DELIVERED_STATUS_VALUES
 from tickets.permissions import TicketPermissions
 from weasyprint import CSS, HTML
 
@@ -103,7 +103,7 @@ class TicketFilter(django_filters.FilterSet):
     created_at_after = django_filters.DateTimeFilter(
         field_name="created_at", lookup_expr="gte"
     )
-    status_in = StringInFilter(field_name='status', lookup_expr='in')
+    status_in = StringInFilter(field_name="status", lookup_expr="in")
 
     class Meta(object):
         model = models.Ticket
@@ -206,9 +206,13 @@ class TicketViewSet(viewsets.BaseViewSet):
 
         if serializer.is_valid(raise_exception=True):
             if ticket.status == serializer.validated_data["status"]:
-                data = self.retrieve_serializer_class(ticket, context={"request": request}).data
+                data = self.retrieve_serializer_class(
+                    ticket, context={"request": request}
+                ).data
                 headers = self.get_success_headers(serializer.data)
-                return response.Response(data, status=status.HTTP_200_OK, headers=headers)
+                return response.Response(
+                    data, status=status.HTTP_200_OK, headers=headers
+                )
             if serializer.validated_data["status"] in DELIVERED_STATUS_VALUES:
                 delivery = ticket.delivery
                 delivery.device_pickup_time = timezone.now()
@@ -326,7 +330,9 @@ class TicketViewSet(viewsets.BaseViewSet):
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 headers = self.get_success_headers(serializer.data)
-                return response.Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+                return response.Response(
+                    serializer.data, status=status.HTTP_200_OK, headers=headers
+                )
         return response.Response("Invalid paramters", status.HTTP_400_BAD_REQUEST)
 
     @decorators.action(methods=["post", "get"], detail=True, url_name="get_gsx_data")

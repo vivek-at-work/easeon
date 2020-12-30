@@ -97,16 +97,13 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         serializer = self.get_serializer_class()
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        valid_otp = serializer.verify_otp(
-            serializer.data.get("otp"), obj, otp_type)
+        valid_otp = serializer.verify_otp(serializer.data.get("otp"), obj, otp_type)
         password = serializer.validated_data["password"]
         FH = rest_status.HTTP_400_BAD_REQUEST
         if not valid_otp:
-            logging.warning(
-                "OTP validation failed for user {}".format(request.user))
+            logging.warning("OTP validation failed for user {}".format(request.user))
             return Response(status=FH)
-        logging.info(
-            "OTP validation succeeded for user {}".format(request.user))
+        logging.info("OTP validation succeeded for user {}".format(request.user))
 
         url, headers, body, status = self.create_token_response(request)
         user = None
@@ -139,18 +136,20 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                     late_login = is_post_workhours_login()
                     res["is_post_workhours_login"] = late_login
                     if late_login:
-                        res["valid_work_hours"] = [x for x in range(
-                            settings.LOGIN_OTP_TO_ADMIN_AFTER_HOUR, 25
-                        )] + [x for x in range(
-                            0,
-                            settings.LOGIN_OTP_TO_ADMIN_BEFORE_HOUR
-                        )]
+                        res["valid_work_hours"] = [
+                            x for x in range(settings.LOGIN_OTP_TO_ADMIN_AFTER_HOUR, 25)
+                        ] + [
+                            x for x in range(0, settings.LOGIN_OTP_TO_ADMIN_BEFORE_HOUR)
+                        ]
                     else:
-                        res["valid_work_hours"] = [x for x in range(
-                            settings.LOGIN_OTP_TO_ADMIN_BEFORE_HOUR,
-                            settings.LOGIN_OTP_TO_ADMIN_AFTER_HOUR)]
-                    response = HttpResponse(
-                        content=json.dumps(res), status=status)
+                        res["valid_work_hours"] = [
+                            x
+                            for x in range(
+                                settings.LOGIN_OTP_TO_ADMIN_BEFORE_HOUR,
+                                settings.LOGIN_OTP_TO_ADMIN_AFTER_HOUR,
+                            )
+                        ]
+                    response = HttpResponse(content=json.dumps(res), status=status)
                 else:
                     response = HttpResponse(content=body, status=status)
             for k, v in headers.items():
@@ -172,16 +171,14 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         contact_number = serializer.validated_data.get("contact_number")
-        valid_otp = serializer.verify_otp(
-            serializer.data.get("otp"), obj, otp_type)
+        valid_otp = serializer.verify_otp(serializer.data.get("otp"), obj, otp_type)
         if not valid_otp:
             logging.warning(
                 "OTP validation failed for customer {}".format(contact_number)
             )
             return Response(status=rest_status.HTTP_400_BAD_REQUEST)
         else:
-            logging.info(
-                "OTP validation succeeded for user {}".format(contact_number))
+            logging.info("OTP validation succeeded for user {}".format(contact_number))
             ticket_modal = apps.get_model(*get_ticket_model().split(".", 1))
             tickets = (
                 ticket_modal.objects.all()
@@ -211,8 +208,7 @@ class LoginViewSet(OAuthLibMixin, viewsets.GenericViewSet):
                         "need_to_change_password"
                     ] = user.need_to_change_password
                     res["user"]["is_superuser"] = user.is_superuser
-                    response = HttpResponse(
-                        content=json.dumps(res), status=status)
+                    response = HttpResponse(content=json.dumps(res), status=status)
                 else:
                     response = HttpResponse(content=body, status=status)
 

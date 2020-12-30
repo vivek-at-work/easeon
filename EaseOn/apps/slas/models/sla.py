@@ -28,8 +28,7 @@ class SLA(BaseModel):
     """A SLA"""
 
     sla_type = models.CharField(
-        max_length=100, choices=SLA_TYPE_CHOICES,
-        default="TICKET_SLA"
+        max_length=100, choices=SLA_TYPE_CHOICES, default="TICKET_SLA"
     )
     name = models.CharField(max_length=100)
     is_default = models.BooleanField(default=False)

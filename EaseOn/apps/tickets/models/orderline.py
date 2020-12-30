@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from core.models import BaseModel
+from devices.models import ComponentIssue
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from inventory.models import RepairInventoryItem, SerializableInventoryItem
-from devices.models import ComponentIssue
+
 from .ticket import Ticket
 
 
@@ -16,8 +17,7 @@ class OrderLine(BaseModel):
         Ticket, related_name="order_lines", on_delete=models.CASCADE
     )
     component_issue = models.OneToOneField(
-        ComponentIssue, related_name="order_line",
-        on_delete=models.CASCADE, null=True
+        ComponentIssue, related_name="order_line", on_delete=models.CASCADE, null=True
     )
     kbb_serial_number = models.CharField(max_length=100)
     quantity = models.IntegerField(default=1)

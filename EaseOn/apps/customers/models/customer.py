@@ -8,7 +8,7 @@ from django.utils import timezone
 
 class Customer(BaseModel):
     first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    last_name = models.CharField(blank=True, null=True, max_length=50)
     city = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
     state = models.CharField(max_length=50)

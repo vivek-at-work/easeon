@@ -10,11 +10,11 @@ from core.serializers import (
     UserSerializer,
 )
 from core.utils import time_by_adding_business_days
+from devices.serializers import ComponentIssueSerializer
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from lists.models import get_list_choices
-from devices.serializers import ComponentIssueSerializer
 from rest_framework import serializers
 from tickets import models
 from tickets import serializers as t_serializer
@@ -113,8 +113,7 @@ class TicketSerializer(BaseSerializer):
     password = serializers.CharField(read_only=True)
     customer_signature = FileFieldWithLinkRepresentation(read_only=True)
     status = serializers.ChoiceField(
-        default="Registered",
-        choices=get_list_choices("TICKET_STATUS")
+        default="Registered", choices=get_list_choices("TICKET_STATUS")
     )
     # coverage_type = serializers.ChoiceField(choices=get_list_choices("COVERAGE_TYPE"))
     repair_type = serializers.ChoiceField(choices=get_list_choices("REPAIR_TYPE"))
@@ -139,10 +138,14 @@ class TicketSerializer(BaseSerializer):
         source="currently_assigned_to", read_only=True, slug_field="full_name"
     )
     first_escalation_after = serializers.DateTimeField(
-        default=time_by_adding_business_days(2))
-    second_escalation_after = serializers.DateTimeField(default=time_by_adding_business_days(3))
+        default=time_by_adding_business_days(2)
+    )
+    second_escalation_after = serializers.DateTimeField(
+        default=time_by_adding_business_days(3)
+    )
     final_escalation_after = serializers.DateTimeField(
-        default=time_by_adding_business_days(30))
+        default=time_by_adding_business_days(30)
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -188,7 +191,6 @@ class TicketSerializer(BaseSerializer):
             "vouchers",
             "comments",
             "serializable_order_lines",
-
             "closed_on",
             "closed_by",
             "last_modified_by",
@@ -208,7 +210,6 @@ class DeviceSerializer(BaseSerializer):
     configuration = serializers.ReadOnlyField()
     component_issues = ComponentIssueSerializer(many=True)
 
-
     class Meta(BaseMeta):
         model = devices.models.Device
         fields = [
@@ -218,7 +219,7 @@ class DeviceSerializer(BaseSerializer):
             "identifier",
             "serial_number",
             "alternate_device_id",
-            "component_issues"
+            "component_issues",
         ]
 
 

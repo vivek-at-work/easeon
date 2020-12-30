@@ -3,12 +3,12 @@ import json
 import logging
 
 import django_filters
-from core import serializers , models
+from core import models, serializers
 from core.filters import FullNameFilter
-from core.utils import get_ticket_model, get_voucher_model
 from core.permissions import IsSuperUser, SuperUserOrReadOnly, SuperUserOrSelf
-from django.contrib.auth import get_user_model
+from core.utils import get_ticket_model, get_voucher_model
 from django.apps import apps
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from gsx.core import GSXRequest
 from organizations.models import Organization, OrganizationRights
