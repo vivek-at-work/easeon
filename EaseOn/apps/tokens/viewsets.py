@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 import django_filters
-from core.utils import is_in_dev_mode
+from core.utils import get_ticket_model, is_in_dev_mode
 from core.viewsets import BaseViewSet
+from django.apps import apps
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework import decorators, permissions, response
 from tokens import models, serializers
 from tokens.commands import send_token_display_call_command
 from tokens.permissions import isValidCaller
-from core.utils import get_ticket_model
-from django.apps import apps
 
 TICKET = apps.get_model(*get_ticket_model().split(".", 1))
 
@@ -155,18 +154,18 @@ class TokenModelViewSet(BaseViewSet):
         url_name="fetch_token_info",
     )
     def fetch_token_info(self, request, organization_code, token_number):
-        token = self.get_queryset().filter(
-            organization__code=organization_code, token_number=token_number
-        ).first()
+        token = (
+            self.get_queryset()
+            .filter(organization__code=organization_code, token_number=token_number)
+            .first()
+        )
         context = {"request": request}
         previous_tickets_counts = {
-            'email': TICKET.objects.filter(
-                customer__email=token.email).count(),
-            'contact_number': TICKET.objects.filter(
-                customer__contact_number=token.contact_number).count()
+            "email": TICKET.objects.filter(customer__email=token.email).count(),
+            "contact_number": TICKET.objects.filter(
+                customer__contact_number=token.contact_number
+            ).count(),
         }
-        data = {'previous_tickets_counts': previous_tickets_counts}
+        data = {"previous_tickets_counts": previous_tickets_counts}
         data.update(serializers.TokenSerializer(token, context=context).data)
-        return response.Response(
-            data
-        )
+        return response.Response(data)

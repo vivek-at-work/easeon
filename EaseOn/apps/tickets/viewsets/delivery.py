@@ -54,7 +54,9 @@ class DeliveryViewSet(viewsets.BaseViewSet):
                 delivery, data=request.data, partial=True, context={"request": request}
             )
             if serializer.is_valid(raise_exception=True):
-                delivery.customer_feedback = serializer.validated_data['customer_feedback']
+                delivery.customer_feedback = serializer.validated_data[
+                    "customer_feedback"
+                ]
                 delivery.save()
             headers = self.get_success_headers(serializer.data)
             obj = self.get_object()

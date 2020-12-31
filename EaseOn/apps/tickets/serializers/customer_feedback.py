@@ -13,6 +13,7 @@ class SaveCustomerFeedbackSerializer(BaseSerializer):
     """
     Used in Post/and put  requests
     """
+
     customer_feedback = serializers.JSONField(initial=dict)
 
     class Meta(BaseMeta):

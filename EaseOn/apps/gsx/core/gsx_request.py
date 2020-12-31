@@ -124,7 +124,9 @@ class GSXRequest:
             payload_string,
         )
         if "authToken" in result:
-            r1 = get_user_model().objects.filter(gsx_user_name__iexact=self.gsx_user_name)
+            r1 = get_user_model().objects.filter(
+                gsx_user_name__iexact=self.gsx_user_name
+            )
             r1.update(
                 gsx_auth_token=result["authToken"],
                 gsx_token_last_refreshed_on=timezone.now(),
