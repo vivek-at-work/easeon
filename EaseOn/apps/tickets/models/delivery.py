@@ -26,6 +26,7 @@ class Delivery(BaseModel):
     )
 
     unit_part_reports = JSONField(null=True)
+    customer_feedback = JSONField(null=True)
 
     class Meta:
         verbose_name = "Delivery"

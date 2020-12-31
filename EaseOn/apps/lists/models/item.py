@@ -18,8 +18,8 @@ LIST_NAME_CHOICES = (
     ("LOANER_INVENTORY_PART_NUMBERS", "Loaner Inventory Part Numbers"),
     ("LOANER_INVENTORY_PENALTY_REASONS", "Loaner Inventory Penalty Reasons"),
     ("CONSIGNMENT_TYPE", "Consignment Types"),
-    ("REPORT_TYPES", "Report Types"),
-)
+    ("REPORT_TYPES", "Report Types")
+   )
 
 
 class Item(BaseModel):

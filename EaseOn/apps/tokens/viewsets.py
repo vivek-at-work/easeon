@@ -8,6 +8,10 @@ from rest_framework import decorators, permissions, response
 from tokens import models, serializers
 from tokens.commands import send_token_display_call_command
 from tokens.permissions import isValidCaller
+from core.utils import get_ticket_model
+from django.apps import apps
+
+TICKET = apps.get_model(*get_ticket_model().split(".", 1))
 
 
 class TokenNumberFilter(django_filters.CharFilter):
@@ -45,7 +49,6 @@ class TokenModelViewSet(BaseViewSet):
         Instantiates and returns the list of permissions that this view requires.
         """
         permission_classes = [permissions.AllowAny]
-        print(self.action)
         if self.action in ["create", "list", "current_customers_at_counter"]:
             permission_classes = [permissions.AllowAny]
         if self.action in ["invite_customer_to_counter", "new_tokens"]:
@@ -144,3 +147,26 @@ class TokenModelViewSet(BaseViewSet):
                 d["is_current"] = True
             new_tokens_data = new_tokens_data + current_token_data
         return response.Response(new_tokens_data)
+
+    @decorators.action(
+        methods=["get"],
+        detail=False,
+        url_path="fetch_token_info/(?P<organization_code>\w+)/(?P<token_number>\d+)",
+        url_name="fetch_token_info",
+    )
+    def fetch_token_info(self, request, organization_code, token_number):
+        token = self.get_queryset().filter(
+            organization__code=organization_code, token_number=token_number
+        ).first()
+        context = {"request": request}
+        previous_tickets_counts = {
+            'email': TICKET.objects.filter(
+                customer__email=token.email).count(),
+            'contact_number': TICKET.objects.filter(
+                customer__contact_number=token.contact_number).count()
+        }
+        data = {'previous_tickets_counts': previous_tickets_counts}
+        data.update(serializers.TokenSerializer(token, context=context).data)
+        return response.Response(
+            data
+        )

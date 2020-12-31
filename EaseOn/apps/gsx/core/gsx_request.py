@@ -124,7 +124,7 @@ class GSXRequest:
             payload_string,
         )
         if "authToken" in result:
-            r1 = get_user_model().objects.filter(gsx_user_name=self.gsx_user_name)
+            r1 = get_user_model().objects.filter(gsx_user_name__iexact=self.gsx_user_name)
             r1.update(
                 gsx_auth_token=result["authToken"],
                 gsx_token_last_refreshed_on=timezone.now(),
@@ -186,7 +186,7 @@ class GSXRequest:
             "GET", url
         )
         if is_unauthorized:
-            raise ValidationError("You are not authrized.")
+            raise ValidationError("You are not authorized.")
         if error_codes:
             raise ValidationError(message)
 
@@ -203,7 +203,7 @@ class GSXRequest:
             "POST", self.url, json.dumps(data)
         )
         if is_unauthorized:
-            raise ValidationError("You are not authrized.")
+            raise ValidationError("You are not authorized.")
         if error_codes:
             raise ValidationError(message)
         if return_headers:
