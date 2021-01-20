@@ -32,3 +32,4 @@ manage your Apple Authorized Service Provider in just one place
   2. Python
   3. Django 2.2
   4. Django Rest Framework
+  5. Celery
