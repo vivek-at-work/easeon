@@ -94,7 +94,7 @@ class OrganizationFilter(django_filters.FilterSet):
 class OrganizationViewSet(BaseViewSet):
     serializer_class = serializers.OrganizationSerializer
     permission_classes = (OrganizationPermissions,)
-    search_fields = ("name", "email", "code")
+    search_fields = ("code",)
     filter_class = OrganizationFilter
 
     def get_queryset(self):
