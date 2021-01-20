@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-
 import environ
-
 from .authentication import *
 from .celery import *
 from .chat import *
@@ -45,11 +43,6 @@ ADMIN_EMAIL = env("ADMIN_EMAIL", default="XXXX")
 ADMIN_CONTACT_NUMBER = env("ADMIN_CONTACT_NUMBER", default="XXXX")
 ADMINS = [(ADMIN_NAME, ADMIN_EMAIL)]
 APPEND_SLASH = False
-TEST_EMAILS = [
-    "developer.viveksrivastava@gmail.com",
-    "ervivek.rbl@gmail.com",
-    "viveksriwastawa.india@gmail.com",
-]
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -168,7 +161,7 @@ VALID_CLIENT_DOMAIN_NAMES = [
 
 # GSX
 
-TICKET_SUFFIX = 2  # env('TICKET_SUFFIX')
+TICKET_SUFFIX = 2
 ACCESS_TOKEN_EXPIRE_SECONDS = 60
 REFRESH_TOKEN_EXPIRE_SECONDS = 3600
 EXEMPTED_DEVICE = ["FCGT24E5HFM2", "ZZ501AAAOWP"]
