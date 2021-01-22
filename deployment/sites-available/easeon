@@ -1,17 +1,17 @@
 server {
     server_name www.easeon.in easeon.in;
-    location = /favicon.ico { access_log off; log_not_found off; }  
+    location = /favicon.ico { access_log off; log_not_found off; }
     location /django_static/ {
         #include  /etc/nginx/mime.types;
         root /home/easeon/production/easeon/EaseOn;
-    
+
      }
     location /media/{
     root /home/easeon/production/easeon/EaseOn;
     }
     location /test/ {
    root /home/easeon/test/client;
- 
+
     }
     location /backend/{
         include proxy_params;

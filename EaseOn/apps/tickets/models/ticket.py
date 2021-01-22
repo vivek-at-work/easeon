@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import random
 import os
+import random
 import tempfile
 from datetime import date, datetime, time
 
@@ -20,11 +20,12 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.template.loader import get_template, render_to_string
 from django.utils import encoding, http, timezone
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
 from slas.models import SLA
-from django.template.loader import get_template, render_to_string
+
 from .upload_content import UploadContent
 
 DELIVERED_STATUS_VALUES = ["Delivered"]
@@ -215,9 +216,10 @@ class Ticket(BaseModel):
             self.first_escalation_after = time_by_adding_business_days(1)
             self.second_escalation_after = time_by_adding_business_days(2)
             self.final_escalation_after = time_by_adding_business_days(29)
-    
+
     def get_pdf(self):
         from weasyprint import CSS, HTML
+
         ticket = self
         html_string = render_to_string("ticket.html", {"ticket": ticket})
         html = HTML(string=html_string)
@@ -229,13 +231,15 @@ class Ticket(BaseModel):
                 os.path.join(settings.STATIC_ROOT, "bootstrap.min.css"),
             ]
         )
-        with tempfile.NamedTemporaryFile(delete=False,prefix=self.reference_number,suffix='.pdf') as output:
+        with tempfile.NamedTemporaryFile(
+            delete=False, prefix=self.reference_number, suffix=".pdf"
+        ) as output:
             output.write(result)
             output.flush()
             output = open(output.name, "rb")
             return output.read(), output.name
 
-    def send_ticket_details_to_customer_via_email(self,attach_pdf=False):
+    def send_ticket_details_to_customer_via_email(self, attach_pdf=False):
         template = settings.EMAIL_TEMPLATES.get("action")
         ticket_display_url = settings.CLIENT_URL
         subject = "Device repair details for {0}".format(self)
@@ -269,8 +273,8 @@ class Ticket(BaseModel):
             "table_data": table_data,
         }
         if attach_pdf:
-            data , name = self.get_pdf()
-            context['files'] = [name]
+            data, name = self.get_pdf()
+            context["files"] = [name]
         receivers = [self.customer.email]
         utils.send_mail(subject, template, *receivers, **context)
         return receivers

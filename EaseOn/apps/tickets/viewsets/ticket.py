@@ -30,7 +30,6 @@ from tickets.models import CLOSED_STATUS_VALUES, DELIVERED_STATUS_VALUES
 from tickets.permissions import TicketPermissions
 
 
-
 class StringInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
     pass
 
@@ -266,8 +265,6 @@ class TicketViewSet(viewsets.BaseViewSet):
         ticket.send_ticket_status_update_to_customer_via_email(True)
         data = self.retrieve_serializer_class(ticket, context={"request": request}).data
         return response.Response(data, status=status.HTTP_200_OK)
-
-
 
     @decorators.action(
         methods=["post", "get"], detail=True, url_name="send_ticket_status_by_sms"

@@ -291,7 +291,7 @@ class TicketPrintSerializer(BaseSerializer):
              Check at least one GSX Repair Info
              record should exist"""
             )
-        return {"flag": False if len(messages)>0 else True, "messages": messages}
+        return {"flag": False if len(messages) > 0 else True, "messages": messages}
 
     class Meta(BaseMeta):
         model = models.Ticket

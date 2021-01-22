@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import copy
 
-from core.utils import time_by_adding_business_days, is_in_dev_mode
+from core.utils import is_in_dev_mode, time_by_adding_business_days
 from gsx.core import GSXRequest
 from rest_framework import serializers
 
 from .base_gsx_serializer import BaseGSXSerializer
 from .gsx_validate import gsx_validate
-
 
 dummy_response = [
     {
@@ -17,14 +16,12 @@ dummy_response = [
                 "questions": [
                     {
                         "optional": "false",
-                        "questionPhrase":
-                        "Which best describes the customer's need for help?",
+                        "questionPhrase": "Which best describes the customer's need for help?",
                         "answerType": "DPD",
                         "questionId": "Q64579",
                         "answers": [
                             {
-                                "answerPhrase":
-                                "Display doesn't turn off when phone is placed next to the customer's ear",
+                                "answerPhrase": "Display doesn't turn off when phone is placed next to the customer's ear",
                                 "questions": [
                                     {
                                         "optional": "false",
@@ -52,8 +49,7 @@ dummy_response = [
                                     },
                                     {
                                         "optional": "false",
-                                        "questionPhrase":
-                                        "What kind of environment was the customer in?",
+                                        "questionPhrase": "What kind of environment was the customer in?",
                                         "answerType": "DPD",
                                         "questionId": "Q100407",
                                         "answers": [
@@ -73,7 +69,7 @@ dummy_response = [
                                                         "questionPhrase": "Please describe",
                                                         "answerType": "FFB",
                                                         "questionId": "Q64128",
-                                                    },
+                                                    }
                                                 ],
                                                 "answerId": "A68174",
                                             },
@@ -83,13 +79,11 @@ dummy_response = [
                                 "answerId": "A69393",
                             },
                             {
-                                "answerPhrase":
-                                "Display doesn't turn on when removed from customer's ear",
+                                "answerPhrase": "Display doesn't turn on when removed from customer's ear",
                                 "questions": [
                                     {
                                         "optional": "false",
-                                        "questionPhrase":
-                                        "After completing the call, how long does the display take to turn back on?",
+                                        "questionPhrase": "After completing the call, how long does the display take to turn back on?",
                                         "answerType": "DPD",
                                         "questionId": "Q65064",
                                         "answers": [
@@ -117,8 +111,7 @@ dummy_response = [
                                     },
                                     {
                                         "optional": "false",
-                                        "questionPhrase":
-                                        "Does the customer have anything on or near them at the time that they think could be obstructing the device?",
+                                        "questionPhrase": "Does the customer have anything on or near them at the time that they think could be obstructing the device?",
                                         "answerType": "DPD",
                                         "questionId": "Q66028",
                                         "answers": [
@@ -138,8 +131,7 @@ dummy_response = [
                                     },
                                     {
                                         "optional": "false",
-                                        "questionPhrase":
-                                        "During the call, did the customer move from a dark environment to a bright environment?",
+                                        "questionPhrase": "During the call, did the customer move from a dark environment to a bright environment?",
                                         "answerType": "DPD",
                                         "questionId": "Q66027",
                                         "answers": [
@@ -213,8 +205,7 @@ dummy_response = [
                                     },
                                     {
                                         "optional": "false",
-                                        "questionPhrase":
-                                        "What kind of environment was the customer in?",
+                                        "questionPhrase": "What kind of environment was the customer in?",
                                         "answerType": "DPD",
                                         "questionId": "Q100407",
                                         "answers": [
@@ -234,7 +225,7 @@ dummy_response = [
                                                         "questionPhrase": "Please describe",
                                                         "answerType": "FFB",
                                                         "questionId": "Q64128",
-                                                    },
+                                                    }
                                                 ],
                                                 "answerId": "A68174",
                                             },
@@ -282,8 +273,7 @@ dummy_response = [
                                     },
                                     {
                                         "optional": "false",
-                                        "questionPhrase":
-                                        "What kind of environment was the customer in?",
+                                        "questionPhrase": "What kind of environment was the customer in?",
                                         "answerType": "DPD",
                                         "questionId": "Q100407",
                                         "answers": [
@@ -303,7 +293,7 @@ dummy_response = [
                                                         "questionPhrase": "Please describe",
                                                         "answerType": "FFB",
                                                         "questionId": "Q64128",
-                                                    },
+                                                    }
                                                 ],
                                                 "answerId": "A68174",
                                             },
@@ -313,12 +303,12 @@ dummy_response = [
                                 "answerId": "A20075",
                             },
                         ],
-                    },
+                    }
                 ],
                 "treeId": "TREE203927",
-            },
+            }
         ],
-    },
+    }
 ]
 
 

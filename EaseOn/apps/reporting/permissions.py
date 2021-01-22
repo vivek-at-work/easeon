@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 from core.permissions.superuser import PRIVILEGED, SUPER_USER, IsOperatorOrSuperUser
 
