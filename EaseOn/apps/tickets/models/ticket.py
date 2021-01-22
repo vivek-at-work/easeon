@@ -271,7 +271,7 @@ class Ticket(BaseModel):
         if attach_pdf:
             data , name = self.get_pdf()
             context['files'] = [name]
-        receivers = ['developer.viveksrivastava@gmail.com']
+        receivers = [self.customer.email]
         utils.send_mail(subject, template, *receivers, **context)
         return receivers
 
