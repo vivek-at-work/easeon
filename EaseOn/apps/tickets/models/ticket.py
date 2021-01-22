@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import random
+import os
+import tempfile
 from datetime import date, datetime, time
 
 from core import utils
@@ -22,7 +24,7 @@ from django.utils import encoding, http, timezone
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
 from slas.models import SLA
-
+from django.template.loader import get_template, render_to_string
 from .upload_content import UploadContent
 
 DELIVERED_STATUS_VALUES = ["Delivered"]
@@ -213,8 +215,27 @@ class Ticket(BaseModel):
             self.first_escalation_after = time_by_adding_business_days(1)
             self.second_escalation_after = time_by_adding_business_days(2)
             self.final_escalation_after = time_by_adding_business_days(29)
+    
+    def get_pdf(self):
+        from weasyprint import CSS, HTML
+        ticket = self
+        html_string = render_to_string("ticket.html", {"ticket": ticket})
+        html = HTML(string=html_string)
+        margins = "{0}px {1} {2}px {1}".format(5, 5, ".5cm")
+        content_print_layout = "@page {size: A4 portrait; margin: %s;}" % margins
+        result = html.write_pdf(
+            stylesheets=[
+                CSS(string=content_print_layout),
+                os.path.join(settings.STATIC_ROOT, "bootstrap.min.css"),
+            ]
+        )
+        with tempfile.NamedTemporaryFile(delete=False,prefix=self.reference_number,suffix='.pdf') as output:
+            output.write(result)
+            output.flush()
+            output = open(output.name, "rb")
+            return output.read(), output.name
 
-    def send_ticket_details_to_customer_via_email(self):
+    def send_ticket_details_to_customer_via_email(self,attach_pdf=False):
         template = settings.EMAIL_TEMPLATES.get("action")
         ticket_display_url = settings.CLIENT_URL
         subject = "Device repair details for {0}".format(self)
@@ -247,7 +268,10 @@ class Ticket(BaseModel):
             "sender_full_name": "Team {0}".format(self.organization.name),
             "table_data": table_data,
         }
-        receivers = [self.customer.email]
+        if attach_pdf:
+            data , name = self.get_pdf()
+            context['files'] = [name]
+        receivers = ['developer.viveksrivastava@gmail.com']
         utils.send_mail(subject, template, *receivers, **context)
         return receivers
 

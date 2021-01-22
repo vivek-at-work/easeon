@@ -1,9 +1,9 @@
 <table style="font-size:12px ;width:100%">
     <tr>
-        <td colspan="2">
+        <td style="padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);" colspan="2">
 
             <div class="text-center">
-                <h2 class="mb-0">Unicorn Infosolutions Pvt. Ltd.</h2>
+                <h2 class="mb-0">{{ticket.organization.name}}</h2>
                 <h6><strong>Service Report</strong></h6>
             </div>
             </div>
@@ -11,8 +11,8 @@
 
     </tr>
     <tr>
-        <td class="text-center" style=" vertical-align: center; border: 1px solid rgb(66, 66, 66);">
-            <h3>{{ticket.reference_number}}</h3>
+        <td class="text-left pl-3" style=" vertical-align: center; border: 1px solid rgb(66, 66, 66);">
+            <h3 class="pl-3">{{ticket.reference_number}}</h3>
         </td>
 
         <td style="padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
@@ -66,7 +66,6 @@
             </p>
             <p><strong><label>Email: </label></strong>{{ticket.customer.email}}</p>
             <p><strong><label>Contact Number: </label></strong>{{ticket.customer.contact_number}}</p>
-
         </td>
 
         <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
@@ -96,7 +95,12 @@
             </p>
 
             <p style="overflow-wrap: break-word;"><strong><label>Stand By Device </label></strong>
-                {{ticket.is_standby_device_required ? "Yes" : "No"}}
+
+                {% if ticket.is_standby_device_required %}
+                Yes
+                {% else %}
+                No
+                {% endif%}
             </p>
 
 
@@ -128,11 +132,10 @@
                     </tr>
                 </thead>
                 <tbody style="padding:0px">
-                    {% for upr in ticket.unit_part_reports.keys()}
-                    %}
+                    {% for k,v in ticket.unit_part_reports.items %}
                     <tr style="padding:0px">
-                        <th style="padding:0px"> {{upr}} </th>
-                        <td style="padding:0px"> {{ticket.unit_part_reports[upr]}} </td>
+                        <th style="padding:0px"> {{k}} </th>
+                        <td style="padding:0px"> {{v}} </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -149,7 +152,7 @@
 
                         <div>
                             <p style="overflow-wrap: break-word;"><strong><label>Token Number: </label></strong>
-                                B037</p>
+                                {{ticket.customer.token_number}}</p>
                         </div>
                         </div>
                     </td>
@@ -157,14 +160,20 @@
 
                         <div>
                             <p style="overflow-wrap: break-word;"><strong><label>Operating System: </label></strong>
-                                NA</p>
+                                {{ticket.initial_operating_system}}</p>
                         </div>
                     </td>
                     <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
 
                         <div>
-                            <p style="overflow-wrap: break-word;"><strong><label>Backup Required: </label></strong>
-                                No</p>
+                            <p style="overflow-wrap: break-word;"><strong><label>Backup Required: </label>
+                                </strong>
+                                {% if ticket.initial_operating_system %}
+                                Yes
+                                {% else %}
+                                No
+                                {% endif%}
+                            </p>
                         </div>
                         </div>
 
@@ -188,8 +197,9 @@
                 <tr>
                     <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
                         <strong><label>Expected
-                                Service/Diagnosis Cost: </label></strong><strong>0 <svg aria-hidden="true"
-                                focusable="false" data-prefix="fas" data-icon="rupee-sign"
+                                Service/Diagnosis Cost: </label></strong><strong>
+                            {{ticket.expected_service_cost}}
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rupee-sign"
                                 class="svg-inline--fa fa-rupee-sign fa-w-10 " role="img"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                                 <path fill="currentColor"
@@ -199,7 +209,8 @@
                     </td>
                     <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
                         <strong><label>Expected Hardware
-                                Cost: </label></strong><strong>0 <svg aria-hidden="true" focusable="false"
+                                Cost: </label></strong><strong>
+                            {{ticket.expected_hardware_cost}} <svg aria-hidden="true" focusable="false"
                                 data-prefix="fas" data-icon="rupee-sign" class="svg-inline--fa fa-rupee-sign fa-w-10 "
                                 role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                                 <path fill="currentColor"
@@ -209,7 +220,8 @@
                     </td>
                     <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
                         <strong><label>Total Cost:
-                            </label></strong><strong>0 <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            </label></strong><strong>
+                            {{ticket.expected_cost}} <svg aria-hidden="true" focusable="false" data-prefix="fas"
                                 data-icon="rupee-sign" class="svg-inline--fa fa-rupee-sign fa-w-10 " role="img"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                                 <path fill="currentColor"
@@ -236,62 +248,26 @@
 <div style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66); ">
     <p><strong><label>Important</label></strong></p>
     <ul>
+        {% for k in ticket.sla.terms.all %}
         <li class="text-justify">
-            <p style="padding: 5px; overflow-wrap: break-word;">Apple or Apple Authorized Service centre
-                (AASP)
-                will not be responsible for any damage to the product that occurs during the repair
-                process that
-                is a result of any unauthorized modifications or repairs or replacements not performed
-                by Apple
-                or an AASP. If damage results, Apple will seek your authorization for any additional
-                costs for
-                completing the service even if the product is covered by warranty or an AppleCare
-                service plan.
-                If you decline authorization, Apple may return your product unrepaired in the damaged
-                condition
-                without any responsibility.Internal inspection would be done at advanced repair centre.
+            <p style="padding: 5px; overflow-wrap: break-word;"> {{k.statement}}
             </p>
         </li>
-        <li class="text-justify">
-            <p style="padding: 5px; overflow-wrap: break-word;">No responsibility for data backup,
-                screen
-                guards, wear and tear. And no warranty for liquid/physical damages, and unauthorised
-                modifications found in the device.Estimation given may vary at the time of approval for
-                processing the part or during servicing of the product. Equipment is accepted subject to
-                the
-                terms and conditions mentioned overleaf..</p>
-        </li>
+        {% endfor %}
     </ul>
 </div>
 
 <table style="font-size:12px ;width:100%"></table>
-
-
-
-
-
-
-
-
-
 <tr>
-
     <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66); ">
-
-        <div>
-            <p style="overflow-wrap: break-word;"> Kunal Sarkar</p>
-        </div>
+        <div class="text-left">
+            <p style="overflow-wrap: break-word;"> {{ticket.created_by.full_name}}</p>
         </div>
     </td>
     <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66); ">
         <div class="text-right">
-            <div>
-                <p style="overflow-wrap: break-word;"> Customer Signature</p>
-            </div>
+            <p style="overflow-wrap: break-word;"> Customer Signature</p>
         </div>
     </td>
 </tr>
-
-
-
 </table>
