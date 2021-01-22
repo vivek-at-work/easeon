@@ -3,7 +3,7 @@ import os
 
 from core.viewsets import BaseViewSet
 from django.http import HttpResponse
-from reporting import models, serializers
+from reporting import models, serializers, permissions
 from rest_framework import renderers, response
 from rest_framework.decorators import action
 
@@ -23,8 +23,10 @@ class PassthroughRenderer(renderers.BaseRenderer):
 class ReportsViewSet(BaseViewSet):
     queryset = models.ReportRequest.objects
     serializer_class = serializers.ReportRequestSerializer
-
-    @action(methods=["get"], detail=True, renderer_classes=(PassthroughRenderer,))
+    
+    @action(methods=["get"], detail=True, 
+    permission_classes=[permissions.HasReportDownloadPermissions],
+    renderer_classes=(PassthroughRenderer,))
     def download(self, *args, **kwargs):
         instance = self.get_object()
         file_handle = open(instance.final_report_path, "rb")

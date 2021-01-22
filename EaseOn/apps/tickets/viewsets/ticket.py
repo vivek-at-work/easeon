@@ -28,7 +28,7 @@ from rest_framework.parsers import MultiPartParser
 from tickets import models, serializers
 from tickets.models import CLOSED_STATUS_VALUES, DELIVERED_STATUS_VALUES
 from tickets.permissions import TicketPermissions
-from weasyprint import CSS, HTML
+
 
 
 class StringInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
@@ -270,6 +270,7 @@ class TicketViewSet(viewsets.BaseViewSet):
     @decorators.action(methods=["post", "get"], detail=True, url_name="ticket_pdf")
     def pdf(self, request, pk):
         """Generate pdf."""
+        from weasyprint import CSS, HTML
         ticket = self.get_object()
         html_string = render_to_string("ticket.html", {"ticket": ticket})
         html = HTML(string=html_string)

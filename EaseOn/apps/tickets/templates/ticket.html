@@ -70,9 +70,9 @@
         </td>
 
         <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
-          <h5> <strong><label>Issue
-                    Reported By
-                    Customer: </label></strong></h5> 
+            <h5> <strong><label>Issue
+                        Reported By
+                        Customer: </label></strong></h5>
 
             <p>{{ticket.issue_reported_by_customer}}</p>
 
@@ -87,30 +87,38 @@
                     Details:
                 </label></strong>
 
-            <p style="overflow-wrap: break-word;"><strong><label>Service Type: </label></strong> Limited
-                Warranty</p>
+            <p style="overflow-wrap: break-word;"><strong><label>Service Type: </label></strong>
+                {{ticket.coverage_type}}
+            </p>
 
-            <p style="overflow-wrap: break-word;"><strong><label>Repair Type: </label></strong> Not Confirm</p>
+            <p style="overflow-wrap: break-word;"><strong><label>Repair Type: </label></strong>
+                {{ticket.repair_type}}
+            </p>
+
+            <p style="overflow-wrap: break-word;"><strong><label>Stand By Device </label></strong>
+                {{ticket.is_standby_device_required ? "Yes" : "No"}}
+            </p>
 
 
-            <p style="overflow-wrap: break-word;"><strong><label>Accessories Received: </label></strong> No
-                accessories
-                received</p>
 
 
-            <p style="overflow-wrap: break-word;"><strong><label>Required Upgrades: </label></strong> n/a</p>
+            <p style="overflow-wrap: break-word;"><strong><label>Accessories Received: </label>
+                </strong> {{ticket.accessories}}</p>
+
+
+            <p style="overflow-wrap: break-word;"><strong><label>Required Upgrades: </label></strong>
+                {{ticket.required_upgrades}}
+
+            </p>
 
 
             <p style="overflow-wrap: break-word;"><strong><label>Unit Condition: </label></strong> User level
-                Scratches
-                on adapter</p>
+                {{ticket.device_condition}}</p>
 
 
         </td>
 
         <td style=" padding-left :8px; vertical-align: top; border: 1px solid rgb(66, 66, 66);">
-
-
             <p><strong><label>Device Part Information</label></strong></p>
             <table style="padding:0px" class="table table-borderless table-sm">
                 <thead style="padding:0px">
@@ -120,66 +128,15 @@
                     </tr>
                 </thead>
                 <tbody style="padding:0px">
+                    {% for upr in ticket.unit_part_reports.keys()}
+                    %}
                     <tr style="padding:0px">
-                        <th style="padding:0px"> FMIP </th>
-                        <td style="padding:0px"> Didn't Check </td>
+                        <th style="padding:0px"> {{upr}} </th>
+                        <td style="padding:0px"> {{ticket.unit_part_reports[upr]}} </td>
                     </tr>
-                    <tr>
-                        <th style="padding:0px"> Camera </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Adapter </th>
-                        <td style="padding:0px"> Not Working </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Battery </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Display </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Speaker </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> USB/DOC </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Bluetooth </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Microphone </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Airport/Wifi </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Touch Screen </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Mouse/Keyboard </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> Touch ID/ Face ID </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
-                    <tr>
-                        <th style="padding:0px"> EarPods/Charging cable </th>
-                        <td style="padding:0px"> Didn't Check </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
-
-
         </td>
 
 
