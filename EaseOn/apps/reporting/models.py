@@ -36,7 +36,7 @@ class ReportRequest(BaseModel):
     def is_processed(self):
         return os.path.exists(self.final_report_path)
 
-    def process_aync(self):
+    def process_async(self):
         process_report_request.delay(
             self.organization.id,
             self.final_report_path,
@@ -59,4 +59,4 @@ class ReportRequest(BaseModel):
 
 @receiver(post_save, sender=ReportRequest)
 def process_request(sender, instance, created, **kwargs):
-    instance.process()
+    instance.process_async()

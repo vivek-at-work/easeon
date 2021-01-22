@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_filters
+from core.utils import get_ticket_model
 from core.permissions import IsOperatorOrSuperUser
 from core.viewsets import BaseBulkCreateViewSet
 from django.db.models import Q
@@ -9,6 +10,12 @@ from inventory.serializers import (
     LoanerItemSerializer,
     PenaltyAmountSerializer,
 )
+from tickets.serializers import (
+    TicketPrintSerializer,
+
+)
+from rest_framework import decorators,response,status
+from django.apps import apps
 
 
 class LoanerInventoryItemFilter(django_filters.FilterSet):
@@ -51,6 +58,24 @@ class LoanerItemViewSet(BaseBulkCreateViewSet):
                 Q(organization__in=organizations)
                 | Q(organization__in=managed_organizations)
             )
+
+    @decorators.action(methods=["get"], detail=True, url_name="get_assignment_log")
+    def assignment_log(self, request, pk):
+        "Get diagnosis suites for device."
+        inventory_item = self.get_object()
+        loaner_records_ticket = inventory_item.loaner_records.all().values_list('ticket')
+        ticket_modal = apps.get_model(*get_ticket_model().split(".", 1))
+        tickets = ticket_modal.objects.filter(id__in=loaner_records_ticket)
+        data = TicketPrintSerializer(tickets,context={'request':request},many=True).data
+        response_data = {"next": None,
+         "previous": None,
+         "current": 1,
+         "count": len(tickets),
+         "page_size": len(tickets),
+         "total_pages": 1,
+         "results": data
+        }
+        return response.Response(response_data, status=status.HTTP_200_OK)
 
 
 class PenaltyAmountViewSet(BaseBulkCreateViewSet):

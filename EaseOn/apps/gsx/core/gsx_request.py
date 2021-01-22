@@ -11,7 +11,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import encoding, timezone
 from rest_framework.exceptions import PermissionDenied, ValidationError
-
 from .error_code import UNAUTHORIZED
 from .gsx_exceptions import GSXResourceNotAvailableError
 

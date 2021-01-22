@@ -36,12 +36,9 @@ def validate_user_email_domain(value):
         if domain in value:
             break
     else:
-        if value in settings.TEST_EMAILS:
-            return
-        ",".join(settings.VALID_CLIENT_DOMAIN_NAMES)
         raise ValidationError(
             "A valid email should be from following domain names {0}.".format(
-                settings.VALID_CLIENT_DOMAIN_NAMES
+                ",".join(settings.VALID_CLIENT_DOMAIN_NAMES)
             )
         )
 
