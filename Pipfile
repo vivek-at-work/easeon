@@ -15,23 +15,27 @@ django-filter = "==2.2.0"
 djangorestframework = "*"
 django-cors-headers = "*"
 django-oauth-toolkit = "*"
-psycopg2 = "*"
 six = "*"
-django = "==2.2.13"
+Django = "==2.2.13"
 pyotp = "*"
-pillow = "*"
+Pillow = "*"
 django-extensions = "*"
 gunicorn = "*"
 gevent = "*"
-celery = {extras = ["redis"],version = "*"}
 redis = "*"
 ipython = "*"
-rocketchat-api = "*"
+rocketchat-API = "*"
 numpy = "*"
 pandas = "*"
-weasyprint = "*"
+WeasyPrint = "*"
 django-redis = "*"
 idna = "==2.5"
+gtts = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.8"
+
+[packages.celery]
+extras = [ "redis",]
+version = "*"

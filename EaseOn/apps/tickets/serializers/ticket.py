@@ -291,11 +291,7 @@ class TicketPrintSerializer(BaseSerializer):
              Check at least one GSX Repair Info
              record should exist"""
             )
-
-        # user = self.get_user()
-        # manager_flag = user.managed_locations.filter(id=obj.organization.id).exists()
-        # return {"flag": obj.is_closed or manager_flag, "messages": messages}
-        return {"flag": obj.is_closed, "messages": messages}
+        return {"flag": False if len(messages) > 0 else True, "messages": messages}
 
     class Meta(BaseMeta):
         model = models.Ticket
