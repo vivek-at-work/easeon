@@ -99,12 +99,6 @@ def send_otp(number, otp, otp_for):
     else:
         return APPIndia.send(number, message)
 
-
-def send_token_to_customer(number, otp):
-    message = "Your Unicorn Customer Token is {}. Please Wait !".format(otp)
-    return APPIndia.send(number, message)
-
-
 def get_random_string(min_char=8, max_char=12):
 
     allchar = string.ascii_letters + string.punctuation + string.digits

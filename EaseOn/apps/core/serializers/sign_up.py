@@ -10,6 +10,16 @@ USER_MODEL = get_user_model()
 
 
 class SignUpSerializer(serializers.HyperlinkedModelSerializer):
+    def validate_email(self, value):
+        """
+        Check that gsx_auth_token from gsx if it is valid and via token refresh.
+        """
+        if USER_MODEL.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError(
+                "Could Not Validate your email.")
+        return value
+
+
     def validate(self, data):
         """
         Check that gsx_auth_token from gsx if it is valid and via token refresh.

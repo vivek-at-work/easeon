@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from core.cache_mixin import ModelCacheMixin
 from core.models import BaseModel
-from core.utils import send_token_to_customer
+
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db import connection, models
 from django.db.models.signals import post_delete, post_save
 from organizations.models import Organization
-
+from core.utils import send_sms
 
 class Token(BaseModel):
     """A Service Token"""
@@ -37,10 +37,15 @@ class Token(BaseModel):
     is_present = models.BooleanField(default=False)
 
     def send_token_number_by_sms(self):
-        send_token_to_customer(self.contact_number, self.token_number)
+        message = "Your Unicorn Customer Token is {}. Please Wait !".format(self.token_number)
+        send_sms(self.contact_number, message)
 
     def can_invite(self, user):
         return (self.invited_by is None) or (self.invited_by == user)
+    
+    def send_invite_by_sms(self):
+        message = "Please proceed to Unicorn counter  {}.".format(self.counter_number)
+        return send_sms(self.contact_number, message)
 
     @classmethod
     def truncate(cls):

@@ -7,7 +7,7 @@ environ.Env.read_env()  # reading .env file
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = not True
 EMAIL_USE_SSL = True
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
 EMAIL_HOST_USER = env("EMAIL_USER", default="EMAIL_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD", default="EMAIL_PASSWORD")
 EMAIL_PORT = 465

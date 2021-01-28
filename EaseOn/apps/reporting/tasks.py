@@ -67,8 +67,8 @@ def create_report(
     report, subject = REPORT_GENRATORS.get(f"create_{report_type.lower()}")(
         organization,
         file_name,
-        start_date.strftime("%Y-%m-%d"),
-        end_date.strftime("%Y-%m-%d"),
+        start_date,
+        end_date,
     )
 
 

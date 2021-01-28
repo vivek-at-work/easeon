@@ -136,6 +136,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "django_static")
 
 CORS_ORIGIN_WHITELIST = [
     "https://easeon.in",
+    "https://test.easeon.in",
     "http://localhost:3000",
     "https://localhost:3000",
 ]

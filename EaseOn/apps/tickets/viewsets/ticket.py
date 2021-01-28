@@ -102,6 +102,19 @@ class TicketFilter(django_filters.FilterSet):
     created_at_after = django_filters.DateTimeFilter(
         field_name="created_at", lookup_expr="gte"
     )
+    closed_on_before = django_filters.DateTimeFilter(
+        field_name="closed_on", lookup_expr="lte"
+    )
+    closed_on_after = django_filters.DateTimeFilter(
+        field_name="closed_on", lookup_expr="gte"
+    )
+    expected_delivery_time_before = django_filters.DateTimeFilter(
+        field_name="expected_delivery_time", lookup_expr="lte"
+    )
+    expected_delivery_time_after = django_filters.DateTimeFilter(
+        field_name="expected_delivery_time", lookup_expr="gte"
+    )
+    
     status_in = StringInFilter(field_name="status", lookup_expr="in")
 
     class Meta(object):
@@ -259,10 +272,10 @@ class TicketViewSet(viewsets.BaseViewSet):
     @decorators.action(
         methods=["post", "get"], detail=True, url_name="send_ticket_status_by_email"
     )
-    def send_ticket_status_by_email_with_pdf(self, request, pk):
+    def send_ticket_details_by_email_with_pdf(self, request, pk):
         "Get diagnosis suites for device."
         ticket = self.get_object()
-        ticket.send_ticket_status_update_to_customer_via_email(True)
+        ticket.send_ticket_details_to_customer_via_email(True)
         data = self.retrieve_serializer_class(ticket, context={"request": request}).data
         return response.Response(data, status=status.HTTP_200_OK)
 
