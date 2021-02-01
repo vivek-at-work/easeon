@@ -28,7 +28,6 @@ from rest_framework.parsers import MultiPartParser
 from tickets import models, serializers
 from tickets.models import CLOSED_STATUS_VALUES, DELIVERED_STATUS_VALUES
 from tickets.permissions import TicketPermissions
-from weasyprint import CSS, HTML
 
 
 class StringInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
@@ -103,6 +102,19 @@ class TicketFilter(django_filters.FilterSet):
     created_at_after = django_filters.DateTimeFilter(
         field_name="created_at", lookup_expr="gte"
     )
+    closed_on_before = django_filters.DateTimeFilter(
+        field_name="closed_on", lookup_expr="lte"
+    )
+    closed_on_after = django_filters.DateTimeFilter(
+        field_name="closed_on", lookup_expr="gte"
+    )
+    expected_delivery_time_before = django_filters.DateTimeFilter(
+        field_name="expected_delivery_time", lookup_expr="lte"
+    )
+    expected_delivery_time_after = django_filters.DateTimeFilter(
+        field_name="expected_delivery_time", lookup_expr="gte"
+    )
+    
     status_in = StringInFilter(field_name="status", lookup_expr="in")
 
     class Meta(object):
@@ -213,12 +225,14 @@ class TicketViewSet(viewsets.BaseViewSet):
                 return response.Response(
                     data, status=status.HTTP_200_OK, headers=headers
                 )
-            if serializer.validated_data["status"] in DELIVERED_STATUS_VALUES:
-                delivery = ticket.delivery
-                delivery.device_pickup_time = timezone.now()
-                delivery.save()
             elif serializer.validated_data["status"] in CLOSED_STATUS_VALUES:
                 ticket.closed_on = timezone.now()
+                ticket.closed_by = request.user
+            if serializer.validated_data["delivering_now"]:
+                delivery = ticket.delivery
+                delivery.delivery_done_by = request.user
+                delivery.device_pickup_time = timezone.now()   
+                delivery.save()                   
             ticket.refresh_escalation_timestamps()
             ticket.save()
             serializer.save()
@@ -258,6 +272,16 @@ class TicketViewSet(viewsets.BaseViewSet):
         return response.Response(data, status=status.HTTP_200_OK)
 
     @decorators.action(
+        methods=["post", "get"], detail=True, url_name="send_ticket_status_by_email"
+    )
+    def send_ticket_details_by_email_with_pdf(self, request, pk):
+        "Get diagnosis suites for device."
+        ticket = self.get_object()
+        ticket.send_ticket_details_to_customer_via_email(True)
+        data = self.retrieve_serializer_class(ticket, context={"request": request}).data
+        return response.Response(data, status=status.HTTP_200_OK)
+
+    @decorators.action(
         methods=["post", "get"], detail=True, url_name="send_ticket_status_by_sms"
     )
     def send_ticket_status_by_sms(self, request, pk):
@@ -271,24 +295,11 @@ class TicketViewSet(viewsets.BaseViewSet):
     def pdf(self, request, pk):
         """Generate pdf."""
         ticket = self.get_object()
-        html_string = render_to_string("ticket.html", {"ticket": ticket})
-        html = HTML(string=html_string)
-        margins = "{0}px {1} {2}px {1}".format(10, 10, "1cm")
-        content_print_layout = "@page {size: A4 portrait; margin: %s;}" % margins
-        result = html.write_pdf(
-            stylesheets=[
-                CSS(string=content_print_layout),
-                os.path.join(settings.STATIC_ROOT, "bootstrap.min.css"),
-            ]
-        )
+        output, name = ticket.get_pdf()
         response = HttpResponse(content_type="application/pdf;")
-        response["Content-Disposition"] = "inline; filename=list_people.pdf"
+        response["Content-Disposition"] = "inline; filename=ticket.pdf"
         response["Content-Transfer-Encoding"] = "binary"
-        with tempfile.NamedTemporaryFile(delete=True) as output:
-            output.write(result)
-            output.flush()
-            output = open(output.name, "rb")
-            response.write(output.read())
+        response.write(output)
         return response
 
     @decorators.action(

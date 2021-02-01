@@ -83,4 +83,6 @@ class OrganizationSerializer(BaseSerializer):
             "gsx_ship_to",
             "last_modified_by",
             "manager",
+            "latitude",
+            "longitude"
         )

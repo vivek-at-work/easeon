@@ -127,7 +127,7 @@ class UserEmailTakenView(generics.GenericAPIView):
                     email
                 )
             )
-            count = get_user_model().objects.filter(email=email).count()
+            count = get_user_model().objects.filter(email__iexact=email).count()
             data = {"email_available_flag": False, "valid_email": valid_email}
             if count > 0:
                 data["message"] = "Email already taken."

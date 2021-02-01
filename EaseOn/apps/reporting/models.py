@@ -41,8 +41,8 @@ class ReportRequest(BaseModel):
             self.organization.id,
             self.final_report_path,
             self.report_type,
-            self.start_date,
-            self.end_date,
+            self.start_date.strftime("%Y-%m-%d"),
+            self.end_date.strftime("%Y-%m-%d"),
             self.created_by.email,
         )
 
@@ -51,8 +51,8 @@ class ReportRequest(BaseModel):
             self.organization.id,
             self.final_report_path,
             self.report_type,
-            self.start_date,
-            self.end_date,
+            self.start_date.strftime("%Y-%m-%d"),
+            self.end_date.strftime("%Y-%m-%d"),
             self.created_by.email,
         )
 

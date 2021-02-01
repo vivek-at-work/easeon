@@ -18,7 +18,7 @@ from .pagination import *
 from .token_generator import *
 from .two_factor_client import TwoFactorIn, APPIndia
 from .workdays import workday
-
+from .distance_calculator import get_distance_in_meters
 
 def is_in_dev_mode():
     return settings.ENV == "DEV"
@@ -98,12 +98,6 @@ def send_otp(number, otp, otp_for):
         print(message)
     else:
         return APPIndia.send(number, message)
-
-
-def send_token_to_customer(number, otp):
-    message = "Your Unicorn Customer Token is {}. Please Wait !".format(otp)
-    return APPIndia.send(number, message)
-
 
 def get_random_string(min_char=8, max_char=12):
 

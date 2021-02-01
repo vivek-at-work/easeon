@@ -11,7 +11,7 @@ from .email import *
 from .gsx import *
 from .logging import *
 from .rest import *
-
+from .geo_location import *
 
 root = environ.Path(__file__) - 1  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False))  # set default values and casting
@@ -136,6 +136,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "django_static")
 
 CORS_ORIGIN_WHITELIST = [
     "https://easeon.in",
+    "https://test.easeon.in",
     "http://localhost:3000",
     "https://localhost:3000",
 ]
@@ -166,3 +167,4 @@ ACCESS_TOKEN_EXPIRE_SECONDS = 60
 REFRESH_TOKEN_EXPIRE_SECONDS = 3600
 EXEMPTED_DEVICE = ["FCGT24E5HFM2", "ZZ501AAAOWP"]
 ENABLE_MULTIPLE_TICKETS_FOR_CUSTOMER = True
+REAL_TIME_API_URL=env('REAL_TIME_API_URL',default='https://www.easeon.in:8000/api')

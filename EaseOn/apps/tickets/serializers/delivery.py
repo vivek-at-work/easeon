@@ -17,6 +17,9 @@ class DeliverySerializer(BaseSerializer):
         required=False, initial=dict, allow_null=True
     )
     customer_signature = FileFieldWithLinkRepresentation(read_only=True)
+    delivery_done_by_name = serializers.SlugRelatedField(
+        source="delivery_done_by", read_only=True, slug_field="full_name"
+    )
 
     class Meta(BaseMeta):
         model = models.Delivery

@@ -5,7 +5,7 @@ from core.viewsets import BaseViewSet
 from django.apps import apps
 from django.db.models import Q
 from django.utils import timezone
-from rest_framework import decorators, permissions, response
+from rest_framework import decorators, permissions, response,viewsets
 from tokens import models, serializers
 from tokens.commands import send_token_display_call_command
 from tokens.permissions import isValidCaller
@@ -17,7 +17,7 @@ class TokenNumberFilter(django_filters.CharFilter):
     empty_value = "EMPTY"
 
     def filter(self, qs, value):
-        if value:
+        if value and value.isnumeric():
             d = {"token_number": int(value)}
             qs = qs.filter(**d)
         return qs
@@ -28,10 +28,16 @@ class TokenFilter(django_filters.FilterSet):
 
     organization = django_filters.CharFilter(field_name="organization__code")
     token_number = TokenNumberFilter(field_name="token_number")
+    invite_sent_on_before = django_filters.DateTimeFilter(
+        field_name="invite_sent_on", lookup_expr="lte"
+    )
+    invite_sent_on_after = django_filters.DateTimeFilter(
+        field_name="invite_sent_on", lookup_expr="gte"
+    )
 
     class Meta:
         model = models.Token
-        fields = ["token_number", "location_code"]
+        fields = ["token_number", "location_code","first_name","last_name","email","contact_number","category"]
 
 
 class TokenModelViewSet(BaseViewSet):
@@ -41,6 +47,9 @@ class TokenModelViewSet(BaseViewSet):
     search_fields = ("token_number", "location_code", "email")
 
     def get_queryset(self):
+        history_data = self.request.query_params.get('all', None)
+        if history_data:
+            return models.Token.objects.all()
         return models.Token.objects.all().created_between()
 
     def get_permissions(self):
@@ -76,10 +85,37 @@ class TokenModelViewSet(BaseViewSet):
             ).update(is_present=False)
             token.invite_sent_on = timezone.now()
             token.save()
+            send_token_display_call_command(
+                **serializers.TokenSerializer(token, context=context).data
+            )
+        return response.Response(
+            serializers.TokenSerializer(token, context=context).data
+        )
+
+    @decorators.action(
+        methods=["POST"],
+        detail=True,
+        url_name="invite_customer_to_counter_via_sms",
+        serializer_class=serializers.InviteCustomerSerializer,
+    )
+    def invite_customer_to_counter_via_sms(self, request, pk):
+        token = self.get_object()
+        requesting_user = request.user
+        if token.can_invite(requesting_user):
+            context = {"request": request}
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            counter_number = serializer.validated_data["counter_number"]
+            token.invited_by = request.user
+            token.counter_number = counter_number
+            token.is_present = True
+            models.Token.objects.filter(
+                counter_number=counter_number, location_code=token.location_code
+            ).update(is_present=False)
+            token.invite_sent_on = timezone.now()
+            token.save()
             if not is_in_dev_mode():
-                send_token_display_call_command(
-                    **serializers.TokenSerializer(token, context=context).data
-                )
+               token.send_invite_by_sms()
         return response.Response(
             serializers.TokenSerializer(token, context=context).data
         )

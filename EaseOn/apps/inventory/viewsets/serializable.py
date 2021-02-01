@@ -15,6 +15,7 @@ class SerializableInventoryItemFilter(django_filters.FilterSet):
     """doc string for OrganizationFilter"""
 
     description = django_filters.CharFilter(lookup_expr="icontains")
+    organization = django_filters.CharFilter(field_name="organization__code")
     created_at_before = django_filters.DateTimeFilter(
         field_name="created_at", lookup_expr="lte"
     )

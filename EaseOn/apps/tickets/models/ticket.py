@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
 import random
+import tempfile
 from datetime import date, datetime, time
 
 from core import utils
@@ -18,6 +20,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.template.loader import get_template, render_to_string
 from django.utils import encoding, http, timezone
 from inventory.models import LoanerInventoryItem, RepairInventoryItem
 from organizations.models import Organization
@@ -48,33 +51,39 @@ class TicketQuerySet(BaseQuerySet):
 
     def due_between(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.open().filter(expected_delivery_time__lt=end_time)
 
     def closed_between(self, **kwargs):
         dt = timezone.now()
-        mid_night_today = datetime.combine(dt.date(), datetime.min.time(), dt.tzinfo)
-        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_today = datetime.combine(
+            dt.date(), datetime.min.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
         start_time = kwargs.get("start_time", mid_night_today)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.filter(closed_on__range=[start_time, end_time])
 
     def first_level_escalations(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.open().filter(final_escalation_after__lt=end_time)
 
     def second_level_escalations(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.open().filter(second_escalation_after__lt=end_time)
 
     def final_level_escalations(self, **kwargs):
         dt = timezone.now()
-        mid_night_tomorrow = datetime.combine(dt.date(), datetime.max.time(), dt.tzinfo)
+        mid_night_tomorrow = datetime.combine(
+            dt.date(), datetime.max.time(), dt.tzinfo)
         end_time = kwargs.get("end_time", mid_night_tomorrow)
         return self.open().filter(final_escalation_after__lt=end_time)
 
@@ -90,12 +99,14 @@ class Ticket(BaseModel):
         Customer, related_name="ticket", on_delete=models.DO_NOTHING
     )
     password = models.CharField(max_length=100, default="NA", null=True)
-    initial_operating_system = models.CharField(max_length=100, default="NA", null=True)
+    initial_operating_system = models.CharField(
+        max_length=100, default="NA", null=True)
     repair_classification = models.CharField(max_length=100, default="SINGLE")
     gsx_coverage_option = models.CharField(max_length=100, default="BATTERY")
     request_review_by_apple = models.BooleanField(default=False)
     mark_complete = models.BooleanField(default=False)
     box_required = models.BooleanField(default=False)
+    estimation = models.BooleanField(default=False)
     loaner_stock_unavailable = models.BooleanField(default=False)
     currently_assigned_to = models.ForeignKey(
         User, related_name="assigned_tickets", on_delete=models.DO_NOTHING
@@ -120,6 +131,7 @@ class Ticket(BaseModel):
     second_escalation_after = models.DateTimeField()
     final_escalation_after = models.DateTimeField()
     closed_on = models.DateTimeField(null=True)
+    inward_time = models.DateTimeField(null=True)
     closed_by = models.ForeignKey(
         User, null=True, related_name="closed_tickets", on_delete=models.DO_NOTHING
     )
@@ -137,7 +149,8 @@ class Ticket(BaseModel):
     sla = models.ForeignKey(
         SLA, null=False, related_name="tickets", on_delete=models.DO_NOTHING
     )
-    uploaded_contents = GenericRelation(UploadContent, related_query_name="tickets")
+    uploaded_contents = GenericRelation(
+        UploadContent, related_query_name="tickets")
     customer_signature = models.ImageField(
         upload_to="customer_signatures/tickets", null=True, blank=True
     )
@@ -205,7 +218,8 @@ class Ticket(BaseModel):
         code = self.organization.code
         index = self.organization.tickets.count() + 1
         suffix = settings.TICKET_SUFFIX
-        reference_number = "{}{}{}{}".format(code, index, random.randint(0, 99), suffix)
+        reference_number = "{}{}{}{}".format(
+            code, index, random.randint(0, 99), suffix)
         self.reference_number = reference_number
 
     def refresh_escalation_timestamps(self, closed=False):
@@ -214,7 +228,29 @@ class Ticket(BaseModel):
             self.second_escalation_after = time_by_adding_business_days(2)
             self.final_escalation_after = time_by_adding_business_days(29)
 
-    def send_ticket_details_to_customer_via_email(self):
+    def get_pdf(self):
+        from weasyprint import CSS, HTML
+
+        ticket = self
+        html_string = render_to_string("ticket.html", {"ticket": ticket})
+        html = HTML(string=html_string)
+        margins = "{0}px {1} {2}px {1}".format(5, 5, ".5cm")
+        content_print_layout = "@page {size: A4 portrait; margin: %s;}" % margins
+        result = html.write_pdf(
+            stylesheets=[
+                CSS(string=content_print_layout),
+                os.path.join(settings.STATIC_ROOT, "bootstrap.min.css"),
+            ]
+        )
+        with tempfile.NamedTemporaryFile(
+            delete=False, prefix=self.reference_number, suffix=".pdf"
+        ) as output:
+            output.write(result)
+            output.flush()
+            output = open(output.name, "rb")
+            return output.read(), output.name
+
+    def send_ticket_details_to_customer_via_email(self, attach_pdf=False):
         template = settings.EMAIL_TEMPLATES.get("action")
         ticket_display_url = settings.CLIENT_URL
         subject = "Device repair details for {0}".format(self)
@@ -247,6 +283,9 @@ class Ticket(BaseModel):
             "sender_full_name": "Team {0}".format(self.organization.name),
             "table_data": table_data,
         }
+        if attach_pdf:
+            data, name = self.get_pdf()
+            context["files"] = [name]
         receivers = [self.customer.email]
         utils.send_mail(subject, template, *receivers, **context)
         return receivers

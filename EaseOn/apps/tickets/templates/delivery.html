@@ -6,7 +6,7 @@
 
             <div class="text-center">
                 <h2 class="mb-0">{{ticket.organization.name}}</h2>
-                <h6><strong>Service Report</strong></h6>
+                <h6><strong>Delivery Report</strong></h6>
             </div>
             </div>
         </td>
@@ -21,11 +21,10 @@
             <br />
             <div><strong><label>Created On: </label></strong><time>
                     {{ticket.created_at}}</time></div>
-            <div><strong><label>Expected Delivery Time: </label></strong><time>
-
-                    {{ticket.expected_delivery_time}}
+            <div><strong><label>Repair Close Time: </label></strong><time>{{ticket.closed_on}}
                 </time></div>
-
+            <div><strong><label>Device Pickup Time: </label></strong><time>{{ticket.delivery.device_pickup_time}}
+                </time></div>
         </td>
 
 

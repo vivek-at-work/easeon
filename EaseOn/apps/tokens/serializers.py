@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from core.serializers import BaseMeta, BaseSerializer
-from core.utils import get_organization_model, is_in_dev_mode
+from core.utils import get_organization_model, is_in_dev_mode,get_distance_in_meters
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -56,24 +57,45 @@ class TokenSerializer(BaseSerializer):
             "can_invite",
             "is_present",
             "category",
+            "latitude",
+            "longitude",
+            "distance_from_organization",
+            "created_at"
         )
 
     def create(self, validated_data):
         validated_data["created_by"] = get_user_model().objects.first()
         Organization = apps.get_model(*get_organization_model().split(".", 1))
-        validated_data["organization"] = Organization.objects.get(
+        org = Organization.objects.get(
             token_machine_location_code=validated_data["location_code"]
         )
+        validated_data["organization"] = org
         validated_data["token_number"] = (
             Token.objects.filter(location_code=validated_data["location_code"])
             .created_between()
             .count()
             + 1
         )
+        
+        distance_from_organization = get_distance_in_meters(
+        float(org.latitude),
+        float(org.longitude),
+        float(validated_data['latitude']),
+        float(validated_data['longitude']))
+        validated_data['distance_from_organization'] = round(distance_from_organization,2)
+        if settings.ENABLE_DISTANCE_CHECK_FOR_TOKEN and distance_from_organization > settings.MAX_TOKEN_RADIUS:
+            raise serializers.ValidationError(
+                    "You can take token only once you are at the {} {} you are currently {} km away.".format(
+                        org.name,
+                        org.communication_address,distance_from_organization/1000)
+                )
+
+           
+
         instance = Token.objects.create(**validated_data)
-        instance.send_token_number_by_sms()
         if not is_in_dev_mode():
-            send_token_display_refresh_command(instance)
+            instance.send_token_number_by_sms()
+        send_token_display_refresh_command(instance)
         return instance
 
     def get_can_invite(self, obj):

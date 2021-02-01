@@ -44,7 +44,10 @@ class Organization(BaseModel):
         through="OrganizationRights",
         through_fields=("organization", "user"),
     )
-    gsx_ship_to = models.CharField(default="IST", max_length=20)
+    gsx_ship_to = models.CharField(max_length=20)
+    latitude = models.CharField(max_length=100,null=True)
+    longitude = models.CharField(max_length=100,null=True)
+
 
     class Meta:
         verbose_name = "Service Centre"
@@ -72,6 +75,16 @@ class Organization(BaseModel):
             ),
         ]
 
+    @property
+    def communication_address(self):
+        return "{0} {1} {2} {3} {4}".format(
+            self.address,
+            self.city,
+            self.state,
+            self.country,
+            self.pin_code,
+        )
+    
     def get_available_loaner_devices(self):
         return self.loaner_inventory_items.all().available()
 
@@ -158,9 +171,9 @@ def onOrganizationSave(sender, instance, *args, **kwargs):
         "action_name": "View",
     }
     subject = summary
-    send_mail(
-        subject, template, *get_user_model().objects.all_superusers_email(), **context
-    )
+    # send_mail(
+    #     subject, template, *get_user_model().objects.all_superusers_email(), **context
+    # )
 
 
 @receiver(post_save, sender=Organization)

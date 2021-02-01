@@ -10,6 +10,7 @@ from core.serializers import (
     UserSerializer,
 )
 from core.utils import time_by_adding_business_days
+from core.permissions import SUPER_USER,PRIVILEGED
 from devices.serializers import ComponentIssueSerializer
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -49,6 +50,7 @@ class TicketListSerializer(BaseSerializer):
         fields = [
             "id",
             "url",
+            "inward_time",
             "created_at",
             "is_deleted",
             "reference_number",
@@ -115,7 +117,6 @@ class TicketSerializer(BaseSerializer):
     status = serializers.ChoiceField(
         default="Registered", choices=get_list_choices("TICKET_STATUS")
     )
-    # coverage_type = serializers.ChoiceField(choices=get_list_choices("COVERAGE_TYPE"))
     repair_type = serializers.ChoiceField(choices=get_list_choices("REPAIR_TYPE"))
     comments = serializers.HyperlinkedRelatedField(
         read_only=True, many=True, view_name="comment-detail"
@@ -265,6 +266,11 @@ class TicketPrintSerializer(BaseSerializer):
         except models.Delivery.DoesNotExist:
             messages.append("There is no delivery Infomation Updated")
             return {"flag": has_delivery, "messages": messages}
+        if obj.closed_on is None:
+            messages.append(
+                "Ticket Closed on time is not updated chnage status to any of {} to update it" .format(",".join(models.CLOSED_STATUS_VALUES)
+                )
+            )
 
         if not obj.is_delivered:
             messages.append(
@@ -291,11 +297,7 @@ class TicketPrintSerializer(BaseSerializer):
              Check at least one GSX Repair Info
              record should exist"""
             )
-
-        # user = self.get_user()
-        # manager_flag = user.managed_locations.filter(id=obj.organization.id).exists()
-        # return {"flag": obj.is_closed or manager_flag, "messages": messages}
-        return {"flag": obj.is_closed, "messages": messages}
+        return {"flag": False if len(messages) > 0 else True, "messages": messages}
 
     class Meta(BaseMeta):
         model = models.Ticket
@@ -303,18 +305,30 @@ class TicketPrintSerializer(BaseSerializer):
 
 class TicketStatusChangeSerializer(BaseSerializer):
     def validate_status(self, value):
+        user = self.get_user()
+        if user.role == SUPER_USER or user.role == PRIVILEGED or user == self.instance.manager:
+            return value
+
         if (
             self.instance
             and value in ["Delivered"]
-            and not hasattr(self.instance, "delivery")
+            
         ):
-            raise serializers.ValidationError(
-                "Can not change status to delivered unless delivery infomation is updated"
-            )
+            if not hasattr(self.instance, "delivery"):
+                raise serializers.ValidationError(
+                "Can not change status to delivered unless delivery infomation is updated")
+            
+            if obj.closed_on is None:
+                    raise serializers.ValidationError(
+                    "Can not change status to delivered unless ticket is marked closed.")
+
+        
+
 
         return value
 
     status = serializers.ChoiceField(choices=get_list_choices("TICKET_STATUS"))
+    delivering_now = serializers.BooleanField(required=False,initial=False)
 
     class Meta(BaseMeta):
         model = models.Ticket

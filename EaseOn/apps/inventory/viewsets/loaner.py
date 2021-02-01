@@ -2,7 +2,9 @@
 import django_filters
 from core.utils import get_ticket_model
 from core.permissions import IsOperatorOrSuperUser
+from core.utils import get_ticket_model
 from core.viewsets import BaseBulkCreateViewSet
+from django.apps import apps
 from django.db.models import Q
 from inventory import models
 from inventory.serializers import (
@@ -10,12 +12,8 @@ from inventory.serializers import (
     LoanerItemSerializer,
     PenaltyAmountSerializer,
 )
-from tickets.serializers import (
-    TicketPrintSerializer,
-
-)
-from rest_framework import decorators,response,status
-from django.apps import apps
+from rest_framework import decorators, response, status
+from tickets.serializers import TicketPrintSerializer
 
 
 class LoanerInventoryItemFilter(django_filters.FilterSet):
@@ -25,6 +23,7 @@ class LoanerInventoryItemFilter(django_filters.FilterSet):
     serial_number = django_filters.CharFilter(lookup_expr="icontains")
     part_number = django_filters.CharFilter(lookup_expr="icontains")
     description = django_filters.CharFilter(lookup_expr="icontains")
+    organization = django_filters.CharFilter(field_name="organization__code")
     created_at_before = django_filters.DateTimeFilter(
         field_name="created_at", lookup_expr="lte"
     )
@@ -63,17 +62,22 @@ class LoanerItemViewSet(BaseBulkCreateViewSet):
     def assignment_log(self, request, pk):
         "Get diagnosis suites for device."
         inventory_item = self.get_object()
-        loaner_records_ticket = inventory_item.loaner_records.all().values_list('ticket')
+        loaner_records_ticket = inventory_item.loaner_records.all().values_list(
+            "ticket"
+        )
         ticket_modal = apps.get_model(*get_ticket_model().split(".", 1))
         tickets = ticket_modal.objects.filter(id__in=loaner_records_ticket)
-        data = TicketPrintSerializer(tickets,context={'request':request},many=True).data
-        response_data = {"next": None,
-         "previous": None,
-         "current": 1,
-         "count": len(tickets),
-         "page_size": len(tickets),
-         "total_pages": 1,
-         "results": data
+        data = TicketPrintSerializer(
+            tickets, context={"request": request}, many=True
+        ).data
+        response_data = {
+            "next": None,
+            "previous": None,
+            "current": 1,
+            "count": len(tickets),
+            "page_size": len(tickets),
+            "total_pages": 1,
+            "results": data,
         }
         return response.Response(response_data, status=status.HTTP_200_OK)
 

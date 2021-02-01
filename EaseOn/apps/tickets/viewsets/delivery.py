@@ -63,3 +63,15 @@ class DeliveryViewSet(viewsets.BaseViewSet):
             data = self.serializer_class(obj, context={"request": request}).data
             return response.Response(data, status=status.HTTP_200_OK, headers=headers)
         return response.Response("Invalid paramters", status.HTTP_400_BAD_REQUEST)
+
+    
+    @decorators.action(methods=["post", "get"], detail=True, url_name="delivery_pdf")
+    def pdf(self, request, pk):
+        """Generate pdf."""
+        delivery = self.get_object()
+        output, name = delivery.get_pdf()
+        response = HttpResponse(content_type="application/pdf;")
+        response["Content-Disposition"] = "inline; filename=delivery.pdf"
+        response["Content-Transfer-Encoding"] = "binary"
+        response.write(output)
+        return response
