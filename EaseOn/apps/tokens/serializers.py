@@ -77,11 +77,12 @@ class TokenSerializer(BaseSerializer):
             + 1
         )
         
-        distance_from_organization = get_distance_in_meters(
-        float(org.latitude),
-        float(org.longitude),
-        float(validated_data['latitude']),
-        float(validated_data['longitude']))
+        if org.latitude is not None and org.longitude is not None:
+            distance_from_organization = get_distance_in_meters(
+            float(org.latitude),
+            float(org.longitude),
+            float(validated_data['latitude']),
+            float(validated_data['longitude']))
         validated_data['distance_from_organization'] = round(distance_from_organization,2)
         if settings.ENABLE_DISTANCE_CHECK_FOR_TOKEN and distance_from_organization > settings.MAX_TOKEN_RADIUS:
             raise serializers.ValidationError(

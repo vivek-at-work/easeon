@@ -39,7 +39,6 @@ class Delivery(BaseModel):
 
     def get_pdf(self):
         from weasyprint import CSS, HTML
-
         delivery = self
         html_string = render_to_string("delivery.html", {"ticket": delivery.ticket})
         html = HTML(string=html_string)
